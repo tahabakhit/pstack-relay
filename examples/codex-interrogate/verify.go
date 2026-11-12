@@ -174,15 +174,18 @@ func readTrace(path string, target config.Target) (transcript, error) {
 			return t, fmt.Errorf("unpaired execution item %s", item.ID)
 		}
 		completed[item.ID] = true
-		if item.Status != "completed" {
-			return t, fmt.Errorf("execution item did not complete")
-		}
 		if item.Type == "command_execution" {
 			if item.Exit == nil || item.Command == "" {
 				return t, fmt.Errorf("incomplete command event")
 			}
+			if (*item.Exit == 0 && item.Status != "completed") || (*item.Exit != 0 && item.Status != "failed") {
+				return t, fmt.Errorf("command status does not match exit code")
+			}
 			t.Commands = append(t.Commands, commandRun{item.ID, item.Command, item.Output, *item.Exit, line, starts[item.ID].Line})
 		} else {
+			if item.Status != "completed" {
+				return t, fmt.Errorf("execution item did not complete")
+			}
 			if item.Server != "pstack-rex" || item.Result.IsError || (len(item.Error) > 0 && string(item.Error) != "null") || len(item.Result.Content) != 1 || item.Result.Content[0].Type != "text" {
 				return t, fmt.Errorf("unsupported or failed MCP call")
 			}
