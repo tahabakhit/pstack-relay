@@ -116,6 +116,8 @@ func testArtifacts(t *testing.T) (string, manifest) {
 	}
 	root := filepath.Join(t.TempDir(), "proof")
 	must(t, os.Mkdir(root, 0700))
+	root, err := filepath.EvalSymlinks(root)
+	must(t, err)
 	cfg := config.Default()
 	cfg.Roles[role] = []config.Target{{Harness: "codex", Model: "model-a", Effort: "medium", Backend: "rex", Auth: "existing"}, {Harness: "codex", Model: "model-b", Effort: "medium", Backend: "rex", Auth: "existing"}}
 	o := options{Binary: binary, Out: root, ParentModel: "parent-model", ParentEffort: "medium"}

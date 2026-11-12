@@ -29,7 +29,10 @@ func TestWorkerProcess(t *testing.T) {
 
 func fixture(t *testing.T, script string) (*Service, Request) {
 	t.Helper()
-	base := t.TempDir()
+	base, err := filepath.EvalSymlinks(t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
 	repo := filepath.Join(base, "repo")
 	if err := os.Mkdir(repo, 0700); err != nil {
 		t.Fatal(err)
