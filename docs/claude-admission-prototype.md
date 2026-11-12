@@ -34,6 +34,12 @@ Managed settings can outrank command-line settings. The official [settings prece
 
 Compare that design with a controlled command-execution boundary and whole-process isolation for both required worker harnesses. Authentication, startup inputs, detached descendants and permitted build/cache writes need explicit ownership. Keep production shell and writer gates closed until the selected boundary passes its own acceptance checks.
 
+## Selected managed-input follow-up
+
+A later actual-CLI experiment mounted synthetic file-based managed settings in a disposable `/etc/claude-code`, leaving actual host policy untouched. A managed Bash deny removed the tool and prevented the scratch command, proving that this managed source affected the invocation. A separate retained candidate with `sandbox.enabled: true` and `sandbox.filesystem.disabled: true` did not weaken the selected fixture restrictions. The effective resolved values and the reason were not established. This is an observation, not a general guarantee against managed weakening.
+
+All three checked variants ended with CLI exit zero. The deny variant returned tool-unavailable errors rather than genuine probe exits. [The managed-input evidence](validation/claude-managed-prototype.json) records the no-managed control, deny control and selected weakening candidate. Complete managed-source, policy mutation, read-allowlist and production-admission checks remain open.
+
 ## Reproduction and retention
 
 Scratch source and raw results are at `/tmp/pstack-rex-admission.4kV4pu`. They are preserved locally under `.git/pstack/experiments/claude-admission-2026-11-12`. They are not included in a clone. No downloaded third-party runtime source was copied into the repository.

@@ -39,6 +39,8 @@ Every row is a release gate. A missing artifact or inconclusive observation leav
 6. Verify lifecycle failures and concurrency through the same installed path. Refresh setup, diagnosis, installation, upgrade and capability guidance against actual behavior.
 7. Freeze a candidate revision. Build and review the exact artifacts. Resolve material findings, repeat affected checks, then publish 1.0.0 with checksums, supported-host requirements and explicit limits.
 
+The [worker execution design](worker-execution-design.md) records the selected experiment path and responsibility boundaries. It does not admit a production profile.
+
 ## Scope boundaries
 
 Codex is the only parent required for this release. Rex is the execution backend. Claude Code and Pi are required coding workers. Codex workers can remain available, but cannot substitute for either required harness in the acceptance evidence.

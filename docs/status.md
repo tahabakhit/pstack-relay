@@ -33,6 +33,8 @@ A direct Pi loader canary also proved that disabling context files does not disa
 
 An [actual CLI/RPC routing experiment](pi-shell-routing-prototype.md) showed a generated Pi shell wrapper in use for an untrusted project and a neutral control cwd. Explicitly approving conflicting project settings replaced the wrapper. This identifies a candidate control path and a precedence hazard, not confinement or model-directed tool-path certification.
 
+The [selected worker design](worker-execution-design.md) retains trusted harnesses and confines Bash task commands. A subsequent [Pi read-only boundary prototype](pi-command-boundary-prototype.md) passed selected actual-tool checks and independent review, with explicit syscall, descriptor and lifecycle limits. It found and corrected [PI-002](issues/pi-helper-environment.md), a synthetic helper-environment leak in the disposable wrapper. No production profile is enabled by these results.
+
 ## Parked capabilities and external checks
 
 These remain explicit future work, rather than requirements silently added to the next milestone.

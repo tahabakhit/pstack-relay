@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "kind": "synthetic-api-actual-claude-managed-inputs",
+  "source_revision": "71e169917b44f95e2c3034d494665eddc820a2ed",
+  "observed_date": "2026-11-12",
+  "scratch_root": "/tmp/pstack-rex-claude-managed.abcyzbi2",
+  "preserved_local_artifacts": "/home/taha/dev/agents/pstack-rex/.git/pstack/experiments/claude-managed-2026-11-12",
+  "real_provider_inference": false,
+  "real_credentials_used": false,
+  "production_runtime_changed": false,
+  "verification": {
+    "verdict": "selected-managed-behaviors-observed",
+    "runs": {
+      "managed-enabled-and-filesystem-disabled": {
+        "fixture": "/tmp/pstack-rex-claude-managed.abcyzbi2/claude-r80bbvdk",
+        "exit": 0,
+        "requests": 9,
+        "scratch_exists": true
+      },
+      "managed-deny-control": {
+        "fixture": "/tmp/pstack-rex-claude-managed.abcyzbi2/claude-dig7ib0v",
+        "exit": 0,
+        "requests": 9,
+        "scratch_exists": false
+      },
+      "no-managed": {
+        "fixture": "/tmp/pstack-rex-claude-managed.abcyzbi2/claude-o0hd587g",
+        "exit": 0,
+        "requests": 9,
+        "scratch_exists": true
+      }
+    },
+    "limits": [
+      "Managed deny demonstrably affects the real CLI.",
+      "Selected enabled plus filesystem.disabled managed candidate did not weaken observed fixture restrictions; effective resolved values and the reason were not established.",
+      "No complete managed-source coverage, reload/mutation test, broad read boundary, authentication or production admission was established."
+    ]
+  },
+  "files": [
+    {
+      "relative_path": "claude-dig7ib0v/policy.json",
+      "sha256": "c6aa5b8646c4e2d8f1dbcb2bfe5e803390b00c08d93b6f0e2015c0d31cd15d27"
+    },
+    {
+      "relative_path": "claude-dig7ib0v/probes.json",
+      "sha256": "060343a009b8d67c13545524bb41a8ba7c2bf962783405f5bd2ebef9ae300f35"
+    },
+    {
+      "relative_path": "claude-dig7ib0v/requests.json",
+      "sha256": "fb81cf12b78bf160d1821eafa672594c92248c80e2cc5794db12c25c42f7c7d5"
+    },
+    {
+      "relative_path": "claude-dig7ib0v/source/seed",
+      "sha256": "9de405475040e1f1a02aa2e3ab6f2a46c5d54e3a74dc4b8433ffd4cfca97a805"
+    },
+    {
+      "relative_path": "claude-dig7ib0v/stderr.log",
+      "sha256": "de8f61180dfd6b00ad02c9688d8fbe00b27cad193f4531c9e2017688bbeca57d"
+    },
+    {
+      "relative_path": "claude-dig7ib0v/stdout.jsonl",
+      "sha256": "2c205a02c31baeaa3fc972dbbdec7208cb6b33e02581fa82f0ff64b7ba5be464"
+    },
+    {
+      "relative_path": "claude-dig7ib0v/summary.json",
+      "sha256": "74f3e89d698010f957479e1b3243841d523d861ee08030e879a5f45902893273"
+    },
+    {
+      "relative_path": "claude-ngek97bu/policy.json",
+      "sha256": "8d022b6c3739f2b834d794ad3127ef0b218009bc676eabb53c3af7d24b436d3f"
+    },
+    {
+      "relative_path": "claude-ngek97bu/probes.json",
+      "sha256": "2ec730ff26a25753a5d0c58e0b029567687a450d06065c0247db5a1190624e3e"
+    },
+    {
+      "relative_path": "claude-ngek97bu/requests.json",
+      "sha256": "aeb5c7c9538736c39db48b92ab0c712f32240bae99c386749743458fd9a6b343"
+    },
+    {
+      "relative_path": "claude-ngek97bu/scratch/result",
+      "sha256": "25d55f4c9d74c69bee6134956e55d2cbdfbdeeabd42013c9457d01f5ff982101"
+    },
+    {
+      "relative_path": "claude-ngek97bu/source/seed",
+      "sha256": "9de405475040e1f1a02aa2e3ab6f2a46c5d54e3a74dc4b8433ffd4cfca97a805"
+    },
+    {
+      "relative_path": "claude-ngek97bu/stderr.log",
+      "sha256": "de8f61180dfd6b00ad02c9688d8fbe00b27cad193f4531c9e2017688bbeca57d"
+    },
+    {
+      "relative_path": "claude-ngek97bu/stdout.jsonl",
+      "sha256": "b6050a8e50598c886b3eb8773be89bfe6976910b1a1379f04b5e232ebf73377a"
+    },
+    {
+      "relative_path": "claude-ngek97bu/summary.json",
+      "sha256": "6704f958089be06836cd6f7c3ce397d565502d099728d7b614de516c0415f617"
+    },
+    {
+      "relative_path": "claude-o0hd587g/policy.json",
+      "sha256": "8a11800aa7d858812bac7334794a530bfd92863327a8fae106509e237acddeb0"
+    },
+    {
+      "relative_path": "claude-o0hd587g/probes.json",
+      "sha256": "9c4403a14b6f77686ddcd92cb64683f0ef2996a6f00d78ad9255668678a00524"
+    },
+    {
+      "relative_path": "claude-o0hd587g/requests.json",
+      "sha256": "e3edc80b855630d00c40624c9dd7686c1caa7d6e828516b1b9dfaae93e71a3e1"
+    },
+    {
+      "relative_path": "claude-o0hd587g/scratch/result",
+      "sha256": "25d55f4c9d74c69bee6134956e55d2cbdfbdeeabd42013c9457d01f5ff982101"
+    },
+    {
+      "relative_path": "claude-o0hd587g/source/seed",
+      "sha256": "9de405475040e1f1a02aa2e3ab6f2a46c5d54e3a74dc4b8433ffd4cfca97a805"
+    },
+    {
+      "relative_path": "claude-o0hd587g/stderr.log",
+      "sha256": "de8f61180dfd6b00ad02c9688d8fbe00b27cad193f4531c9e2017688bbeca57d"
+    },
+    {
+      "relative_path": "claude-o0hd587g/stdout.jsonl",
+      "sha256": "511cae85bb07924ca342a57205c3bed41c2aa210a75f89689e7f46f66c8701b2"
+    },
+    {
+      "relative_path": "claude-o0hd587g/summary.json",
+      "sha256": "f7c3f800c674b733c85469da23a33041e9c5fc7b04f1715afb70911faa3d5432"
+    },
+    {
+      "relative_path": "claude-r80bbvdk/policy.json",
+      "sha256": "662236449453071aa6e8f10444d6be94133c6b25f474e78ee9a3cc03253506a7"
+    },
+    {
+      "relative_path": "claude-r80bbvdk/probes.json",
+      "sha256": "fdb3b92eb844c80aaaba19be3849afbc9156f145f45965943228d2e096bf057b"
+    },
+    {
+      "relative_path": "claude-r80bbvdk/requests.json",
+      "sha256": "8098fa5c2f54ae32f55cda93e743b9e7ce932eccc2499243cecd696ce18a7345"
+    },
+    {
+      "relative_path": "claude-r80bbvdk/scratch/result",
+      "sha256": "25d55f4c9d74c69bee6134956e55d2cbdfbdeeabd42013c9457d01f5ff982101"
+    },
+    {
+      "relative_path": "claude-r80bbvdk/source/seed",
+      "sha256": "9de405475040e1f1a02aa2e3ab6f2a46c5d54e3a74dc4b8433ffd4cfca97a805"
+    },
+    {
+      "relative_path": "claude-r80bbvdk/stderr.log",
+      "sha256": "de8f61180dfd6b00ad02c9688d8fbe00b27cad193f4531c9e2017688bbeca57d"
+    },
+    {
+      "relative_path": "claude-r80bbvdk/stdout.jsonl",
+      "sha256": "ef59fe06911950725479b81a83d433ae15cbbcd52cd82481a356d23620f6125b"
+    },
+    {
+      "relative_path": "claude-r80bbvdk/summary.json",
+      "sha256": "ec408ad773fa1d6692271ab33e9b3a1f8d0ae870e2cca445e8f532425dab9fe5"
+    },
+    {
+      "relative_path": "claude_mock.py",
+      "sha256": "73fef91ba877675d262d8b7a85cda47b90efc6d271dcaf189300e131d645bc57"
+    },
+    {
+      "relative_path": "managed/managed-settings.json",
+      "sha256": "329c44da88283f3c5361fcb5899a4e9c391c4dac0e50e1e4b3ad128081d57386"
+    },
+    {
+      "relative_path": "managed-deny/managed-settings.json",
+      "sha256": "329c44da88283f3c5361fcb5899a4e9c391c4dac0e50e1e4b3ad128081d57386"
+    },
+    {
+      "relative_path": "managed-disabled/managed-settings.json",
+      "sha256": "17768d317b189ceff58bde0a4a1c499c6203bbc4d078766be33a8f1e4c420c56"
+    },
+    {
+      "relative_path": "verification.json",
+      "sha256": "8fb63e3f42f1ecf75f788bea55a3af19c09ec1725d39b99dfe7e47b890419e1f"
+    },
+    {
+      "relative_path": "verify.py",
+      "sha256": "ec04952950586aafe40a39e6aa2c2468b36fdcdf807afa6d0b8158e51ea7261e"
+    }
+  ],
+  "unpreserved_special_files": [
+    "claude-r80bbvdk/service.sock",
+    "claude-dig7ib0v/service.sock",
+    "claude-ngek97bu/service.sock",
+    "claude-o0hd587g/service.sock"
+  ],
+  "limitations": [
+    "Only file-based managed sources were exercised under a synthetic /etc mount. Actual host policy was not modified.",
+    "An earlier exploratory filesystem.disabled-only run is retained but excluded from the verifier conclusion because its mutable policy file was later replaced. The enabled-plus-disabled variant used a separate retained policy directory.",
+    "The reason selected filesystem weakening was not observed is unknown. This is not proof that all managed weakening is rejected.",
+    "The managed deny control removed Bash and yielded no scratch marker despite CLI terminal success.",
+    "Runtime Unix socket inodes are excluded from regular-file retention. No listener accept events were recorded.",
+    "Raw source and traces are local Git-directory artifacts absent from a clone."
+  ],
+  "claude": {
+    "version": "2.1.322",
+    "sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478"
+  }
+}
