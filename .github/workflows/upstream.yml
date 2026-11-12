@@ -1,0 +1,30 @@
+name: Propose Cursor pstack update
+on:
+  schedule:
+    - cron: '23 7 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cursor-pstack-update
+  cancel-in-progress: false
+jobs:
+  propose:
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version: '1.23.x'
+          cache: false
+      - name: Install pinned staged-secret scanner
+        run: go install github.com/gitleaks/gitleaks/v8@v8.30.1
+      - name: Validate and propose source-only update
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/check-upstream-update.sh
