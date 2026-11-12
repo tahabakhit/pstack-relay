@@ -87,8 +87,8 @@ func TestBuildRestrictsToolsAndEnvironment(t *testing.T) {
 		if h == "claude" && strings.Contains(env, "selected-secret") {
 			t.Fatal("unrelated provider secret retained")
 		}
-		if h == "pi" && p.Args[len(p.Args)-1] != "--evil $(touch /tmp/no)" {
-			t.Fatal(p.Args)
+		if p.Stdin != "--evil $(touch /tmp/no)" {
+			t.Fatal("prompt was not delivered as literal stdin", p.Stdin)
 		}
 		if h != "codex" {
 			if _, err := Build(selected(h), "isolated-write", dir, "prompt"); err == nil {

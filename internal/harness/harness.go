@@ -56,7 +56,7 @@ func Build(t config.Target, access, cwd, prompt string) (Plan, error) {
 		if effort {
 			p.Args = append(p.Args, "-c", "model_reasoning_effort="+strconv.Quote(t.Effort))
 		}
-		p.Args = append(p.Args, "-")
+		p.Args = append(p.Args, "-c", "suppress_unstable_features_warning=true", "-")
 	case "claude":
 		p.Args = []string{"--safe-mode", "--restricted", "-p", "--model", t.Model, "--output-format", "stream-json", "--verbose", "--tools", "Read,Grep,Glob", "--permission-mode", "dontAsk", "--permission-prompts", "none", "--strict-mcp-config"}
 		if effort {
@@ -71,9 +71,6 @@ func Build(t config.Target, access, cwd, prompt string) (Plan, error) {
 		if effort {
 			p.Args = append(p.Args, "--thinking", t.Effort)
 		}
-		// Pi consumes positional text; -- prevents prompts from becoming options.
-		p.Args = append(p.Args, "--", prompt)
-		p.Stdin = ""
 	}
 	return p, nil
 }

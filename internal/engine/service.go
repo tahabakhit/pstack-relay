@@ -12,6 +12,7 @@ import (
 	"strings"
 	"syscall"
 	"time"
+	"unicode/utf8"
 
 	"github.com/pstack-rex/pstack-rex/internal/harness"
 )
@@ -87,10 +88,10 @@ func (s *Service) Dispatch(ctx context.Context, req Request) (Record, error) {
 	if err != nil {
 		return Record{}, err
 	}
-	if req.RequireMCP {
+	if req.RequireMCP || strings.HasPrefix(req.Role, "why ") || strings.HasPrefix(req.Role, "reflect ") {
 		return Record{}, fmt.Errorf("worker MCP access is unsupported by the controlled one-shot profiles; this workflow is blocked")
 	}
-	if req.Prompt == "" || len(req.Prompt) > 256*1024 || strings.ContainsRune(req.Prompt, 0) {
+	if req.Prompt == "" || !utf8.ValidString(req.Prompt) || len(req.Prompt) > 256*1024 || strings.ContainsRune(req.Prompt, 0) {
 		return Record{}, fmt.Errorf("prompt must be nonempty UTF-8 text without NUL, at most 256 KiB")
 	}
 	if req.Seat < 0 {
@@ -289,8 +290,8 @@ func (s *Service) Inspect(ctx context.Context, id string) (Record, error) {
 		return Record{}, fmt.Errorf("invalid Rex process response: %w", err)
 	}
 	if process.LastExit != nil {
-		record.Status = "failed"
-		record.Error = fmt.Sprintf("supervisor exited (%d) without a terminal result; partial artifacts retained", process.LastExit.Code)
+		record.Status = "unknown"
+		record.Error = fmt.Sprintf("supervisor exited (%d) without a terminal result; child termination is unconfirmed and capacity remains reserved", process.LastExit.Code)
 	} else {
 		record.Status = "running"
 	}

@@ -18,7 +18,7 @@ import (
 
 var UpstreamVersion = Version()
 
-//go:embed all:upstream manifest.json compatibility.json runtime-contract.md
+//go:embed all:_upstream manifest.json compatibility.json runtime-contract.md adaptations.json
 var files embed.FS
 
 // File locks every source file's bytes and executable bits.
@@ -40,6 +40,7 @@ type Compatibility struct {
 }
 
 func Version() string        { var m Manifest; _ = json.Unmarshal(manifestBytes(), &m); return m.Version }
+func Revision() string       { var m Manifest; _ = json.Unmarshal(manifestBytes(), &m); return m.Revision }
 func manifestBytes() []byte  { b, _ := files.ReadFile("manifest.json"); return b }
 func digest(b []byte) string { h := sha256.Sum256(b); return hex.EncodeToString(h[:]) }
 
@@ -61,12 +62,41 @@ func Check() error {
 	if c.ManifestSHA256 != digest(manifestBytes()) {
 		return errors.New("upstream compatibility review pending: run upstream accept only after reviewing the change report")
 	}
-	source, err := fs.Sub(files, "upstream")
+	source, err := fs.Sub(files, "_upstream")
 	if err != nil {
 		return err
 	}
-	return checkFS(source, m, false)
+	if err = checkFS(source, m, false); err != nil {
+		return err
+	}
+	var rules []adaptation
+	data, err := files.ReadFile("adaptations.json")
+	if err != nil {
+		return err
+	}
+	if err = json.Unmarshal(data, &rules); err != nil {
+		return err
+	}
+	for _, rule := range rules {
+		data, err := sourceRead(rule.Path)
+		if err != nil {
+			return err
+		}
+		if digest(data) != rule.SourceSHA256 || rule.Old == "" || bytes.Count(data, []byte(rule.Old)) != 1 {
+			return fmt.Errorf("adaptation needs review for %s", rule.Path)
+		}
+	}
+	return nil
 }
+
+type adaptation struct {
+	Path         string `json:"path"`
+	SourceSHA256 string `json:"source_sha256"`
+	Old          string `json:"old"`
+	Replacement  string `json:"replacement"`
+}
+
+func sourceRead(p string) ([]byte, error) { return files.ReadFile("_upstream/" + p) }
 
 func checkFS(source fs.FS, m Manifest, modes bool) error {
 	expected := make(map[string]File, len(m.Files))
@@ -128,6 +158,14 @@ func entrypoint(p string) bool {
 	return path.Base(p) == "SKILL.md" || path.Base(p) == "FOR_AGENTS.md" || (strings.HasPrefix(p, "agents/") && strings.HasSuffix(p, ".md"))
 }
 func transform(p string, b []byte) []byte {
+	var rules []adaptation
+	data, _ := files.ReadFile("adaptations.json")
+	_ = json.Unmarshal(data, &rules)
+	for _, rule := range rules {
+		if rule.Path == p {
+			b = bytes.Replace(b, []byte(rule.Old), []byte(rule.Replacement), 1)
+		}
+	}
 	if !entrypoint(p) {
 		return b
 	}
@@ -184,7 +222,7 @@ func Install(dest string) (err error) {
 		return err
 	}
 	for _, f := range m.Files {
-		b, err := files.ReadFile("upstream/" + f.Path)
+		b, err := files.ReadFile("_upstream/" + f.Path)
 		if err != nil {
 			return err
 		}

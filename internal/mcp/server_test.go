@@ -60,7 +60,10 @@ func TestStdioProtocolAndToolParity(t *testing.T) {
 	}
 	var listed struct {
 		Tools []struct {
-			Name string `json:"name"`
+			Name   string `json:"name"`
+			Schema struct {
+				Required []string `json:"required"`
+			} `json:"inputSchema"`
 		} `json:"tools"`
 	}
 	if err := json.Unmarshal(responses["3"], &listed); err != nil {
@@ -68,6 +71,9 @@ func TestStdioProtocolAndToolParity(t *testing.T) {
 	}
 	names := map[string]bool{}
 	for _, tool := range listed.Tools {
+		if tool.Schema.Required == nil {
+			t.Fatalf("invalid required keyword for %s", tool.Name)
+		}
 		names[tool.Name] = true
 	}
 	if !reflect.DeepEqual(names, map[string]bool{"dispatch": true, "inspect": true, "list": true, "wait": true, "cancel": true, "capabilities": true}) {
@@ -112,6 +118,10 @@ func TestMalformedCallsAndUnsupportedMethods(t *testing.T) {
 		{"wait", `{"id":"attempt","seconds":-1}`},
 		{"list", `{"shell":"echo unsafe"}`},
 		{"capabilities", `{"unknown":true}`},
+		{"capabilities", `null`},
+		{"list", `null`},
+		{"inspect", `{"id":"attempt","seconds":1}`},
+		{"cancel", `{"id":"attempt","seconds":1}`},
 		{"steer", `{}`},
 	} {
 		t.Run(tc.name+tc.args, func(t *testing.T) {

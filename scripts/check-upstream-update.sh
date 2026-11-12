@@ -21,7 +21,7 @@ revision=$(git -C "$work/cursor" rev-parse HEAD)
 go run ./cmd/upstream update --source "$work/cursor" --revision "$revision"
 jq -Sc '.files | sort_by(.path)' upstream.lock.json > "$work/after.json"
 if cmp -s "$work/before.json" "$work/after.json"; then
-  git restore -- upstream.lock.json internal/bundle/manifest.json internal/bundle/review-report.json internal/bundle/upstream
+  git restore -- upstream.lock.json internal/bundle/manifest.json internal/bundle/review-report.json internal/bundle/_upstream
   echo 'Cursor pstack paths, bytes and modes are unchanged. No update PR.' >> "$GITHUB_STEP_SUMMARY"
   exit 0
 fi
@@ -64,7 +64,7 @@ if [[ -n "$existing" ]]; then
   gh pr edit "$existing" --repo "$GITHUB_REPOSITORY" --body-file "$body"
 else
   git switch -c "$branch"
-  git add upstream.lock.json internal/bundle/manifest.json internal/bundle/review-report.json internal/bundle/upstream
+  git add upstream.lock.json internal/bundle/manifest.json internal/bundle/review-report.json internal/bundle/_upstream
   gitleaks git --staged --redact
   git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Propose Cursor pstack source update'
   git push origin "$branch"

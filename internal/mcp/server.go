@@ -25,7 +25,7 @@ func Capabilities() map[string]any {
 }
 
 func schema(properties map[string]any, required ...string) map[string]any {
-	return map[string]any{"type": "object", "properties": properties, "required": required, "additionalProperties": false}
+	return map[string]any{"type": "object", "properties": properties, "required": append([]string{}, required...), "additionalProperties": false}
 }
 func stringField(description string) map[string]any {
 	return map[string]any{"type": "string", "description": description}
@@ -43,6 +43,10 @@ func tools() []map[string]any {
 }
 
 func strict(data []byte, value any) error {
+	trimmed := bytes.TrimSpace(data)
+	if len(trimmed) == 0 || trimmed[0] != '{' {
+		return fmt.Errorf("tool arguments must be a JSON object")
+	}
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
 	if err := decoder.Decode(value); err != nil {
@@ -85,12 +89,24 @@ func call(ctx context.Context, s *engine.Service, name string, args json.RawMess
 		}
 		return s.List(ctx)
 	}
+	if name != "inspect" && name != "wait" && name != "cancel" {
+		return nil, fmt.Errorf("unknown tool %q", name)
+	}
+	if name == "inspect" || name == "cancel" {
+		var input struct {
+			ID string `json:"id"`
+		}
+		if err := strict(args, &input); err != nil {
+			return nil, err
+		}
+		if name == "inspect" {
+			return s.Inspect(ctx, input.ID)
+		}
+		return s.Cancel(ctx, input.ID)
+	}
 	var input struct {
 		ID      string `json:"id"`
 		Seconds int    `json:"seconds"`
-	}
-	if name != "inspect" && name != "wait" && name != "cancel" {
-		return nil, fmt.Errorf("unknown tool %q", name)
 	}
 	if err := strict(args, &input); err != nil {
 		return nil, err

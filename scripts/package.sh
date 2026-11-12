@@ -14,7 +14,7 @@ for target in darwin/amd64 darwin/arm64 linux/amd64 linux/arm64; do
   mkdir -p "$stage/$name"
   CGO_ENABLED=0 GOOS="$os" GOARCH="$arch" go build -trimpath -o "$stage/$name/pstack-rex" ./cmd/pstack-rex
   cp LICENSE NOTICE "$stage/$name/"
-  cp internal/bundle/upstream/LICENSE "$stage/$name/LICENSE.upstream"
+  cp internal/bundle/_upstream/LICENSE "$stage/$name/LICENSE.upstream"
   for doc in README.md docs/architecture.md docs/contracts.md; do
     if [[ -f "$doc" && ! -L "$doc" ]]; then
       mkdir -p "$stage/$name/$(dirname "$doc")"

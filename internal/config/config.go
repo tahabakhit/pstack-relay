@@ -148,7 +148,7 @@ func ValidateTarget(t Target, allowInherit bool) error {
 	if strings.TrimSpace(t.Model) == "" {
 		return fmt.Errorf("explicit model required")
 	}
-	if !allowInherit && (t.Model == "inherit-parent" || t.Effort == "inherit-session" || t.Effort == "inherit-parent") {
+	if !allowInherit && (t.Model == "auto" || t.Model == "inherit-parent" || t.Effort == "inherit-session" || t.Effort == "inherit-parent") {
 		return fmt.Errorf("unresolved model or effort inheritance")
 	}
 	if t.Backend != "auto" && t.Backend != "rex" {
@@ -174,7 +174,7 @@ func (c Config) Resolve(role string, index int, parent *Target) (Target, error) 
 		return Target{}, fmt.Errorf("role %q seat %d unavailable", role, index)
 	}
 	t := seats[index]
-	if t.Harness == "inherit-parent" || t.Model == "inherit-parent" || t.Effort == "inherit-session" || t.Effort == "inherit-parent" {
+	if t.Harness == "inherit-parent" || t.Model == "auto" || t.Model == "inherit-parent" || t.Effort == "inherit-session" || t.Effort == "inherit-parent" {
 		if parent == nil {
 			return Target{}, fmt.Errorf("concrete parent required for inheritance")
 		}
@@ -184,7 +184,7 @@ func (c Config) Resolve(role string, index int, parent *Target) (Target, error) 
 		if t.Harness == "inherit-parent" {
 			t.Harness = parent.Harness
 		}
-		if t.Model == "inherit-parent" {
+		if t.Model == "auto" || t.Model == "inherit-parent" {
 			t.Model = parent.Model
 		}
 		if t.Effort == "inherit-session" || t.Effort == "inherit-parent" {

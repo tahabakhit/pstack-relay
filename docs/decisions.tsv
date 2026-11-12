@@ -1,2 +1,10 @@
 ts	phase	decision	why	evidence	result
 2026-11-12T14:45:00Z	frame	Investigate source and installed interfaces before implementation	The project depends on evolving host and Rex contracts	docs/architecture.md	open
+2026-11-12T14:01:09+00:00	audit	Correct initial timestamp label	Initial frame row recorded local time with UTC suffix; approximately 13:45 UTC was intended	docs/decisions.tsv:2	supersedes timestamp only
+2026-11-12T14:01:09+00:00	architecture	Choose thin Go CLI/MCP with immutable Rex supervisors	One workflow upstream and no extra Bun runner; keep requested and reported model evidence separate	docs/architecture.md	accepted after independent GPT-6 Astra comparison
+2026-11-12T14:01:09+00:00	implementation	Complete resolver, three harness adapters, embedded upstream and Rex lifecycle	Central code owns runtime policy while Cursor owns workflow bodies	a2bfff7	build and module tests passed
+2026-11-12T14:01:09+00:00	verification	Add subprocess lifecycle, MCP and CLI tests	Completion, concurrency, malformed events and cancellation need observable proof	2238bb4	go test -race ./... passed
+2026-11-12T14:01:09+00:00	maintenance	Add cross-platform packaging and draft-only upstream updater	Updates must retain a closed compatibility gate	2bd33bd	local package and stub updater validation passed; hosted runs unverified
+2026-11-12T14:01:09+00:00	live	Run three real harnesses through Rex	Fixture tests cannot prove installed harness compatibility	/tmp/pstack-rex-live/state/workers/	Claude and Pi complete; Codex warning rejected then corrected run completes
+2026-11-12T14:01:09+00:00	review	Keep missing supervisor results unknown and handle ordinary signals	A crashed supervisor may leave a child alive; do not release its capacity	internal/engine/service.go	independent review reproduced original orphan; fixes under validation
+2026-11-12T14:01:09+00:00	maintenance	Store imported source under _upstream	Go wildcard tests must never execute future third-party Go packages	internal/bundle/bundle.go	source bytes unchanged; focused tests pass

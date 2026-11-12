@@ -115,7 +115,7 @@ func run(args []string) error {
 	}
 	switch command {
 	case "version":
-		return printJSON(map[string]any{"version": version, "upstream_version": bundle.UpstreamVersion, "upstream_revision": bundle.Version()})
+		return printJSON(map[string]any{"version": version, "upstream_version": bundle.UpstreamVersion, "upstream_revision": bundle.Revision()})
 	case "worker":
 		return engine.RunWorker(*stateRoot, *id)
 	case "install":
@@ -241,7 +241,13 @@ func run(args []string) error {
 		if e != nil {
 			return e
 		}
-		return printJSON(record)
+		if err = printJSON(record); err != nil {
+			return err
+		}
+		if record.Status != "completed" {
+			return fmt.Errorf("worker %s has status %s; no successful completion", record.ID, record.Status)
+		}
+		return nil
 	case "cancel":
 		record, e := service.Cancel(ctx, *id)
 		if e != nil {

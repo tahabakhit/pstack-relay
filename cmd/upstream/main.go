@@ -81,7 +81,7 @@ func run(args []string) error {
 		if err != nil {
 			return err
 		}
-		if err := bundle.CheckDirectory(filepath.Join(bundleDir, "upstream"), m); err != nil {
+		if err := bundle.CheckDirectory(filepath.Join(bundleDir, "_upstream"), m); err != nil {
 			return err
 		}
 		if err := writeJSON(filepath.Join(bundleDir, "compatibility.json"), bundle.Compatibility{ManifestSHA256: hash(raw), Note: "Explicitly accepted source inventory. Runtime contract overrides upstream delegation; lexical inventory is a review aid, not a semantic guarantee."}); err != nil {
@@ -122,7 +122,7 @@ func check() error {
 	if err != nil {
 		return err
 	}
-	if err := bundle.CheckDirectory(filepath.Join(bundleDir, "upstream"), m); err != nil {
+	if err := bundle.CheckDirectory(filepath.Join(bundleDir, "_upstream"), m); err != nil {
 		return err
 	}
 	var c bundle.Compatibility
@@ -250,7 +250,7 @@ func update(source, revision string) error {
 		return err
 	}
 	// The compatibility baseline is deliberately untouched by updates.
-	dest := filepath.Join(bundleDir, "upstream")
+	dest := filepath.Join(bundleDir, "_upstream")
 	backup := dest + ".previous"
 	if _, err := os.Lstat(backup); !os.IsNotExist(err) {
 		return errors.New("upstream.previous exists; resolve interrupted update before retry")
@@ -330,7 +330,7 @@ func makeReport(stage string, m bundle.Manifest) (Report, error) {
 	old, _, _ := readManifest()
 	previousRoles := map[string]bool{}
 	if len(old.Files) > 0 {
-		for _, role := range roleCandidates(filepath.Join(bundleDir, "upstream")) {
+		for _, role := range roleCandidates(filepath.Join(bundleDir, "_upstream")) {
 			previousRoles[role] = true
 		}
 	}
@@ -363,7 +363,7 @@ func makeReport(stage string, m bundle.Manifest) (Report, error) {
 			delegation[c.Path] = true
 		}
 	}
-	oldCandidates, oldVocabulary, _ := inventory(filepath.Join(bundleDir, "upstream"), old)
+	oldCandidates, oldVocabulary, _ := inventory(filepath.Join(bundleDir, "_upstream"), old)
 	for _, c := range oldCandidates {
 		if changed[c.Path] {
 			delegation[c.Path] = true

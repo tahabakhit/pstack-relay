@@ -26,6 +26,11 @@ func snapshot(ctx context.Context, cwd string) (string, error) {
 		return "", err
 	}
 	hash := sha256.New()
+	revision, err := git(ctx, root, "rev-parse", "HEAD")
+	if err != nil {
+		return "", err
+	}
+	fmt.Fprintf(hash, "head:%s\x00", strings.TrimSpace(revision))
 	fmt.Fprintf(hash, "diff:%d\x00%s", len(diff), diff)
 	for _, name := range strings.Split(untracked, "\x00") {
 		if name == "" {

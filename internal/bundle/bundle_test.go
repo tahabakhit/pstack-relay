@@ -30,7 +30,7 @@ func TestEmbeddedInstall(t *testing.T) {
 	}
 	count := 0
 	for _, f := range m.Files {
-		original, err := files.ReadFile("upstream/" + f.Path)
+		original, err := files.ReadFile("_upstream/" + f.Path)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -64,6 +64,20 @@ func TestEmbeddedInstall(t *testing.T) {
 				t.Fatal("missing pointer ending")
 			}
 			restored := append(append([]byte{}, first[:start]...), first[start+1+end+2:]...)
+			var rules []adaptation
+			data, _ := files.ReadFile("adaptations.json")
+			if err = json.Unmarshal(data, &rules); err != nil {
+				t.Fatal(err)
+			}
+			for i := len(rules) - 1; i >= 0; i-- {
+				rule := rules[i]
+				if rule.Path == f.Path {
+					if bytes.Count(restored, []byte(rule.Replacement)) != 1 {
+						t.Fatalf("declared adaptation missing %s", f.Path)
+					}
+					restored = bytes.Replace(restored, []byte(rule.Replacement), []byte(rule.Old), 1)
+				}
+			}
 			if !bytes.Equal(restored, original) {
 				t.Fatalf("upstream body changed %s", f.Path)
 			}

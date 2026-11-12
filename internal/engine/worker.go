@@ -9,6 +9,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"os/signal"
 	"path/filepath"
 	"strings"
 	"syscall"
@@ -97,22 +98,36 @@ func RunWorker(root, id string) error {
 		result.Error = "cancelled before execution"
 		return finish()
 	}
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, syscall.SIGTERM, syscall.SIGINT, syscall.SIGHUP)
+	defer signal.Stop(signals)
 	current, err := git(context.Background(), req.Cwd, "rev-parse", "HEAD")
 	if err != nil || strings.TrimSpace(current) != req.ExpectedRevision {
 		result.Error = "checkout revision changed before execution"
 		return finish()
 	}
 	if req.Access == "isolated-write" {
+		repoRoot, e := git(context.Background(), req.Cwd, "rev-parse", "--show-toplevel")
+		if e != nil {
+			result.Error = e.Error()
+			return finish()
+		}
+		relative, e := filepath.Rel(strings.TrimSpace(repoRoot), req.Cwd)
+		if e != nil {
+			result.Error = e.Error()
+			return finish()
+		}
 		dirty, e := git(context.Background(), req.Cwd, "status", "--porcelain")
 		if e != nil || strings.TrimSpace(dirty) != "" {
 			result.Error = "isolated writers require a clean source checkout; commit or create an explicit snapshot first"
 			return finish()
 		}
-		started.Cwd = filepath.Join(dir, "worktree")
-		if _, err = git(context.Background(), req.Cwd, "worktree", "add", "--detach", started.Cwd, req.ExpectedRevision); err != nil {
+		worktree := filepath.Join(dir, "worktree")
+		if _, err = git(context.Background(), req.Cwd, "worktree", "add", "--detach", worktree, req.ExpectedRevision); err != nil {
 			result.Error = err.Error()
 			return finish()
 		}
+		started.Cwd = filepath.Join(worktree, relative)
 	}
 	if err = os.Setenv("PATH", filepath.Dir(req.Executable)+string(os.PathListSeparator)+os.Getenv("PATH")); err != nil {
 		return err
@@ -165,6 +180,12 @@ func RunWorker(root, id string) error {
 		result.Error = err.Error()
 		return finish()
 	}
+	if err = writeJSON(filepath.Join(dir, "child.json"), map[string]any{"pid": cmd.Process.Pid, "process_group": cmd.Process.Pid, "started_at": time.Now().UTC(), "executable": plan.Executable}); err != nil {
+		syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL)
+		cmd.Wait()
+		result.Error = err.Error()
+		return finish()
+	}
 	done := make(chan error, 1)
 	go func() { done <- cmd.Wait() }()
 	deadline := time.NewTimer(time.Duration(req.TimeoutSeconds) * time.Second)
@@ -191,6 +212,9 @@ func RunWorker(root, id string) error {
 			running = false
 		case <-deadline.C:
 			stop("execution deadline exceeded", "timed_out")
+			running = false
+		case sig := <-signals:
+			stop("supervisor received "+sig.String(), "cancelled")
 			running = false
 		case <-poll.C:
 			if cancelled() {
