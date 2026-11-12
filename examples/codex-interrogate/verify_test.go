@@ -31,7 +31,11 @@ func (b *traceBuilder) item(item map[string]any) {
 	b.events = append(b.events, map[string]any{"type": "item.started", "item": started}, map[string]any{"type": "item.completed", "item": item})
 }
 func (b *traceBuilder) command(command, output string, exit int) {
-	b.item(map[string]any{"type": "command_execution", "command": "/usr/bin/zsh -lc " + shellQuote(command), "aggregated_output": output, "exit_code": exit, "status": "completed"})
+	status := "completed"
+	if exit != 0 {
+		status = "failed"
+	}
+	b.item(map[string]any{"type": "command_execution", "command": "/usr/bin/zsh -lc " + shellQuote(command), "aggregated_output": output, "exit_code": exit, "status": status})
 }
 func (b *traceBuilder) call(tool string, args, value any) {
 	data, _ := json.Marshal(value)
@@ -48,6 +52,61 @@ func (b *traceBuilder) bytes() []byte {
 	}
 	return out
 }
+func TestReadTraceCommandTerminalStatus(t *testing.T) {
+	for _, test := range []struct {
+		name, status string
+		exit         any
+		wantError    bool
+	}{
+		{"success", "completed", 0, false},
+		{"failed probe", "failed", 1, false},
+		{"other nonzero exit", "failed", 2, false},
+		{"failed zero exit", "failed", 0, true},
+		{"completed nonzero exit", "completed", 1, true},
+		{"missing exit", "failed", nil, true},
+		{"cancelled", "cancelled", 1, true},
+		{"incomplete", "in_progress", 1, true},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			var b traceBuilder
+			b.item(map[string]any{"type": "command_execution", "command": "python3 -B /proof/probe.py", "aggregated_output": reviewOutput, "exit_code": test.exit, "status": test.status})
+			b.finish("probe executed")
+			path := filepath.Join(t.TempDir(), "trace.jsonl")
+			must(t, os.WriteFile(path, b.bytes(), 0600))
+			trace, err := readTrace(path, config.Target{Harness: "codex", Model: "model-a", Effort: "medium", Backend: "rex", Auth: "existing"})
+			if test.wantError {
+				if err == nil {
+					t.Fatal("invalid command terminal state accepted")
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("terminal command rejected: %v", err)
+			}
+			if len(trace.Commands) != 1 || trace.Commands[0].ExitCode != test.exit || trace.Commands[0].Output != reviewOutput {
+				t.Fatalf("command evidence changed: %+v", trace.Commands)
+			}
+		})
+	}
+}
+
+func TestReadTraceMCPRequiresCompletion(t *testing.T) {
+	for _, status := range []string{"completed", "failed", "in_progress", "cancelled"} {
+		t.Run(status, func(t *testing.T) {
+			var b traceBuilder
+			b.call("capabilities", map[string]any{}, map[string]any{})
+			b.events[1]["item"].(map[string]any)["status"] = status
+			b.finish("tool returned")
+			path := filepath.Join(t.TempDir(), "trace.jsonl")
+			must(t, os.WriteFile(path, b.bytes(), 0600))
+			_, err := readTrace(path, config.Target{Harness: "codex", Model: "model-a", Effort: "medium", Backend: "rex", Auth: "existing"})
+			if (err == nil) != (status == "completed") {
+				t.Fatalf("MCP status %q: %v", status, err)
+			}
+		})
+	}
+}
+
 func testArtifacts(t *testing.T) (string, manifest) {
 	t.Helper()
 	binary := filepath.Join(t.TempDir(), "pstack-rex")
