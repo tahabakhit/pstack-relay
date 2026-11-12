@@ -28,7 +28,7 @@ type Config struct {
 var Roles = []string{"feature, refactoring", "bug-fix", "perf-issue", "hillclimb", "judgment and prose", "hardest tasks", "how explorer", "how explainer", "why investigators", "why synthesizer", "reflect tooling", "reflect judgment, divergent, synthesizer", "arena runners", "arena cross-judge pool", "swarm workers", "architect runners", "interrogate reviewers"}
 
 func Default() Config {
-	return Config{Version: 1, Session: "pstack-rex", MaxConcurrent: 4, TimeoutSeconds: 600, Roles: map[string][]Target{}}
+	return Config{Version: 1, MaxConcurrent: 4, TimeoutSeconds: 600, Roles: map[string][]Target{}}
 }
 func DefaultPath() string {
 	root := os.Getenv("XDG_CONFIG_HOME")
@@ -116,8 +116,8 @@ func (c Config) Validate() error {
 	if c.Version != 1 {
 		return fmt.Errorf("unsupported config version %d", c.Version)
 	}
-	if c.Session == "" || c.MaxConcurrent < 1 || c.TimeoutSeconds < 1 {
-		return fmt.Errorf("session, positive max_concurrent and timeout_seconds required")
+	if c.MaxConcurrent < 1 || c.TimeoutSeconds < 1 {
+		return fmt.Errorf("positive max_concurrent and timeout_seconds required")
 	}
 	for r, seats := range c.Roles {
 		if !knownRole(r) {
