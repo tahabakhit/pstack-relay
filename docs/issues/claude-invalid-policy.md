@@ -38,3 +38,7 @@ Prototype a launcher that validates the complete generated policy before startin
 Repeat this exact negative control through that launcher and verify that no Claude process or probe starts. Then test schema-valid weakening, managed overrides, and actual effective controls. A new launcher may close this gap, but this experiment does not prove that it does.
 
 Keep Claude and Pi shell-required dispatch blocked until the acceptance gate passes. A normal terminal success cannot certify that required probes executed under the intended policy.
+
+## Admission experiment follow-up
+
+The [strict launcher experiment](../claude-admission-prototype.md) rejected the malformed and wrong-type candidates and demonstrated actual CLI acceptance of an inline approved snapshot. It does not close this issue. Effective managed policy, complete S03, executable identity races and production integration remain unverified. Use its retained evidence to avoid repeating the deterministic admission subset solely to restate the same result.

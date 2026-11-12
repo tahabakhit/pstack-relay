@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "kind": "actual-pi-rpc-shell-selection",
+  "source_revision": "71e169917b44f95e2c3034d494665eddc820a2ed",
+  "observed_date": "2026-11-12",
+  "pi_version": "1.5.2",
+  "host": "Linux amd64",
+  "scratch_root": "/tmp/pstack-rex-pi-shell.5c7r0kvn",
+  "preserved_local_artifacts": "/home/taha/dev/agents/pstack-rex/.git/pstack/experiments/pi-shell-routing-2026-11-12",
+  "real_provider_inference": false,
+  "real_credentials_used": false,
+  "production_runtime_changed": false,
+  "observations": [
+    {
+      "mode": "untrusted-project",
+      "trusted": false,
+      "exit": 0,
+      "wrapper_used": true,
+      "marker": "PI_RPC_CONTROL"
+    },
+    {
+      "mode": "trusted-project",
+      "trusted": true,
+      "exit": 0,
+      "wrapper_used": false,
+      "marker": "PI_RPC_CONTROL"
+    },
+    {
+      "mode": "neutral-control",
+      "trusted": false,
+      "exit": 0,
+      "wrapper_used": true,
+      "marker": "PI_RPC_CONTROL"
+    }
+  ],
+  "files": [
+    {
+      "relative_path": "neutral-control-6v80okhv/agent/APPEND_SYSTEM.md",
+      "sha256": "df146316131963f113029aa7705fdbb61679825c9cc85d7088659690c37b2b4f"
+    },
+    {
+      "relative_path": "neutral-control-6v80okhv/agent/SYSTEM.md",
+      "sha256": "de6522f96fe8711eb33d83eea3613c6a435df199cbfa9eb139e0258db981e5e6"
+    },
+    {
+      "relative_path": "neutral-control-6v80okhv/agent/auth.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "relative_path": "neutral-control-6v80okhv/agent/models-store.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "relative_path": "neutral-control-6v80okhv/agent/settings.json",
+      "sha256": "d3c67e222ac90c467ffc4a1147f3390ec6445cfa42df577959aee86271ad35a9"
+    },
+    {
+      "relative_path": "neutral-control-6v80okhv/result",
+      "sha256": "daac9a231f03c173cfe95733f1d4e22246c4e25ad66f35753a1948ec66c45de1"
+    },
+    {
+      "relative_path": "neutral-control-6v80okhv/shell-wrapper",
+      "sha256": "66642cc6ec3b3fde36183e89a60931a59114ffe70b9a06499ce41618fd432c76"
+    },
+    {
+      "relative_path": "neutral-control-6v80okhv/source/.pi/APPEND_SYSTEM.md",
+      "sha256": "df146316131963f113029aa7705fdbb61679825c9cc85d7088659690c37b2b4f"
+    },
+    {
+      "relative_path": "neutral-control-6v80okhv/source/.pi/SYSTEM.md",
+      "sha256": "de6522f96fe8711eb33d83eea3613c6a435df199cbfa9eb139e0258db981e5e6"
+    },
+    {
+      "relative_path": "neutral-control-6v80okhv/source/.pi/settings.json",
+      "sha256": "904b440eb07a5dea722dec5d7e27e4558b4e7fd5648cba01c66c5715260f1e27"
+    },
+    {
+      "relative_path": "neutral-control-6v80okhv/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "relative_path": "neutral-control-6v80okhv/stdout.jsonl",
+      "sha256": "fedb184a8ed334083b469dc404ab1fb1672d669a8f200766b3080bad74ee6c85"
+    },
+    {
+      "relative_path": "neutral-control-6v80okhv/wrapper.json",
+      "sha256": "507febd71afd73eaac30d54e620cb46f5b56982d5fb58dd4a5d223df75c27c73"
+    },
+    {
+      "relative_path": "probe.py",
+      "sha256": "daac4ade004479a8beb6c69abb0f3b2ab125fad6f5e4f2da9a9ea79285246a51"
+    },
+    {
+      "relative_path": "results.json",
+      "sha256": "09f08bbac6c324e545df8f240f8aac713c78acc50d055c95ef129b5a60cd389d"
+    },
+    {
+      "relative_path": "trusted-project-wxivjaig/agent/APPEND_SYSTEM.md",
+      "sha256": "df146316131963f113029aa7705fdbb61679825c9cc85d7088659690c37b2b4f"
+    },
+    {
+      "relative_path": "trusted-project-wxivjaig/agent/SYSTEM.md",
+      "sha256": "de6522f96fe8711eb33d83eea3613c6a435df199cbfa9eb139e0258db981e5e6"
+    },
+    {
+      "relative_path": "trusted-project-wxivjaig/agent/auth.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "relative_path": "trusted-project-wxivjaig/agent/models-store.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "relative_path": "trusted-project-wxivjaig/agent/settings.json",
+      "sha256": "e2e3b0545a3a96718c94a02a2f0a17f1124853c5e98e5dfb0680dcb28c72726c"
+    },
+    {
+      "relative_path": "trusted-project-wxivjaig/result",
+      "sha256": "daac9a231f03c173cfe95733f1d4e22246c4e25ad66f35753a1948ec66c45de1"
+    },
+    {
+      "relative_path": "trusted-project-wxivjaig/shell-wrapper",
+      "sha256": "8f5993557806218b02bcd5be8332be52eb5b1c269a7ca9496540ff0e95952de2"
+    },
+    {
+      "relative_path": "trusted-project-wxivjaig/source/.pi/APPEND_SYSTEM.md",
+      "sha256": "df146316131963f113029aa7705fdbb61679825c9cc85d7088659690c37b2b4f"
+    },
+    {
+      "relative_path": "trusted-project-wxivjaig/source/.pi/SYSTEM.md",
+      "sha256": "de6522f96fe8711eb33d83eea3613c6a435df199cbfa9eb139e0258db981e5e6"
+    },
+    {
+      "relative_path": "trusted-project-wxivjaig/source/.pi/settings.json",
+      "sha256": "904b440eb07a5dea722dec5d7e27e4558b4e7fd5648cba01c66c5715260f1e27"
+    },
+    {
+      "relative_path": "trusted-project-wxivjaig/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "relative_path": "trusted-project-wxivjaig/stdout.jsonl",
+      "sha256": "83c73704da41b792d2530ce2d3332af1e50664c190510016c41a9345f5975d6c"
+    },
+    {
+      "relative_path": "untrusted-project-qfy0xrny/agent/APPEND_SYSTEM.md",
+      "sha256": "df146316131963f113029aa7705fdbb61679825c9cc85d7088659690c37b2b4f"
+    },
+    {
+      "relative_path": "untrusted-project-qfy0xrny/agent/SYSTEM.md",
+      "sha256": "de6522f96fe8711eb33d83eea3613c6a435df199cbfa9eb139e0258db981e5e6"
+    },
+    {
+      "relative_path": "untrusted-project-qfy0xrny/agent/auth.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "relative_path": "untrusted-project-qfy0xrny/agent/models-store.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "relative_path": "untrusted-project-qfy0xrny/agent/settings.json",
+      "sha256": "35f1b15b7623468e3876931f39999098c2530aa8c41e2277a2fe0b3b8f39a07a"
+    },
+    {
+      "relative_path": "untrusted-project-qfy0xrny/result",
+      "sha256": "daac9a231f03c173cfe95733f1d4e22246c4e25ad66f35753a1948ec66c45de1"
+    },
+    {
+      "relative_path": "untrusted-project-qfy0xrny/shell-wrapper",
+      "sha256": "4945d6674dba9183b7a7327f516e7d5dbb64a9983c49b3636e602c161b41e5b5"
+    },
+    {
+      "relative_path": "untrusted-project-qfy0xrny/source/.pi/APPEND_SYSTEM.md",
+      "sha256": "df146316131963f113029aa7705fdbb61679825c9cc85d7088659690c37b2b4f"
+    },
+    {
+      "relative_path": "untrusted-project-qfy0xrny/source/.pi/SYSTEM.md",
+      "sha256": "de6522f96fe8711eb33d83eea3613c6a435df199cbfa9eb139e0258db981e5e6"
+    },
+    {
+      "relative_path": "untrusted-project-qfy0xrny/source/.pi/settings.json",
+      "sha256": "904b440eb07a5dea722dec5d7e27e4558b4e7fd5648cba01c66c5715260f1e27"
+    },
+    {
+      "relative_path": "untrusted-project-qfy0xrny/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "relative_path": "untrusted-project-qfy0xrny/stdout.jsonl",
+      "sha256": "f03465923801edb445b763bd23918294a492d1915d1d83305eb7c2a8c3f1974f"
+    },
+    {
+      "relative_path": "untrusted-project-qfy0xrny/wrapper.json",
+      "sha256": "9c645e9f2a36d24d69e0c4f017562463ea2224a55432f3a2aa447716ac7002fa"
+    }
+  ],
+  "limitations": [
+    "RPC user bash uses session.executeBash, not model-directed tool execution.",
+    "Wrapper only records and execs bash; it is not a sandbox.",
+    "No prompt content or whole-process boundary is certified.",
+    "Initial closed-stdin instrument yielded only get_state and was inconclusive. The corrected driver keeps stdin open through correlated bash response.",
+    "Existing authentication, refresh and provider requests were not exercised.",
+    "Scripts and raw evidence are local Git-directory artifacts absent from a clone."
+  ]
+}

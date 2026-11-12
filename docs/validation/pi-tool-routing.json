@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "kind": "synthetic-model-actual-pi-tool-path",
+  "source_revision": "71e169917b44f95e2c3034d494665eddc820a2ed",
+  "observed_date": "2026-11-12",
+  "pi_version": "1.5.2",
+  "host": "Linux amd64",
+  "scratch_root": "/tmp/pstack-rex-pi-tools.hh2ro0qa",
+  "preserved_local_artifacts": "/home/taha/dev/agents/pstack-rex/.git/pstack/experiments/pi-tool-routing-2026-11-12",
+  "real_provider_inference": false,
+  "real_credentials_used": false,
+  "production_runtime_changed": false,
+  "verification": {
+    "verdict": "synthetic-model-tool-routing-verified",
+    "observations": [
+      {
+        "fixture": "fixture",
+        "cli_exit": 0,
+        "message_requests": 3,
+        "command_exits": [
+          1,
+          0
+        ],
+        "tool_errors": [
+          true,
+          false
+        ]
+      },
+      {
+        "fixture": "fixture-missing",
+        "cli_exit": 0,
+        "message_requests": 3,
+        "command_exits": [
+          null,
+          null
+        ],
+        "tool_errors": [
+          true,
+          true
+        ]
+      }
+    ],
+    "limitations": [
+      "No command isolation was installed.",
+      "No real model inference, authentication or Rex integration was performed.",
+      "Deferred provider placeholder is present in wire tools; it was not invoked or independently execution-tested."
+    ]
+  },
+  "files": [
+    {
+      "relative_path": "fixture/agent/APPEND_SYSTEM.md",
+      "sha256": "84e8d174c0853ce247e8a0a89fd08d05db6fec13922b54344b37e205795300b8"
+    },
+    {
+      "relative_path": "fixture/agent/SYSTEM.md",
+      "sha256": "49796b604da995b00f957327d1c58b698bed06b4d0db9fa5cacaf346c65e9180"
+    },
+    {
+      "relative_path": "fixture/agent/auth.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "relative_path": "fixture/agent/models-store.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "relative_path": "fixture/agent/models.json",
+      "sha256": "9da711d39414af0c48fa23507659b5bb25ae5d5a5600289a8a08a70906043bc2"
+    },
+    {
+      "relative_path": "fixture/agent/settings.json",
+      "sha256": "d6290232b1e13968d037c23f85a8563d6a003f3f754dd7f8001628b1ab5dfce3"
+    },
+    {
+      "relative_path": "fixture/requests.json",
+      "sha256": "05cd7a882238e50435b1e8f70a73b279c827bde1b54ad6f704b0c8c365079efe"
+    },
+    {
+      "relative_path": "fixture/scratch/result",
+      "sha256": "3fae2b130dadb65a597c68815a7e572d94dd846423138dff02cddf9f7fe1e26b"
+    },
+    {
+      "relative_path": "fixture/shell-wrapper",
+      "sha256": "f0575b222e3f3d9971600494556584e689eaf77ca478c8e13fe1a7e4efb2bd9a"
+    },
+    {
+      "relative_path": "fixture/source/.pi/APPEND_SYSTEM.md",
+      "sha256": "84e8d174c0853ce247e8a0a89fd08d05db6fec13922b54344b37e205795300b8"
+    },
+    {
+      "relative_path": "fixture/source/.pi/SYSTEM.md",
+      "sha256": "49796b604da995b00f957327d1c58b698bed06b4d0db9fa5cacaf346c65e9180"
+    },
+    {
+      "relative_path": "fixture/source/.pi/settings.json",
+      "sha256": "904b440eb07a5dea722dec5d7e27e4558b4e7fd5648cba01c66c5715260f1e27"
+    },
+    {
+      "relative_path": "fixture/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "relative_path": "fixture/stdout.jsonl",
+      "sha256": "d2483d143ad740a7714217391db26389e2c18cd01aa123d53703c83b63311a02"
+    },
+    {
+      "relative_path": "fixture/summary.json",
+      "sha256": "e4ac56f1a3291d4bb1f965cb13e8e519be2a625c97d578f41e36808f8bf1dc71"
+    },
+    {
+      "relative_path": "fixture/wrapper.jsonl",
+      "sha256": "c7a0e7494b12d1ba12dd9423e821a8e0e85f5f653a12241a6e6a957ce125116e"
+    },
+    {
+      "relative_path": "fixture-missing/agent/APPEND_SYSTEM.md",
+      "sha256": "84e8d174c0853ce247e8a0a89fd08d05db6fec13922b54344b37e205795300b8"
+    },
+    {
+      "relative_path": "fixture-missing/agent/SYSTEM.md",
+      "sha256": "49796b604da995b00f957327d1c58b698bed06b4d0db9fa5cacaf346c65e9180"
+    },
+    {
+      "relative_path": "fixture-missing/agent/auth.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "relative_path": "fixture-missing/agent/models-store.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "relative_path": "fixture-missing/agent/models.json",
+      "sha256": "17afcb7774db5c3d0b263aef623782ab82c71801b78568a2cccff73f63e216c4"
+    },
+    {
+      "relative_path": "fixture-missing/agent/settings.json",
+      "sha256": "d1feec690b665b026ab961c596e5f8a6deb683ece96fa19a6b03556dc45a21e3"
+    },
+    {
+      "relative_path": "fixture-missing/requests.json",
+      "sha256": "bb2a2cbfc97013d0254b5d98cf958c5e28d3b36527386f7f3e8565566b896a33"
+    },
+    {
+      "relative_path": "fixture-missing/source/.pi/APPEND_SYSTEM.md",
+      "sha256": "84e8d174c0853ce247e8a0a89fd08d05db6fec13922b54344b37e205795300b8"
+    },
+    {
+      "relative_path": "fixture-missing/source/.pi/SYSTEM.md",
+      "sha256": "49796b604da995b00f957327d1c58b698bed06b4d0db9fa5cacaf346c65e9180"
+    },
+    {
+      "relative_path": "fixture-missing/source/.pi/settings.json",
+      "sha256": "904b440eb07a5dea722dec5d7e27e4558b4e7fd5648cba01c66c5715260f1e27"
+    },
+    {
+      "relative_path": "fixture-missing/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "relative_path": "fixture-missing/stdout.jsonl",
+      "sha256": "12fac85f2706e885cd79cbc22a8ebfb1cf61b6edab4cb2fc3548d0d646cc7524"
+    },
+    {
+      "relative_path": "fixture-missing/summary.json",
+      "sha256": "9bb90c3f5eeac676bd482da2954f0a72cd2c47a34362919cb8275f7c5355bed1"
+    },
+    {
+      "relative_path": "probe.py",
+      "sha256": "fc22854358becae495fc9d47f820db4c58da8b83053232d18f92ae400d184c7a"
+    },
+    {
+      "relative_path": "verification.json",
+      "sha256": "4cf7b7383bf06f10462133ab119ab97b2426efe883bc5a4788c4dbe83d19e1fb"
+    },
+    {
+      "relative_path": "verify.py",
+      "sha256": "315e2a14c7597e3302c5bcdd9b24ddcf35d8e91830073b9d168dc54cfba4c67f"
+    }
+  ],
+  "source_locator": {
+    "provider_placeholder": "@earendil-works/pi-ai/dist/api/anthropic-messages.js:131-142"
+  },
+  "limitations": [
+    "The wrapper is an observation instrument that execs bash, not a sandbox.",
+    "The local synthetic Messages endpoint dictates commands and responses; it establishes no reasoning or served-model identity.",
+    "Only selected system/append prompt canaries were tested, not all startup mechanisms.",
+    "A reserved deferred tool placeholder was included in provider requests. Source describes it as never activated; it was not invoked here.",
+    "Actual credentials, refresh, containment, Rex, concurrency and lifecycle remain unverified.",
+    "Raw traces and scripts are local Git-directory artifacts absent from a clone."
+  ]
+}

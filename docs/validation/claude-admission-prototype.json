@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "kind": "strict-policy-admission-prototype",
+  "source_revision": "71e169917b44f95e2c3034d494665eddc820a2ed",
+  "observed_date": "2026-11-12",
+  "host": "Linux amd64",
+  "scratch_root": "/tmp/pstack-rex-admission.4kV4pu",
+  "preserved_local_artifacts": "/home/taha/dev/agents/pstack-rex/.git/pstack/experiments/claude-admission-2026-11-12",
+  "claude": {
+    "version": "2.1.322",
+    "sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478"
+  },
+  "verification": {
+    "verdict": "admission-subset-verified",
+    "matrix_variants": 72,
+    "native_runs": {
+      "wrong-type": {
+        "fixture": "/tmp/pstack-rex-admission.4kV4pu/claude-hw_hoqj1",
+        "exit": 1,
+        "message_requests": 0
+      },
+      "valid": {
+        "fixture": "/tmp/pstack-rex-admission.4kV4pu/claude-y4fm73tm",
+        "exit": 0,
+        "message_requests": 9
+      },
+      "malformed": {
+        "fixture": "/tmp/pstack-rex-admission.4kV4pu/claude-26it7d56",
+        "exit": 1,
+        "message_requests": 0
+      }
+    },
+    "not_verified": [
+      "managed effective policy",
+      "all shell-matrix requirements",
+      "production launcher integration",
+      "executable replacement races",
+      "real inference",
+      "Rex integration",
+      "Pi boundaries"
+    ]
+  },
+  "production_runtime_changed": false,
+  "real_credentials_used": false,
+  "real_provider_inference": false,
+  "files": [
+    {
+      "relative_path": "main.go",
+      "sha256": "c8bfd6e11bb3f68ad5775b6812716e9da42fd01e5958f2426e0b99e8d850035b"
+    },
+    {
+      "relative_path": "matrix.py",
+      "sha256": "f6c24bda276665315f2378dbe6a31be827da14024c5ca1fc031eaecd29158251"
+    },
+    {
+      "relative_path": "verify.py",
+      "sha256": "4ae7867dbaa032f055d4065f0316277f1ed830b83c3bc19936d311ff738fa983"
+    },
+    {
+      "relative_path": "claude_mock.py",
+      "sha256": "73fef91ba877675d262d8b7a85cda47b90efc6d271dcaf189300e131d645bc57"
+    },
+    {
+      "relative_path": "matrix-results.json",
+      "sha256": "f5b8c0f18b2f29ff7c74a4877a9259052b765af8f4f384ffdcd14737d29d5461"
+    },
+    {
+      "relative_path": "verification.json",
+      "sha256": "5938b929518566ae25a52b1cb1105b6eb75e9a960df3664667898b81c5fd58c6"
+    },
+    {
+      "relative_path": "claude-26it7d56/policy.json",
+      "sha256": "021fb596db81e6d02bf3d2586ee3981fe519f275c0ac9ca76bbcf2ebb4097d96"
+    },
+    {
+      "relative_path": "claude-26it7d56/probes.json",
+      "sha256": "0ae4235723067e32f43e46a4fb7f7c823222dfb479250bc6a74ab0b8b76138fb"
+    },
+    {
+      "relative_path": "claude-26it7d56/summary.json",
+      "sha256": "ec4ae5682f519a79c6686ee8132e34ba5dec03a2177d9b031dab506296d8f713"
+    },
+    {
+      "relative_path": "claude-hw_hoqj1/policy.json",
+      "sha256": "e4c539862b7ef5deddf9f4872f78bca5662011a321418b4b6cfacf6c65bffb09"
+    },
+    {
+      "relative_path": "claude-hw_hoqj1/probes.json",
+      "sha256": "439a21469bdb9383d438b0305fb5167d0609fc1763436be652f5fd534bc23e52"
+    },
+    {
+      "relative_path": "claude-hw_hoqj1/summary.json",
+      "sha256": "cbe84c30ffc278b788ea467f72349a328f174ed83cf32927677e8741b8020181"
+    },
+    {
+      "relative_path": "claude-y4fm73tm/policy.json",
+      "sha256": "d6bbd5c0c3a82e50e9b819c7c0386f41d9ef40f950cb3709f0839da50ef18bc4"
+    },
+    {
+      "relative_path": "claude-y4fm73tm/probes.json",
+      "sha256": "84368f35e12d45bacaabefdaa4d7d428e17befc032f628b77d93fb3eccad5030"
+    },
+    {
+      "relative_path": "claude-y4fm73tm/requests.json",
+      "sha256": "c22a39a74739d8660d802d45dad994963d1625e944dbf2efe4fde1974002a3fa"
+    },
+    {
+      "relative_path": "claude-y4fm73tm/summary.json",
+      "sha256": "41bd7a89c014d03230df5c2df04b3023c3b849eba4a005555cc9a96a7eb66655"
+    },
+    {
+      "relative_path": "claude-26it7d56/stdout.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "relative_path": "claude-hw_hoqj1/stdout.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "relative_path": "claude-y4fm73tm/stdout.jsonl",
+      "sha256": "cbbc688242cc6e29ded9514deaa24f9e9b24aae7c75ca623bba4e509f2d244e2"
+    },
+    {
+      "relative_path": "claude-26it7d56/stderr.log",
+      "sha256": "628b9566eb4895961e87596bb3a9f7bdbac7f21023d0dbc9f3ffc3f4a56dbf0d"
+    },
+    {
+      "relative_path": "claude-hw_hoqj1/stderr.log",
+      "sha256": "81ce8e9e408d8f42341398710f21eea6cb77929b1f2c678dd9a346c14a23e4d4"
+    },
+    {
+      "relative_path": "claude-y4fm73tm/stderr.log",
+      "sha256": "de8f61180dfd6b00ad02c9688d8fbe00b27cad193f4531c9e2017688bbeca57d"
+    }
+  ],
+  "limitations": [
+    "The fake child matrix establishes policy admission and snapshot transport, not actual Claude enforcement.",
+    "Only valid, malformed and wrong-type variants were run against the actual Claude command path with synthetic local API responses.",
+    "The launcher trusts caller-selected fixture root, command arguments, environment and executable pin. These are not production admission interfaces.",
+    "Managed-policy precedence, effective controls beyond selected canaries, executable replacement races and complete S03 remain open.",
+    "The positive native run ended in permissionMode default, not requested dontAsk, because credential scrubbing forces it.",
+    "No real model, Rex, Pi, macOS, broad hostile-code containment or production integration claim follows.",
+    "The Unix-socket listener was not monitored for accept events. The tool returned an EPERM error when creating its socket.",
+    "Raw evidence and scripts are local Git-directory artifacts and will not arrive in a clone. Their hashes do not reconstruct missing files."
+  ]
+}
