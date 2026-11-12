@@ -1,6 +1,12 @@
 # Validation record
 
-This record describes the initial usable milestone on 12 November 2026. It separates execution evidence from workflow verification and unsupported capabilities.
+This record covers the initial usable integration and the later multi-model review milestone on 12 November 2026. It separates execution evidence from workflow verification and unsupported capabilities.
+
+## Latest verification and retention
+
+The multi-model milestone at local commit `56de7706aedbf521863a6ef0f3a871f1267c0cc9` passed the full race suite, the Go 1.23.12 test suite, vet, source-lock checking, Bash syntax checks, ShellCheck and staged gitleaks. A fresh clone passed tests and built four checksummed archives. Native offline installation, overwrite refusal, archive contents and a real model smoke from the packaged Linux binary passed. Independent GPT-6 Astra source/evidence review and a separate artifact/trail audit found no unresolved material finding in their stated scopes.
+
+These are completed historical checks. A later handoff check found the temporary live-run, writer, package and fresh-clone directories absent. The public evidence JSON and reports preserved in the local Git checkpoint remain available, but their hashes cannot reconstruct raw traces or archives. Replay of the original run requires recovering its artifacts. A new live example run makes new model calls and produces new evidence. The existing archive identities belong to `56de770`; later documentation commits do not update those archives.
 
 ## Automated checks
 
@@ -20,7 +26,7 @@ The final implementation commit `22eac9d84ef96ab73179ee1b67d7a2be4d83832d` passe
 
 ## Live execution
 
-[The sanitized receipt extract](validation/live-evidence.json) records observed versions and outcomes. Raw transcripts and private artifact directories remain outside the repository.
+[The sanitized receipt extract](validation/live-evidence.json) records observed versions and outcomes. Raw transcripts were kept outside the repository and are subject to the retention limits above.
 
 | Test | Observed outcome | Evidence limit |
 | --- | --- | --- |
@@ -44,7 +50,7 @@ Rex creation and process APIs returned persistent session/block identities. The 
 
 ## Product target status
 
-| Acceptance target | Initial milestone |
+| Acceptance target | Verified state |
 | --- | --- |
 | One installation in Codex | Project skills plus one local MCP server; exercised in a temporary Git project |
 | Upstream workflows available | Complete pristine import; generated entrypoint contract and two declared adaptations |

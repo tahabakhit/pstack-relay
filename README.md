@@ -4,6 +4,8 @@ Run upstream pstack workflows from Codex while delegating to Codex, Claude Code 
 
 This is an initial usable integration, version 0.1.0. Cursor owns the engineering workflows. pstack-rex owns role resolution, permission profiles, Rex execution, receipts and installation. The included pstack version is 0.15.36 at `a5539b15a3d56e04992565aafee2b37051329ce3`.
 
+See [current status and continuation](docs/status.md) for the completed milestone, artifact retention and next bounded work.
+
 A real Codex parent has used the installed pstack `how` workflow to dispatch a Claude worker through MCP and Rex, receive its result, and answer from it. An installed `interrogate` workflow has also completed with two explicitly requested Codex models, runnable reviewer probes and a parent rerun. All three worker harnesses have separately completed live Rex smoke tasks. See [validation and limits](docs/validation.md). Full workflow parity, native subagents and live steering are not claimed.
 
 ## Build
