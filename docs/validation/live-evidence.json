@@ -112,5 +112,33 @@
     "model": "gpt-6.1-sol",
     "effort": "low",
     "evidence": "pi-rpc-get_state-before-inference"
+  },
+  "validated_source_commit": "22eac9d84ef96ab73179ee1b67d7a2be4d83832d",
+  "packaged_parent_workflow": {
+    "status": "verified-execution-path",
+    "parent_model_requested": "gpt-6.1-sol",
+    "worker_id": "how-sum-20261112-source-seat0",
+    "worker_status": "completed",
+    "worker_target": {
+      "harness": "claude",
+      "model": "haiku",
+      "effort": "low",
+      "backend": "rex",
+      "auth": "existing"
+    },
+    "reported_model": "claude-haiku-5-5",
+    "model_evidence": "assistant.message.model",
+    "rex_block": "block:01a1d025-bf00-7eed-a1fd-cfb8f2a3e055"
+  },
+  "checks": {
+    "clean_clone_race_tests": "passed",
+    "go_1_23_12_tests": "passed",
+    "vet": "passed",
+    "upstream_bytes_modes_and_adaptations": "passed",
+    "actionlint": "passed",
+    "shellcheck": "passed",
+    "four_target_cross_builds_and_checksums": "passed",
+    "native_archive_offline_install": "passed",
+    "updater_stub_scenarios": "passed"
   }
 }

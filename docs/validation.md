@@ -14,6 +14,10 @@ The package script cross-builds four targets, verifies archive checksums and per
 
 The updater was exercised with stubbed GitHub operations and real local Git fixtures. An unchanged pstack subtree at another root commit produced no proposal. Changed source retained the old compatibility approval and prepared a draft body. An injected producer failure preserved exit code 7 before any GitHub operation. No real pull request was created.
 
+An independent GPT-6 Astra review checked the runtime, packaging, live claims and decision trail. It independently reran positive and negative Git-boundary tests and the earlier regression negative controls. No material correctness finding remained in the reviewed changes. The retained [negative-control output](validation/negative-controls.txt) shows actual old-code failures. This was an engineering review, not a complete security audit.
+
+The final implementation commit `22eac9d84ef96ab73179ee1b67d7a2be4d83832d` passed tests from a fresh local clone, the Go 1.23.12 baseline, vet, exact upstream checking, actionlint and shellcheck. Its four archives passed checksums and the native offline install check. The packaged Linux binary also passed the real Codex-parent example. Subsequent documentation-only commits record these results.
+
 ## Live execution
 
 [The sanitized receipt extract](validation/live-evidence.json) records observed versions and outcomes. Raw transcripts and private artifact directories remain outside the repository.
