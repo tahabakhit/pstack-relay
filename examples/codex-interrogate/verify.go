@@ -200,7 +200,6 @@ func readTrace(path string, target config.Target) (transcript, error) {
 	return t, scanner.Err()
 }
 
-// Codex currently reports these exact shell wrappers. No shell is evaluated here.
 func isCommand(actual, want string) bool {
 	if actual == want {
 		return true
@@ -459,7 +458,7 @@ func verify(root string) (e evidence, err error) {
 		return e, err
 	}
 	e.Status = "verified-seeded-interrogate-path"
-	e.Scope = "controlled committed fixture; requested model diversity only; harness transcripts are trusted observations, not attestation"
+	e.Scope = "controlled committed fixture; structured finding verified, raw narrative unverified; requested model diversity only; harness transcripts are trusted observations, not attestation"
 	e.BaseRevision = m.BaseRevision
 	e.ReviewRevision = m.ReviewRevision
 	e.ProbeSHA256 = digest([]byte(probeSource))

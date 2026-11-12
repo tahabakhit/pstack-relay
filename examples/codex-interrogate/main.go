@@ -88,7 +88,6 @@ func run() error {
 	if _, err = targets(cfg); err != nil {
 		return err
 	}
-	// Artifacts must stay outside the caller's repository, including ignored paths.
 	cwd, err := os.Getwd()
 	if err != nil {
 		return err
@@ -216,7 +215,7 @@ The fixture is intentionally tiny. All reviewer worktrees are already prepared d
 Call capabilities before dispatch. Dispatch EVERY ordered configured seat below exactly once. Use its exact ID, index and cwd, role "interrogate reviewers", access "read-only", require_shell true, expected_revision %s. Include the installed upstream adversary brief and relevant complete instructions. Every reviewer must execute exactly 'python3 -B ABSOLUTE_SEAT_CWD/probe.py', replacing ABSOLUTE_SEAT_CWD with its supplied absolute cwd, preserve the failing exit/output and report only findings reproduced by commands. Use each configured model without substitutions or retries. Wait for terminal completion of ALL seats. Inspect/list as needed.
 %s
 After all terminal waits, independently execute exactly 'python3 -B %s' (the absolute parent probe path). Preserve the nonzero result, which proves a defect rather than worker failure. Merge findings by root cause. Keep normal Intent/Findings/Dropped output. This fixture proof permits exactly one surviving root cause (last element omitted); any additional unverified claims must be dropped, never added to Findings.
-End your final message with a single fenced JSON block labelled pstack-rex-evidence containing exactly this shape, with every reporting zero-based seat in order: {"findings":[{"root_cause":"last-element-omitted","command":"python3 -B probe.py","output":%s,"required_output":%s,"contributors":[0,1]}]}. Expand contributors to the complete actual configured seat list. No extra findings. Output strings must preserve the trailing newline. This structured block supplements the upstream report and binds its sole surviving finding to actual command evidence. Do not claim provider-served model identity.`, m.BaseRevision, m.ReviewRevision, readPaths(o.Out), m.ReviewRevision, seats, filepath.Join(o.Out, "repo", "probe.py"), strconv.Quote(reviewOutput), strconv.Quote(baseOutput))
+End your final message with a single fenced JSON block labelled pstack-rex-evidence containing exactly this shape, with every reporting zero-based seat in order: {"findings":[{"root_cause":"last-element-omitted","command":"python3 -B probe.py","output":%s,"required_output":%s,"contributors":[0,1]}]}. Expand contributors to the complete actual configured seat list. No extra findings. Output strings must preserve the trailing newline. This structured block is the authoritative finding list for the verifier and binds its sole surviving finding to actual command evidence. The verifier does not certify claims in your narrative. Do not claim provider-served model identity.`, m.BaseRevision, m.ReviewRevision, readPaths(o.Out), m.ReviewRevision, seats, filepath.Join(o.Out, "repo", "probe.py"), strconv.Quote(reviewOutput), strconv.Quote(baseOutput))
 	if err := os.WriteFile(filepath.Join(o.Out, "parent-prompt.txt"), []byte(prompt), 0600); err != nil {
 		return err
 	}

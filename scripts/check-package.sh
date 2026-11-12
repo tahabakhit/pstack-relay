@@ -21,7 +21,7 @@ stage=$(mktemp -d)
 trap 'rm -rf "$stage"' EXIT
 tar -xzf "$output/pstack-rex_${os}_${arch}.tar.gz" -C "$stage"
 binary="$stage/pstack-rex_${os}_${arch}/pstack-rex"
-for doc in docs/configuration.md docs/troubleshooting.md docs/upstream.md docs/research.md docs/validation.md docs/validation/live-evidence.json CONTRIBUTING.md examples/codex-parent/main.go; do
+for doc in docs/configuration.md docs/troubleshooting.md docs/upstream.md docs/research.md docs/validation.md docs/validation/live-evidence.json docs/validation/writer-evidence.json docs/validation/interrogate-evidence.json CONTRIBUTING.md examples/codex-parent/main.go examples/codex-interrogate/main.go examples/codex-interrogate/verify.go; do
   test -f "$stage/pstack-rex_${os}_${arch}/$doc"
 done
 "$binary" version

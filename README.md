@@ -4,7 +4,7 @@ Run upstream pstack workflows from Codex while delegating to Codex, Claude Code 
 
 This is an initial usable integration, version 0.1.0. Cursor owns the engineering workflows. pstack-rex owns role resolution, permission profiles, Rex execution, receipts and installation. The included pstack version is 0.15.36 at `a5539b15a3d56e04992565aafee2b37051329ce3`.
 
-A real Codex parent has used the installed pstack `how` workflow to dispatch a Claude worker through MCP and Rex, receive its result, and answer from it. All three worker harnesses have separately completed live Rex smoke tasks. See [validation and limits](docs/validation.md). Full workflow parity, native subagents and live steering are not claimed.
+A real Codex parent has used the installed pstack `how` workflow to dispatch a Claude worker through MCP and Rex, receive its result, and answer from it. An installed `interrogate` workflow has also completed with two explicitly requested Codex models, runnable reviewer probes and a parent rerun. All three worker harnesses have separately completed live Rex smoke tasks. See [validation and limits](docs/validation.md). Full workflow parity, native subagents and live steering are not claimed.
 
 ## Build
 
@@ -85,6 +85,20 @@ go run ./examples/codex-parent \
 ```
 
 The configured `how explainer` must use Claude or Pi. The example verifies an actual MCP dispatch/wait pair and the durable worker result. Success produces `evidence.json` and the parent explanation. A failed approval or missing worker result exits nonzero. [Validation](docs/validation.md) describes the observed run and what it proves.
+
+For a controlled multi-model review, configure `interrogate reviewers` with at least two distinct explicit Codex models, concrete efforts and `rex` backends. Every configured seat participates. The example requires Python 3 and an absent output directory outside the source repository.
+
+```sh
+go run ./examples/codex-interrogate \
+  --binary "$PWD/bin/pstack-rex" \
+  --config "$HOME/.config/pstack-rex/config.json" \
+  --parent-model gpt-6.1-sol \
+  --out /tmp/pstack-rex-review-proof
+
+go run ./examples/codex-interrogate --verify-only /tmp/pstack-rex-review-proof
+```
+
+The first command makes real model calls. Replay checks retained artifacts without inference. Each reviewer gets a separate prepared read-only worktree and executes a committed failing probe. The parent reruns it after all terminal waits. The verifier checks every seat, durable receipts, actual command events, fixture bytes and one merged structured finding. It prints sanitized JSON and retains raw artifacts privately. Only the structured finding receives verification; the raw narrative is not semantically checked. This proves a seeded execution path and requested model diversity. Provider-served identities remain unknown.
 
 ## Inspect and cancel workers
 

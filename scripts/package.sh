@@ -6,7 +6,7 @@ mkdir -p "$output"
 output=$(cd "$output" && pwd)
 stage=$(mktemp -d)
 trap 'rm -rf "$stage"' EXIT
-git ls-files -z -- README.md CONTRIBUTING.md docs examples/codex-parent/main.go .github/workflows > "$stage/documents"
+git ls-files -z -- README.md CONTRIBUTING.md docs examples .github/workflows > "$stage/documents"
 go run ./cmd/upstream check
 for target in darwin/amd64 darwin/arm64 linux/amd64 linux/arm64; do
   os=${target%/*}

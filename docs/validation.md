@@ -28,8 +28,15 @@ The final implementation commit `22eac9d84ef96ab73179ee1b67d7a2be4d83832d` passe
 | Pi through Rex | Completed with literal stdin prompt; free RPC state probe selected exact model and effort before inference | Final message reported selected `gpt-6.1-sol`, not a concrete provider response identity |
 | Codex through Rex | Completed and returned `PSTACK_REX_READY` | Explicit `gpt-6.1-sol` command-line selection; exec did not report served model |
 | Codex parent, pstack `how`, Claude worker | Parent read the installed skill and contract, called MCP dispatch/wait, and returned the worker's explanation of the actual fixture source | One simple workflow, not comprehensive semantic parity |
+| Codex parent, pstack `interrogate`, two Codex model seats | Every configured seat executed the fixed failing probe in its own detached read-only worktree; the parent waited for both and reran the probe | Controlled seeded fixture and requested model diversity, not general review quality or served-model identity |
 
 All three initial harness smoke tasks were launched before any finished. The source records include their start/end times. This proves parallel execution through Rex, not a completed multi-model interrogate workflow. A reusable [Codex-parent example](../examples/codex-parent/main.go) independently checks the actual dispatch/wait trace against the retained worker receipt and exits nonzero if the path did not occur.
+
+The later [interrogate example](../examples/codex-interrogate/main.go) completed with explicitly requested `gpt-6.1-sol` and `gpt-6.1-terra` reviewer seats. Its [sanitized evidence](validation/interrogate-evidence.json) binds both completed workers, actual exit-1 probe commands, the parent's later rerun and one structured finding to retained trace and receipt hashes. Replay verifies the same artifacts without further inference. Negative controls reject missing or extra attempts, wrong role, seat, target, cwd or revision, changed fixture bytes, prose-only execution claims, wrong probe paths and missing or early parent reruns. The public structured finding is the sole authoritative verified report. Raw parent prose is retained privately and is not semantically certified by the verifier. Independent inspection of this run's prose found only the seeded finding.
+
+The first live replay exposed a verifier error. Actual Codex command events label nonzero commands `failed`, while the initial synthetic fixture labelled them `completed`. A failing regression now captures that shape. The corrected parser checks command status against exit code separately from MCP completion. Replaying the retained live run then passed; no model task was repeated to obtain a passing report.
+
+A later [isolated-writer check](validation/writer-evidence.json) ran two real Codex workers through Rex with workspace-write access. Their execution intervals overlapped. Each wrote a different value to the same filename in its own detached worktree. External checks read both exact results, confirmed the seed files were unchanged, and confirmed the original checkout remained clean without the result file. The starting and ending commits matched. This establishes isolation for two controlled concurrent tasks. The engine still labels its own verification `not-performed`, and the additional file checks are separate evidence.
 
 Initial failures were retained and diagnosed. Codex emitted an experimental-feature warning as an error item; the parser rejected that run despite exit zero. Suppressing that known launch warning produced a valid repeat. Parent MCP calls under approval policy `never` failed until the local server received explicit scoped `approve` policy. Workers were not switched to unrestricted permissions to solve either failure.
 
@@ -43,11 +50,11 @@ Rex creation and process APIs returned persistent session/block identities. The 
 | Upstream workflows available | Complete pristine import; generated entrypoint contract and two declared adaptations |
 | Harness/model role configuration | Implemented with ordered seats, explicit backend and requested effort |
 | Claude, Pi and Codex through Rex | All exercised live |
-| Multi-model review workflow | Configurable; full interrogate/arena workflow not live-verified |
+| Multi-model review workflow | Installed interrogate path completed on a seeded fixture with two requested models, every configured seat, executed probes and parent rerun |
 | Client visibility | Server IDs observed; GUI presentation not exercised |
 | Structured identity/status/results | Implemented and exercised |
 | Interrupted workers cannot appear successful | Reproduced and tested, unknown remains unresolved |
-| Parallel writer isolation | Detached Codex worktrees tested with fake harnesses; real writer inference not exercised |
+| Parallel writer isolation | Two real concurrent Codex writers produced distinct results in separate worktrees and left the source checkout clean |
 | Central integration without hand-editing each skill | Deterministic generation from one source tree |
 | Reproducible imports and update proposals | Implemented and fixture-tested; hosted Actions not exercised |
 | Setup, inspection and diagnosis | CLI and MCP implemented; configuration remains noninteractive |
