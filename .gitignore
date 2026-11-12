@@ -1,0 +1,6 @@
+/notes/
+/.audit/
+/bin/
+/dist/
+*.test
+coverage.out

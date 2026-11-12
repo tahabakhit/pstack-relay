@@ -1,0 +1,2 @@
+ts	phase	decision	why	evidence	result
+2026-11-12T14:45:00Z	frame	Investigate source and installed interfaces before implementation	The project depends on evolving host and Rex contracts	docs/architecture.md	open
