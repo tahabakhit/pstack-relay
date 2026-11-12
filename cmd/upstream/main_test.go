@@ -34,7 +34,7 @@ func TestUpdateRequiresCompatibilityAcceptance(t *testing.T) {
 	put(filepath.Join(external, "pstack/SKILL.md"), "# Test\nSpawn the model reviewer.\n")
 	command := func(args ...string) {
 		t.Helper()
-		c := exec.Command("git", append([]string{"-C", external}, args...)...)
+		c := exec.Command("git", append([]string{"-c", "core.hooksPath=/dev/null", "-c", "commit.gpgsign=false", "-C", external}, args...)...)
 		if out, err := c.CombinedOutput(); err != nil {
 			t.Fatalf("git: %v %s", err, out)
 		}

@@ -213,7 +213,6 @@ func Install(dest string) (err error) {
 	if len(entries) != 0 {
 		return errors.New("install destination must be empty")
 	}
-	// Generate in a private sibling first so malformed input never leaves a partial bundle.
 	stage, err := os.MkdirTemp(filepath.Dir(dest), ".pstack-rex-install-")
 	if err != nil {
 		return err
@@ -246,7 +245,6 @@ func Install(dest string) (err error) {
 	if err := os.WriteFile(filepath.Join(stage, "runtime-contract.md"), contract, 0644); err != nil {
 		return err
 	}
-	// Remove only an empty directory. A concurrent file creation makes this fail.
 	entries, err = os.ReadDir(dest)
 	if err != nil {
 		return err

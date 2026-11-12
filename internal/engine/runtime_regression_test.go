@@ -146,7 +146,7 @@ func TestIsolatedWriterPreservesNestedCwd(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, args := range [][]string{{"add", "."}, {"-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "nested fixture"}} {
-		if out, err := exec.Command("git", append([]string{"-C", sourceRoot}, args...)...).CombinedOutput(); err != nil {
+		if out, err := exec.Command("git", append([]string{"-c", "core.hooksPath=/dev/null", "-c", "commit.gpgsign=false", "-C", sourceRoot}, args...)...).CombinedOutput(); err != nil {
 			t.Fatalf("git: %s: %v", out, err)
 		}
 	}
@@ -199,7 +199,7 @@ func TestSnapshotReceiptsIncludeCleanRevisionAndUntrackedContent(t *testing.T) {
 		return r
 	}
 	first := run()
-	if out, err := exec.Command("git", "-C", req.Cwd, "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "--allow-empty", "-qm", "another clean revision").CombinedOutput(); err != nil {
+	if out, err := exec.Command("git", "-c", "core.hooksPath=/dev/null", "-c", "commit.gpgsign=false", "-C", req.Cwd, "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "--allow-empty", "-qm", "another clean revision").CombinedOutput(); err != nil {
 		t.Fatalf("git commit: %s: %v", out, err)
 	}
 	second := run()

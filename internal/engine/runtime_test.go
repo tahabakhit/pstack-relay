@@ -35,7 +35,7 @@ func fixture(t *testing.T, script string) (*Service, Request) {
 		t.Fatal(err)
 	}
 	for _, args := range [][]string{{"init", "-q"}, {"-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "--allow-empty", "-qm", "fixture"}} {
-		if out, err := exec.Command("git", append([]string{"-C", repo}, args...)...).CombinedOutput(); err != nil {
+		if out, err := exec.Command("git", append([]string{"-c", "core.hooksPath=/dev/null", "-c", "commit.gpgsign=false", "-C", repo}, args...)...).CombinedOutput(); err != nil {
 			t.Fatalf("git: %s: %v", out, err)
 		}
 	}

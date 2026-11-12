@@ -60,3 +60,7 @@ Review the result's worktree before integrating changes. Keep failed or cancelle
 ## Upstream installation reports pending compatibility
 
 Review `internal/bundle/review-report.json`, the complete source diff, roles and `adaptations.json`. Then follow the [upstream update procedure](upstream.md). Do not run `accept` just to make CI green. Full input hashing detects drift; it does not certify arbitrary natural-language delegation semantics.
+
+## A repository depends on Git filters or hooks
+
+Owned Git operations disable hooks, filesystem-monitor programs, clean/smudge/process filters and external diff/text conversion. These can otherwise execute repository-selected programs before the harness sandbox starts. Worktree checkout uses the raw recorded Git tree. Repositories requiring filter-based hydration, including some LFS setups, are not fully supported for isolated writers. Read-only investigation can inspect already materialized files, but the runner does not execute hydration programs outside the sandbox.

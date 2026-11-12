@@ -75,7 +75,7 @@ Only configure scoped preapproval after reviewing the local server and its role 
 
 ## Run the end-to-end example
 
-This uses real authenticated models. It creates a temporary Git fixture and installs skills there. It retains transcripts, worker receipts and Rex sessions, and changes no global Codex settings.
+Run this from a source checkout. The example source included in binary archives is for inspection and needs the checkout's Go packages to execute. It uses real authenticated models, creates a temporary Git fixture and installs skills there. It retains transcripts, worker receipts and Rex sessions, and changes no global Codex settings.
 
 ```sh
 go run ./examples/codex-parent \

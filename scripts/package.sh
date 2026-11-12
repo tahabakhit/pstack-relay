@@ -6,6 +6,7 @@ mkdir -p "$output"
 output=$(cd "$output" && pwd)
 stage=$(mktemp -d)
 trap 'rm -rf "$stage"' EXIT
+git ls-files -z -- README.md CONTRIBUTING.md docs examples/codex-parent/main.go .github/workflows > "$stage/documents"
 go run ./cmd/upstream check
 for target in darwin/amd64 darwin/arm64 linux/amd64 linux/arm64; do
   os=${target%/*}
@@ -15,12 +16,14 @@ for target in darwin/amd64 darwin/arm64 linux/amd64 linux/arm64; do
   CGO_ENABLED=0 GOOS="$os" GOARCH="$arch" go build -trimpath -o "$stage/$name/pstack-rex" ./cmd/pstack-rex
   cp LICENSE NOTICE "$stage/$name/"
   cp internal/bundle/_upstream/LICENSE "$stage/$name/LICENSE.upstream"
-  for doc in README.md docs/architecture.md docs/contracts.md; do
-    if [[ -f "$doc" && ! -L "$doc" ]]; then
-      mkdir -p "$stage/$name/$(dirname "$doc")"
-      cp "$doc" "$stage/$name/$doc"
+  while IFS= read -r -d '' doc; do
+    if [[ ! -f "$doc" || -L "$doc" ]]; then
+      echo "Package documentation must be a regular file: $doc" >&2
+      exit 1
     fi
-  done
+    mkdir -p "$stage/$name/$(dirname "$doc")"
+    cp "$doc" "$stage/$name/$doc"
+  done < "$stage/documents"
   tar -czf "$output/$name.tar.gz" -C "$stage" "$name"
 done
 (

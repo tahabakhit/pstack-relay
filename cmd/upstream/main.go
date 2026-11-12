@@ -263,7 +263,6 @@ func update(source, revision string) error {
 	if err != nil {
 		return err
 	}
-	// The compatibility baseline is deliberately untouched by updates.
 	dest := filepath.Join(bundleDir, "_upstream")
 	backup := dest + ".previous"
 	if _, err := os.Lstat(backup); !os.IsNotExist(err) {
@@ -417,7 +416,6 @@ func verifyExternal(source, revision string) error {
 	return bundle.CheckDirectory(filepath.Join(source, "pstack"), m)
 }
 
-// Role examples are review candidates, not an authoritative model-policy parser.
 func roleCandidates(root string) []string {
 	b, err := os.ReadFile(filepath.Join(root, "skills/setup-pstack/SKILL.md"))
 	if err != nil {

@@ -10,7 +10,6 @@ if [[ -n $(git status --porcelain) ]]; then
   echo 'Updater requires a clean checkout' >&2
   exit 1
 fi
-# Validate trusted baseline before importing any third-party source as data.
 go test -race ./...
 go vet ./...
 go run ./cmd/upstream check
@@ -25,7 +24,6 @@ if cmp -s "$work/before.json" "$work/after.json"; then
   echo 'Cursor pstack paths, bytes and modes are unchanged. No update PR.' >> "$GITHUB_STEP_SUMMARY"
   exit 0
 fi
-# An update must never silently carry compatibility approval forward.
 if go run ./cmd/upstream check > "$work/check.log" 2>&1; then
   echo 'Changed source unexpectedly passed compatibility approval' >&2
   exit 1
@@ -47,8 +45,8 @@ body="$work/body.md"
   printf 'Source commit: https://github.com/cursor/plugins/commit/%s\n\n' "$revision"
   printf 'Canonical path/byte/mode inventory SHA-256: %s. Unrelated Cursor commits do not create proposals.\n\n' "$digest"
   printf '## Source changes and role inventory\n\n```json\n'
-  jq '{revision, changed_files, changed_delegation_files, new_terms, role_candidates, new_role_candidates, limit}' internal/bundle/review-report.json
-  printf '\n```\n\nThe PR Files changed tab contains the complete source diff. The lexical inventory is a review aid, not semantic verification.\n\n'
+  jq '{revision, changed_file_count:(.changed_files|length), changed_files:(.changed_files[:80]), changed_delegation_file_count:(.changed_delegation_files|length), changed_delegation_files:(.changed_delegation_files[:80]), new_terms:(.new_terms[:50]), role_candidates, new_role_candidates, limit}' internal/bundle/review-report.json
+  printf '\n```\n\nLists above are bounded to keep the PR body readable. The committed review-report.json and PR Files changed tab contain the complete inventory and source diff. The lexical inventory is a review aid, not semantic verification.\n\n'
   printf '## Validation and review\n\n'
   printf 'Baseline Go race tests, vet and accepted inventory passed before import. Candidate vet and build passed. Candidate upstream check intentionally reports compatibility review pending. Candidate tests and installer acceptance remain unverified until review.\n\n'
   printf 'PRs opened using GITHUB_TOKEN do not automatically trigger ordinary push/pull_request CI. The updater validation above is not a substitute for candidate CI. After review, push the compatibility acceptance commit with maintainer credentials, or manually dispatch CI on this branch.\n\n'

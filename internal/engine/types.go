@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/pstack-rex/pstack-rex/internal/config"
@@ -143,7 +144,30 @@ func readJSON(path string, value any) error {
 }
 
 func git(ctx context.Context, cwd string, args ...string) (string, error) {
-	cmd := exec.CommandContext(ctx, "git", append([]string{"-C", cwd}, args...)...)
+	base := []string{"--no-pager", "-c", "core.hooksPath=/dev/null", "-c", "core.fsmonitor=false", "-C", cwd}
+	{
+		query := exec.CommandContext(ctx, "git", append(append([]string{}, base...), "config", "--null", "--name-only", "--get-regexp", `^filter\..*\.(smudge|clean|process|required)$`)...)
+		data, err := query.Output()
+		if err != nil {
+			if failure, ok := err.(*exec.ExitError); !ok || failure.ExitCode() != 1 {
+				return "", fmt.Errorf("inspect Git filters: %w", err)
+			}
+		}
+		for _, key := range strings.Split(string(data), "\x00") {
+			if key == "" {
+				continue
+			}
+			value := ""
+			if strings.HasSuffix(key, ".required") {
+				value = "false"
+			}
+			base = append(base, "-c", key+"="+value)
+		}
+	}
+	if len(args) > 0 && args[0] == "diff" {
+		args = append([]string{"diff", "--no-ext-diff", "--no-textconv"}, args[1:]...)
+	}
+	cmd := exec.CommandContext(ctx, "git", append(base, args...)...)
 	data, err := cmd.Output()
 	if err != nil {
 		return "", fmt.Errorf("git %v: %w", args, err)

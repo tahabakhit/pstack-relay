@@ -21,8 +21,10 @@ stage=$(mktemp -d)
 trap 'rm -rf "$stage"' EXIT
 tar -xzf "$output/pstack-rex_${os}_${arch}.tar.gz" -C "$stage"
 binary="$stage/pstack-rex_${os}_${arch}/pstack-rex"
+for doc in docs/configuration.md docs/troubleshooting.md docs/upstream.md docs/research.md docs/validation.md docs/validation/live-evidence.json CONTRIBUTING.md examples/codex-parent/main.go; do
+  test -f "$stage/pstack-rex_${os}_${arch}/$doc"
+done
 "$binary" version
-# An empty PATH proves bundle installation does not require network or helper CLIs.
 PATH='' "$binary" install --dest "$stage/installed"
 test -f "$stage/installed/runtime-contract.md"
 test -f "$stage/installed/LICENSE"

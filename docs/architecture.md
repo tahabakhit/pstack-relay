@@ -1,6 +1,6 @@
 # Architecture decision 001
 
-Status is accepted for the first usable milestone. The independent architecture comparison selected the thin design, with per-attempt supervisors instead of a socket service. See research.md for source evidence and the comparison rubric.
+Status is accepted for the first usable milestone. The independent architecture comparison selected the thin design, with per-attempt supervisors instead of a socket service. See [research](research.md) for source evidence and the comparison rubric.
 
 ## Goal
 
@@ -53,3 +53,7 @@ A custom orchestration daemon would add recovery and transport responsibilities 
 ## Synthesis decision
 
 Choose the thin Go design. Keep the upstream byte lock and single shared generated adapter from the thin candidate. Keep the provider-report versus pinned-argv evidence distinction and strict result parsing from the Open Pstack candidate. Reject the thin candidate's local socket service and the reuse candidate's additional runner dependency. Native delegation and MCP-dependent worker workflows are capability-gated rather than approximated. The cross-judge used GPT-6 Astra and independently favored this boundary.
+
+## Principles applied
+
+Foundational Thinking put shared contracts and verification scaffolding before implementation. Model the Domain separated the harness, model and backend and made attempt receipts explicit. Separate Before Serializing Shared State gave the parent and supervisor different receipt files and reserved a lock for admission only. Laziness Protocol removed the proposed daemon and extra provider-runner dependency. Exhaust the Design Space required distinct fork-based and thin-adapter candidates before the independent comparison. Prove It Works required real Rex processes, a real Codex-parent workflow and negative-control regression evidence.
