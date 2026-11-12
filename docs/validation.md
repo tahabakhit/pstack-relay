@@ -16,7 +16,7 @@ The regression suite proves behavior through subprocess liveness, receipts and f
 
 Mocked Rex tests establish transport contracts without credentials. Harness fixtures establish parser contracts. Neither proves account model access. The original upstream Bun/Node helper suites are not run by Go CI.
 
-The package script cross-builds four targets, verifies archive checksums and performs a native offline installation from an archive. Cross-building a macOS binary does not establish macOS runtime behavior. Ubuntu and macOS GitHub jobs are defined but have not run on GitHub in this unpublished checkout.
+The package script cross-builds four targets, verifies archive checksums and performs a native offline installation from an archive. Cross-building a macOS binary does not establish macOS runtime behavior. Ubuntu and macOS GitHub jobs were not exercised during these historical checks. Any later hosted runs have their own revisions and results.
 
 The updater was exercised with stubbed GitHub operations and real local Git fixtures. An unchanged pstack subtree at another root commit produced no proposal. Changed source retained the old compatibility approval and prepared a draft body. An injected producer failure preserved exit code 7 before any GitHub operation. No real pull request was created.
 

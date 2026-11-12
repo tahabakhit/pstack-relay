@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/pstack-rex/pstack-rex/internal/engine"
+	"github.com/tahabakhit/pstack-rex/internal/engine"
 )
 
 type rpcRequest struct {

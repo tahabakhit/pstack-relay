@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pstack-rex/pstack-rex/internal/config"
+	"github.com/tahabakhit/pstack-rex/internal/config"
 )
 
 const successStream = `printf '%s\n' '{"type":"item.completed","item":{"type":"agent_message","text":"verified fixture"}}' '{"type":"turn.completed"}'`

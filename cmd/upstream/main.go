@@ -18,7 +18,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/pstack-rex/pstack-rex/internal/bundle"
+	"github.com/tahabakhit/pstack-rex/internal/bundle"
 )
 
 const bundleDir = "internal/bundle"

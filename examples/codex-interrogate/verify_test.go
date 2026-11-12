@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pstack-rex/pstack-rex/internal/config"
-	"github.com/pstack-rex/pstack-rex/internal/engine"
-	"github.com/pstack-rex/pstack-rex/internal/harness"
+	"github.com/tahabakhit/pstack-rex/internal/config"
+	"github.com/tahabakhit/pstack-rex/internal/engine"
+	"github.com/tahabakhit/pstack-rex/internal/harness"
 )
 
 type traceBuilder struct {

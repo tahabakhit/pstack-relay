@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pstack-rex/pstack-rex/internal/config"
+	"github.com/tahabakhit/pstack-rex/internal/config"
 )
 
 const role = "interrogate reviewers"

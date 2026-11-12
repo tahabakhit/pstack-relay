@@ -30,7 +30,7 @@ A successful result requires process exit zero, a valid harness completion event
 
 Request IDs are idempotency keys. Reusing one with different input fails. An ambiguous Rex launch is retained as unknown and never automatically retried. Successful partial work and worktrees remain available for inspection. Cancellation and deadlines terminate the child process group before returning a terminal result.
 
-Default workers are read-only. Codex uses its read-only sandbox. Claude and Pi get explicit tool restrictions with customizations and additional tools disabled. Those restrictions are not an OS sandbox. Initial isolated writers are supported only through Codex workspace-write in a dedicated detached worktree. Unsupported writer combinations fail before launch.
+Default workers are read-only. Codex uses its read-only sandbox. Claude and Pi get explicit tool restrictions and flags that suppress specific customizations. Those restrictions are not an OS sandbox or complete startup isolation. Claude managed policy and Pi system-prompt discovery remain relevant, as recorded in [the shell investigation](shell-capability.md). Initial isolated writers are supported only through Codex workspace-write in a dedicated detached worktree. Unsupported writer combinations fail before launch.
 
 The executable, repository, configuration and artifact directory must be on the Rex server host. Remote clients are supported because they attach to server sessions. Cross-machine filesystem staging is outside the first release.
 

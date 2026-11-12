@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pstack-rex/pstack-rex/internal/config"
+	"github.com/tahabakhit/pstack-rex/internal/config"
 )
 
 func selected(h string) config.Target {

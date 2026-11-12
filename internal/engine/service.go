@@ -14,7 +14,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/pstack-rex/pstack-rex/internal/harness"
+	"github.com/tahabakhit/pstack-rex/internal/harness"
 )
 
 func (s *Service) lock() (*os.File, error) {

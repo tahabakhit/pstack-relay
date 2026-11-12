@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pstack-rex/pstack-rex/internal/config"
-	"github.com/pstack-rex/pstack-rex/internal/harness"
+	"github.com/tahabakhit/pstack-rex/internal/config"
+	"github.com/tahabakhit/pstack-rex/internal/harness"
 )
 
 type Request struct {

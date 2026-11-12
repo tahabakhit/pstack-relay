@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "kind": "shell-capability-investigation",
+  "observed_date": "2026-11-12",
+  "source_revision": "c29c5ca3484c903345fab023d6c7e993314acb27",
+  "method": "Installed version/help inspection, source tracing, current official documentation, and isolated Pi resource-loader canary. No Claude/Pi worker inference or production permission changes.",
+  "host": {
+    "uname_command": "uname -srm",
+    "uname_output": "Linux 7.3.4-1-cachyos x86_64",
+    "bwrap_path": "/usr/bin/bwrap",
+    "socat_path": "/usr/bin/socat",
+    "sandbox_operation_tested": false
+  },
+  "claude": {
+    "version_command": "claude --version",
+    "version_output": "2.1.322 (Claude Code)",
+    "executable": "/home/taha/.local/share/claude/versions/2.1.322",
+    "executable_sha256": "bfb3703ad5380242328459bc62ada4bde8ae7ba57c6e1eeadb9c00e08874c478",
+    "help_command": "claude --help",
+    "temporary_help_artifact": "/tmp/pstack-rex-shell-claude/claude-help.txt",
+    "help_locators": {
+      "print_ignores_invalid_settings": "171-180",
+      "restricted_explicit_tools": "195-209",
+      "safe_mode_policy_exception": "213-223"
+    },
+    "sandbox_candidate_validated": false
+  },
+  "pi": {
+    "version_command": "pi --version",
+    "version_output": "1.5.2",
+    "package": "@earendil-works/pi-coding-agent",
+    "package_root": "/home/taha/.pi/agent/install/releases/1.5.2/node_modules/@earendil-works/pi-coding-agent",
+    "source_files": [
+      {
+        "path": "dist/core/tools/bash.js",
+        "sha256": "afc4f829b3da2e7d8cc31296ccceb26bbc8e35018eb3f352791b651866cc2040",
+        "locator": "60-81",
+        "observation": "Local shell backend directly calls child_process.spawn with cwd and environment."
+      },
+      {
+        "path": "dist/core/resource-loader.js",
+        "sha256": "57ece4ebd0ef6429bf45e1a22a7c581813251a988afa67bf2d3158eb752cdecc",
+        "locator": "481-505,959-979",
+        "observation": "Context-file suppression and system-prompt discovery use separate branches."
+      }
+    ],
+    "resource_canary": {
+      "command": "node /tmp/pstack-rex-shell-pi/resource-canary.mjs",
+      "temporary_script_sha256": "aacdb29116b824643383b34b2a8f9c63acc5a44a931bf7e4cc747b8c10190250",
+      "exit_code": 0,
+      "root_rerun_fixture": "/tmp/pstack-pi-resource-HEpb2Q",
+      "options": {
+        "noExtensions": true,
+        "disabledBuiltinExtensions": ["mcp"],
+        "noSkills": true,
+        "noContextFiles": true,
+        "noPromptTemplates": true
+      },
+      "observed_values": [
+        {"projectTrusted": false, "system": "AGENT_SYSTEM_CANARY", "append": [], "context": {"agentsFiles": []}},
+        {"projectTrusted": true, "system": "PROJECT_SYSTEM_CANARY", "append": ["PROJECT_APPEND_CANARY"], "context": {"agentsFiles": []}}
+      ],
+      "scope": "Direct installed resource-loader API with isolated directories and explicit synthetic trust state. No live CLI startup trust selection or tool escape established."
+    }
+  },
+  "primary_documentation_opened": [
+    "https://code.claude.com/docs/en/sandboxing",
+    "https://code.claude.com/docs/en/cli-reference",
+    "https://code.claude.com/docs/en/settings-reference",
+    "https://code.claude.com/docs/en/env-vars",
+    "https://code.claude.com/docs/en/permissions",
+    "https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/security.md"
+  ],
+  "limits": [
+    "Official documentation is current mutable documentation, not a claim of exact installed implementation behavior.",
+    "Installed help and source observations are version-specific. Help and source hashes do not prove sandbox enforcement.",
+    "Temporary artifacts are machine-local and can disappear. The canary recipe is documented in docs/issues/pi-startup-inputs.md.",
+    "No proposed shell boundary test, real harness shell task, or macOS test passed in this milestone.",
+    "No authentication contents or effective managed policy were inspected."
+  ]
+}

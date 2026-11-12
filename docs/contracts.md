@@ -1,6 +1,6 @@
 # Implementation contracts
 
-These are the selected shared interfaces for the first milestone. The module path is a provisional local build identity, not a claim that a GitHub repository has been published.
+These are the selected shared interfaces for the first milestone. The Go module path is `github.com/tahabakhit/pstack-rex`.
 
 ## Configuration
 
@@ -43,7 +43,7 @@ func Build(target config.Target, access, cwd, prompt string) (Plan, error)
 func Parse(target config.Target, stdout []byte) (Outcome, error)
 ```
 
-Build resolves executable with `exec.LookPath`. Default access `read-only`. Only Codex supports `isolated-write`. It disables customization/native delegation in workers; Pi and Claude use explicit read-only built-in tool sets. Auth selection `existing`, `subscription`, `api` describes intended credential source. Unsupported enforced billing modes fail, and existing auth is explicitly unknown funding rather than falsely verified subscription. In v0.1 only `existing` is accepted until a harness-specific billing check is implemented. Plan Environment is the complete child environment, sanitized of parent session identity and unrelated provider keys, retaining only selected harness auth keys. No shell interpolation.
+Build resolves executable with `exec.LookPath`. Default access `read-only`. Only Codex supports `isolated-write`. Pi and Claude use explicit read-only built-in tool sets without native delegation tools. Their flags suppress specific customization mechanisms, not every possible startup input. Claude managed policy still applies, and Pi system-prompt discovery remains eligible. See [the shell investigation](shell-capability.md) and [PI-001](issues/pi-startup-inputs.md). Auth selection `existing`, `subscription`, `api` describes intended credential source. Unsupported enforced billing modes fail, and existing auth is explicitly unknown funding rather than falsely verified subscription. In v0.1 only `existing` is accepted until a harness-specific billing check is implemented. Plan Environment is the complete child environment, sanitized of parent session identity and unrelated provider keys, retaining only selected harness auth keys. No shell interpolation.
 
 Parse requires terminal success and final text. A zero exit alone is never sufficient. Error, aborted and truncated streams fail. Model absence stays unknown and explicit selection is `pinned-argv`, not proof of served identity. Effective effort is unknown unless actually reported.
 

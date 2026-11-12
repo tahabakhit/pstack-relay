@@ -1,10 +1,10 @@
 # Current status and continuation
 
-The latest completed milestone is a reproducible installed multi-model `interrogate` workflow. The wider goal remains an upstream-tracking pstack integration with configurable harnesses, models, efforts and Rex execution. Completion of the controlled fixture does not establish every upstream workflow or future backend capability.
+The latest runtime milestone is a reproducible installed multi-model `interrogate` workflow. A subsequent [shell capability investigation](shell-capability.md) defines a proposed Claude profile and [acceptance tests](shell-capability-tests.md). The [disposable prototype](claude-sandbox-prototype.md) rejected its direct-CLI variant on malformed-policy admission. Shell execution remains disabled for Claude and Pi. The wider goal remains an upstream-tracking pstack integration with configurable harnesses, models, efforts and Rex execution.
 
 ## Completed milestone
 
-The implementation and validation record are committed through local commit `56de7706aedbf521863a6ef0f3a871f1267c0cc9`. Later documentation commits clarify status and handoff without changing runtime code. No repository remote, pull request or release has been created.
+The runtime implementation and validation baseline is commit `56de7706aedbf521863a6ef0f3a871f1267c0cc9`. Later changes record the shell investigation and align the Go module identity for GitHub publication. No release archives have been published.
 
 - [The interrogate example](../examples/codex-interrogate/main.go) installs the bundle, prepares a detached read-only worktree per configured reviewer, and launches a Codex parent through the local MCP server.
 - [The verifier](../examples/codex-interrogate/verify.go) reconciles every configured seat, requests, receipts, actual probe commands, fixture identity and the parent's later rerun. Its public structured finding is the authoritative verified report. It does not classify arbitrary narrative claims.
@@ -21,11 +21,11 @@ The source can rebuild archives using the documented contributor commands. A new
 
 ## Next bounded milestone
 
-Define and validate a bounded shell-execution profile for Claude or Pi before claiming cross-harness runnable review. Start with the installed harness controls and [current permission planning](../internal/harness/harness.go). Keep harness, model and backend selection separate.
+The capability contract and negative-test plan are drafted from installed Claude Code 2.1.322, Pi 1.5.2, current official documentation, and adapter source. The recommendation is a Claude Bash-only native-sandbox experiment. Pi's native bash has no intrinsic OS boundary. Existing source-only profiles remain available.
 
-The first deliverable is an evidence-backed capability contract and negative-test plan. Establish the supported operating systems, permitted subprocess and write behavior, customization loading, credential exposure and failure semantics. Compare the bounded profile with retaining the current read-only boundary. Implement only a profile the available controls can enforce and test. Do not enable unrestricted execution merely to make an example pass.
+Selected offline and actual Claude tool-path probes ran without provider inference. The well-formed policy blocked selected forbidden accesses, but a malformed settings file permitted them. A separate agent independently reproduced both variants. [CL-001](issues/claude-invalid-policy.md) blocks promotion. Next, prototype strict prelaunch policy validation and repeat S03 before integrating a profile or completing the remaining matrix. Linux results cannot certify macOS or other platforms.
 
-The next session should read this document and the project checkpoint, verify Git state and available artifacts, then scope that capability milestone. Do not repeat completed model tasks to reestablish history when the preserved reports are sufficient.
+A direct Pi loader canary also proved that disabling context files does not disable system-prompt discovery. [PI-001](issues/pi-startup-inputs.md) tracks the startup-profile gap. The canary does not demonstrate a tool escape. The latest [observation record](validation/shell-controls.json) records its scope. Do not repeat historical model tasks to reestablish prior milestones.
 
 ## Parked capabilities and external checks
 

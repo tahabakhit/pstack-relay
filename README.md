@@ -19,7 +19,7 @@ go build -trimpath -o bin/pstack-rex ./cmd/pstack-rex
 
 Put the binary on your PATH. It embeds the complete pinned upstream bundle and needs no runtime package manager or pstack fork. Some upstream specialist scripts have their own Bun, Node or Java requirements. They are preserved, not installed or executed by this build.
 
-`make package` creates checksummed archives for Linux and macOS on amd64 and arm64. The packaging smoke test installs from the native binary without network access. There are no published releases or configured repository remotes in this initial checkout.
+`make package` creates checksummed archives for Linux and macOS on amd64 and arm64. The packaging smoke test installs from the native binary without network access. No release archives have been published. Build from source using the commands above.
 
 ## Configure workers
 

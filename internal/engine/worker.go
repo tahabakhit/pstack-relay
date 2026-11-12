@@ -15,7 +15,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/pstack-rex/pstack-rex/internal/harness"
+	"github.com/tahabakhit/pstack-rex/internal/harness"
 )
 
 func programStatus(state, id string) { fmt.Printf("\x1b]7501;state=%s:id=%s\x1b\\", state, id) }

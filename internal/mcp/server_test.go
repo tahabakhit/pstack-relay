@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pstack-rex/pstack-rex/internal/engine"
+	"github.com/tahabakhit/pstack-rex/internal/engine"
 )
 
 func exchange(t *testing.T, s *engine.Service, input string) map[string]json.RawMessage {

@@ -12,10 +12,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pstack-rex/pstack-rex/internal/bundle"
-	"github.com/pstack-rex/pstack-rex/internal/config"
-	"github.com/pstack-rex/pstack-rex/internal/engine"
-	"github.com/pstack-rex/pstack-rex/internal/mcp"
+	"github.com/tahabakhit/pstack-rex/internal/bundle"
+	"github.com/tahabakhit/pstack-rex/internal/config"
+	"github.com/tahabakhit/pstack-rex/internal/engine"
+	"github.com/tahabakhit/pstack-rex/internal/mcp"
 )
 
 const version = "0.1.0"
