@@ -77,3 +77,31 @@ func TestRejectUnsupportedSelections(t *testing.T) {
 		}
 	}
 }
+
+func TestAutoModelRequiresConcreteParent(t *testing.T) {
+	c := Default()
+	a := target()
+	a.Model = "auto"
+	c.Roles["how explorer"] = []Target{a}
+	for _, model := range []string{"", "auto", "inherit-parent"} {
+		t.Run("unresolved_"+model, func(t *testing.T) {
+			parent := target()
+			parent.Model = model
+			if got, err := c.Resolve("how explorer", 0, &parent); err == nil {
+				t.Fatalf("resolved auto using unresolved parent: %+v", got)
+			}
+		})
+	}
+	if got, err := c.Resolve("how explorer", 0, nil); err == nil {
+		t.Fatalf("resolved auto without a parent: %+v", got)
+	}
+	parent := target()
+	parent.Model = "concrete-parent-model"
+	got, err := c.Resolve("how explorer", 0, &parent)
+	if err != nil || got.Model != parent.Model || got.Backend != "rex" {
+		t.Fatalf("concrete parent resolution=%+v err=%v", got, err)
+	}
+	if err := ValidateTarget(a, false); err == nil {
+		t.Fatal("auto model accepted at execution boundary")
+	}
+}

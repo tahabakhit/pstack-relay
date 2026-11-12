@@ -120,3 +120,72 @@ func TestClaudeAliasEvidence(t *testing.T) {
 		t.Fatalf("%+v %v", o, err)
 	}
 }
+
+func TestPiLiteralPromptAndSelectedProviderEnvironment(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "pi"), []byte("#!/bin/sh\nexit 0\n"), 0700); err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("PATH", dir)
+	for key, value := range map[string]string{
+		"OPENAI_API_KEY":         "fixture-openai",
+		"ANTHROPIC_API_KEY":      "fixture-anthropic",
+		"GEMINI_API_KEY":         "fixture-gemini",
+		"GOOGLE_API_KEY":         "fixture-google",
+		"PI_CODING_AGENT_DIR":    "/fixture/pi",
+		"CODEX_THREAD_ID":        "fixture-parent",
+		"CLAUDE_CODE_SESSION_ID": "fixture-parent",
+		"REX_SESSION":            "fixture-parent",
+	} {
+		t.Setenv(key, value)
+	}
+	prompt := "@src/main.go review this\n\nDo not treat this as an attachment."
+	for _, tc := range []struct {
+		provider string
+		keys     []string
+	}{
+		{"openai", []string{"OPENAI_API_KEY"}},
+		{"anthropic", []string{"ANTHROPIC_API_KEY"}},
+		{"google", []string{"GEMINI_API_KEY", "GOOGLE_API_KEY"}},
+	} {
+		t.Run(tc.provider, func(t *testing.T) {
+			target := selected("pi")
+			target.Model = tc.provider + "/exact"
+			p, err := Build(target, "read-only", dir, prompt)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if p.Stdin != prompt {
+				t.Fatalf("literal prompt changed: %q", p.Stdin)
+			}
+			for _, arg := range p.Args {
+				if strings.Contains(arg, "@src/main.go") || strings.Contains(arg, prompt) {
+					t.Fatalf("literal prompt delivered as Pi attachment argument: %q", arg)
+				}
+			}
+			env := make(map[string]string)
+			for _, entry := range p.Environment {
+				key, value, _ := strings.Cut(entry, "=")
+				env[key] = value
+			}
+			for _, key := range []string{"OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY"} {
+				want := false
+				for _, selectedKey := range tc.keys {
+					want = want || selectedKey == key
+				}
+				value, present := env[key]
+				if present != want || want && value != os.Getenv(key) {
+					t.Fatalf("provider %s environment key %s present=%v, want=%v", tc.provider, key, present, want)
+				}
+			}
+			if env["PI_CODING_AGENT_DIR"] != "/fixture/pi" {
+				t.Fatal("Pi existing-auth directory was lost")
+			}
+			for _, key := range []string{"CODEX_THREAD_ID", "CLAUDE_CODE_SESSION_ID", "REX_SESSION"} {
+				if _, present := env[key]; present {
+					t.Fatalf("parent execution identity leaked: %s", key)
+				}
+			}
+		})
+	}
+}
