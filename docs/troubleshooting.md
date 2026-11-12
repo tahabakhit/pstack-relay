@@ -37,7 +37,7 @@ rex wait -s SESSION_ID BLOCK_ID --for 10s --json
 
 A Rex command may have succeeded before its acknowledgement was lost. The supervisor writes its own Rex identities, which can recover an ambiguous launch when available. A supervisor exit without a terminal receipt stays unknown because its child might still be running. That attempt retains a concurrency slot.
 
-Do not replay the request or kill a stale PID from a receipt. PIDs can be reused. Confirm the current owned process and descendants before manually stopping them. SIGTERM, SIGINT and SIGHUP are handled by the supervisor. SIGKILL, server crashes and processes deliberately escaping their process group require human diagnosis. There is no automatic crash-recovery engine or safe “forget this unknown attempt” shortcut in version 0.1.
+Do not replay the request or kill a stale PID from a receipt. PIDs can be reused. Confirm the current owned process and descendants before manually stopping them. SIGTERM, SIGINT and SIGHUP are handled by the supervisor. SIGKILL, server crashes and processes deliberately escaping their process group require human diagnosis. There is no automatic crash-recovery engine or safe "forget this unknown attempt" shortcut in version 0.1.
 
 ## Cancellation is not confirmed
 

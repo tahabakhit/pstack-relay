@@ -49,7 +49,7 @@ The state root defaults to `$XDG_STATE_HOME/pstack-rex`, or `~/.local/state/psta
 | `backend` | `rex` or `auto`; native is rejected |
 | `auth` | Only `existing`; funding is unknown and no new credentials are stored |
 
-The resolver supports explicit parent inheritance internally, but CLI and MCP do not currently supply parent identity. `auto` or `inherit-parent` as a model, and inherited effort/harness, therefore fail dispatch. They do not mean “let another harness select a default.” Backend `auto` is a separate concept and resolves Rex.
+The resolver supports explicit parent inheritance internally, but CLI and MCP do not currently supply parent identity. `auto` or `inherit-parent` as a model, and inherited effort/harness, therefore fail dispatch. They do not mean "let another harness select a default." Backend `auto` is a separate concept and resolves Rex.
 
 Allowed effort spellings are validated syntactically. Support for a particular model/effort combination is ultimately established by the installed CLI and a real probe. Rejection never causes a different effort, model or provider to run silently.
 
