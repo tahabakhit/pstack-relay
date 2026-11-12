@@ -6,6 +6,8 @@ This is an initial usable integration, version 0.1.0. Cursor owns the engineerin
 
 See [current status and continuation](docs/status.md) for the completed milestone, artifact retention and next bounded work.
 
+The next scoped release is [1.0.0](docs/release-1.0.md), with Codex as the main chat and Claude Code and Pi as coding workers through Rex. That target requires runnable verification and isolated implementation from both worker harnesses. The current integration does not yet meet those requirements.
+
 A real Codex parent has used the installed pstack `how` workflow to dispatch a Claude worker through MCP and Rex, receive its result, and answer from it. An installed `interrogate` workflow has also completed with two explicitly requested Codex models, runnable reviewer probes and a parent rerun. All three worker harnesses have separately completed live Rex smoke tasks. See [validation and limits](docs/validation.md). Full workflow parity, native subagents and live steering are not claimed.
 
 ## Build
