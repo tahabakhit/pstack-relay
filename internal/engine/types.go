@@ -24,6 +24,7 @@ type Request struct {
 	Target           config.Target `json:"target"`
 	TimeoutSeconds   int           `json:"timeout_seconds"`
 	RequireMCP       bool          `json:"require_mcp,omitempty"`
+	RequireShell     bool          `json:"require_shell,omitempty"`
 	ExpectedRevision string        `json:"expected_revision,omitempty"`
 	Executable       string        `json:"executable,omitempty"`
 }

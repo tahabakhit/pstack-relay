@@ -69,16 +69,20 @@ func Check() error {
 	if err = checkFS(source, m, false); err != nil {
 		return err
 	}
-	var rules []adaptation
 	data, err := files.ReadFile("adaptations.json")
 	if err != nil {
 		return err
 	}
-	if err = json.Unmarshal(data, &rules); err != nil {
+	return ValidateAdaptations(source, data)
+}
+
+func ValidateAdaptations(source fs.FS, data []byte) error {
+	var rules []adaptation
+	if err := json.Unmarshal(data, &rules); err != nil {
 		return err
 	}
 	for _, rule := range rules {
-		data, err := sourceRead(rule.Path)
+		data, err := fs.ReadFile(source, rule.Path)
 		if err != nil {
 			return err
 		}
@@ -95,8 +99,6 @@ type adaptation struct {
 	Old          string `json:"old"`
 	Replacement  string `json:"replacement"`
 }
-
-func sourceRead(p string) ([]byte, error) { return files.ReadFile("_upstream/" + p) }
 
 func checkFS(source fs.FS, m Manifest, modes bool) error {
 	expected := make(map[string]File, len(m.Files))

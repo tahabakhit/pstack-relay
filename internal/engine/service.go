@@ -101,6 +101,9 @@ func (s *Service) Dispatch(ctx context.Context, req Request) (Record, error) {
 	if err != nil {
 		return Record{}, err
 	}
+	if (req.RequireShell || req.Role == "interrogate reviewers") && req.Target.Harness != "codex" {
+		return Record{}, fmt.Errorf("worker requires shell execution, unavailable in the controlled %s profile; this workflow is blocked", req.Target.Harness)
+	}
 	if req.Access == "" {
 		req.Access = "read-only"
 	}

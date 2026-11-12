@@ -97,6 +97,7 @@ func run(args []string) error {
 	seconds := flags.Int("seconds", 30, "Wait duration, at most 60 seconds")
 	timeout := flags.Int("timeout", 0, "Worker deadline in seconds")
 	requireMCP := flags.Bool("require-mcp", false, "Require worker MCP access")
+	requireShell := flags.Bool("require-shell", false, "Require worker shell execution")
 	revision := flags.String("revision", "", "Required exact Git SHA")
 	dest := flags.String("dest", "", "Empty installation destination")
 	setRole := flags.String("set-role", "", "Replace configured role with target list")
@@ -219,7 +220,7 @@ func run(args []string) error {
 		if e != nil {
 			return e
 		}
-		record, e := service.Dispatch(ctx, engine.Request{ID: *id, Role: *role, Seat: *seat, Cwd: *cwd, Prompt: string(data), Access: *access, TimeoutSeconds: *timeout, RequireMCP: *requireMCP, ExpectedRevision: *revision})
+		record, e := service.Dispatch(ctx, engine.Request{ID: *id, Role: *role, Seat: *seat, Cwd: *cwd, Prompt: string(data), Access: *access, TimeoutSeconds: *timeout, RequireMCP: *requireMCP, RequireShell: *requireShell, ExpectedRevision: *revision})
 		if e != nil {
 			return e
 		}

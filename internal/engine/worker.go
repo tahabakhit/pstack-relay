@@ -52,6 +52,8 @@ func RunWorker(root, id string) error {
 	if req.ID != id {
 		return fmt.Errorf("request identity mismatch")
 	}
+	workCtx, cancelWork := context.WithTimeout(context.Background(), time.Duration(req.TimeoutSeconds)*time.Second)
+	defer cancelWork()
 	started := Started{PID: os.Getpid(), Session: os.Getenv("REX_SESSION"), Block: os.Getenv("REX_BLOCK"), At: time.Now().UTC(), Revision: req.ExpectedRevision, Cwd: req.Cwd}
 	if started.Session == "" || started.Block == "" {
 		return fmt.Errorf("worker must be launched inside a Rex terminal")
@@ -101,13 +103,13 @@ func RunWorker(root, id string) error {
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGTERM, syscall.SIGINT, syscall.SIGHUP)
 	defer signal.Stop(signals)
-	current, err := git(context.Background(), req.Cwd, "rev-parse", "HEAD")
+	current, err := git(workCtx, req.Cwd, "rev-parse", "HEAD")
 	if err != nil || strings.TrimSpace(current) != req.ExpectedRevision {
 		result.Error = "checkout revision changed before execution"
 		return finish()
 	}
 	if req.Access == "isolated-write" {
-		repoRoot, e := git(context.Background(), req.Cwd, "rev-parse", "--show-toplevel")
+		repoRoot, e := git(workCtx, req.Cwd, "rev-parse", "--show-toplevel")
 		if e != nil {
 			result.Error = e.Error()
 			return finish()
@@ -117,13 +119,13 @@ func RunWorker(root, id string) error {
 			result.Error = e.Error()
 			return finish()
 		}
-		dirty, e := git(context.Background(), req.Cwd, "status", "--porcelain")
+		dirty, e := git(workCtx, req.Cwd, "status", "--porcelain")
 		if e != nil || strings.TrimSpace(dirty) != "" {
 			result.Error = "isolated writers require a clean source checkout; commit or create an explicit snapshot first"
 			return finish()
 		}
 		worktree := filepath.Join(dir, "worktree")
-		if _, err = git(context.Background(), req.Cwd, "worktree", "add", "--detach", worktree, req.ExpectedRevision); err != nil {
+		if _, err = git(workCtx, req.Cwd, "worktree", "add", "--detach", worktree, req.ExpectedRevision); err != nil {
 			result.Error = err.Error()
 			return finish()
 		}
@@ -143,7 +145,18 @@ func RunWorker(root, id string) error {
 		return finish()
 	}
 	started.Enforcement = plan.Enforcement
-	result.StartSnapshotSHA256, err = snapshot(context.Background(), started.Cwd)
+	if req.Target.Harness == "pi" {
+		selection, e := harness.ProbePi(workCtx, plan, req.Target, started.Cwd)
+		if e != nil {
+			result.Error = e.Error()
+			return finish()
+		}
+		if e = writeJSON(filepath.Join(dir, "selection.json"), selection); e != nil {
+			result.Error = e.Error()
+			return finish()
+		}
+	}
+	result.StartSnapshotSHA256, err = snapshot(workCtx, started.Cwd)
 	if err != nil {
 		result.Error = "cannot capture starting snapshot: " + err.Error()
 		return finish()
@@ -168,12 +181,25 @@ func RunWorker(root, id string) error {
 	cmd.Dir = started.Cwd
 	cmd.Env = plan.Environment
 	cmd.Stdin = strings.NewReader(plan.Stdin)
-	cmd.Stdout = io.MultiWriter(stdout, os.Stdout)
-	cmd.Stderr = io.MultiWriter(stderr, os.Stderr)
+	cmd.Stdout = io.MultiWriter(&limitedLog{file: stdout, left: 32 << 20}, os.Stdout)
+	cmd.Stderr = io.MultiWriter(&limitedLog{file: stderr, left: 32 << 20}, os.Stderr)
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+	cmd.WaitDelay = 2 * time.Second
 	if cancelled() {
 		result.Status = "cancelled"
 		result.Error = "cancelled before process start"
+		return finish()
+	}
+	select {
+	case sig := <-signals:
+		result.Status = "cancelled"
+		result.Error = "supervisor received " + sig.String()
+		return finish()
+	default:
+	}
+	if workCtx.Err() != nil {
+		result.Status = "timed_out"
+		result.Error = "deadline exceeded before inference"
 		return finish()
 	}
 	if err = cmd.Start(); err != nil {
@@ -188,7 +214,8 @@ func RunWorker(root, id string) error {
 	}
 	done := make(chan error, 1)
 	go func() { done <- cmd.Wait() }()
-	deadline := time.NewTimer(time.Duration(req.TimeoutSeconds) * time.Second)
+	deadlineAt, _ := workCtx.Deadline()
+	deadline := time.NewTimer(time.Until(deadlineAt))
 	defer deadline.Stop()
 	poll := time.NewTicker(100 * time.Millisecond)
 	defer poll.Stop()

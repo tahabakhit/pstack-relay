@@ -1,0 +1,116 @@
+{
+  "observed_at": "2026-11-12",
+  "platform": "Linux amd64",
+  "software": {
+    "codex": "0.167.2",
+    "claude": "2.1.322",
+    "pi": "1.5.2",
+    "rex_api": 12
+  },
+  "upstream": {
+    "version": "0.15.36",
+    "revision": "a5539b15a3d56e04992565aafee2b37051329ce3"
+  },
+  "worker_smokes": [
+    {
+      "id": "claude-smoke",
+      "status": "completed",
+      "target": {
+        "harness": "claude",
+        "model": "haiku",
+        "effort": "low",
+        "backend": "rex",
+        "auth": "existing"
+      },
+      "exit_code": 0,
+      "model_evidence": "assistant.message.model",
+      "reported_model": "claude-haiku-5-5",
+      "text": "PSTACK_REX_READY",
+      "started": "2026-11-12T13:54:56.722536268Z",
+      "finished": "2026-11-12T13:54:58.910934212Z"
+    },
+    {
+      "id": "codex-smoke-fixed",
+      "status": "completed",
+      "target": {
+        "harness": "codex",
+        "model": "gpt-6.1-sol",
+        "effort": "low",
+        "backend": "rex",
+        "auth": "existing"
+      },
+      "exit_code": 0,
+      "model_evidence": "pinned-argv",
+      "reported_model": null,
+      "text": "PSTACK_REX_READY",
+      "started": "2026-11-12T13:56:07.346989567Z",
+      "finished": "2026-11-12T13:56:10.888661621Z"
+    },
+    {
+      "id": "pi-preflight-exact",
+      "status": "completed",
+      "target": {
+        "harness": "pi",
+        "model": "openai/gpt-6.1-sol",
+        "effort": "low",
+        "backend": "rex",
+        "auth": "existing"
+      },
+      "exit_code": 0,
+      "model_evidence": "message.model-selected",
+      "reported_model": "gpt-6.1-sol",
+      "text": "PSTACK_REX_READY",
+      "started": "2026-11-12T14:09:50.237088952Z",
+      "finished": "2026-11-12T14:09:54.64118438Z"
+    }
+  ],
+  "parent_workflow": {
+    "status": "verified-execution-path",
+    "parent_model_requested": "gpt-6.1-sol",
+    "workflow": "how simple path",
+    "worker_id": "how-calculator-sum-20261112-01",
+    "worker_status": "completed",
+    "worker_target": {
+      "harness": "claude",
+      "model": "haiku",
+      "effort": "low",
+      "backend": "rex",
+      "auth": "existing"
+    },
+    "worker_model_evidence": "assistant.message.model",
+    "worker_reported_model": "claude-haiku-5-5",
+    "rex_block": "block:01a1d018-3602-7420-8eec-6edd471e941f"
+  },
+  "limits": [
+    "Provider model proof is not available from Codex exec.",
+    "Effective effort and funding are not provider-verified.",
+    "Graphical clients and macOS runtime were not exercised.",
+    "This does not establish full upstream workflow parity."
+  ],
+  "parallel_initial_attempts": [
+    {
+      "id": "claude-smoke",
+      "status": "completed",
+      "started": "2026-11-12T13:54:56.722536268Z",
+      "finished": "2026-11-12T13:54:58.910934212Z"
+    },
+    {
+      "id": "codex-smoke",
+      "status": "failed",
+      "started": "2026-11-12T13:54:56.903212576Z",
+      "finished": "2026-11-12T13:55:00.488353825Z"
+    },
+    {
+      "id": "pi-smoke",
+      "status": "completed",
+      "started": "2026-11-12T13:54:56.805701019Z",
+      "finished": "2026-11-12T13:54:59.597056595Z"
+    }
+  ],
+  "pi_selection_preflight": {
+    "provider": "openai",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "evidence": "pi-rpc-get_state-before-inference"
+  }
+}

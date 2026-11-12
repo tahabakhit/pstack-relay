@@ -84,6 +84,9 @@ func run(args []string) error {
 		if err := bundle.CheckDirectory(filepath.Join(bundleDir, "_upstream"), m); err != nil {
 			return err
 		}
+		if err := checkAdaptations(); err != nil {
+			return err
+		}
 		if err := writeJSON(filepath.Join(bundleDir, "compatibility.json"), bundle.Compatibility{ManifestSHA256: hash(raw), Note: "Explicitly accepted source inventory. Runtime contract overrides upstream delegation; lexical inventory is a review aid, not a semantic guarantee."}); err != nil {
 			return err
 		}
@@ -136,8 +139,19 @@ func check() error {
 	if hash(raw) != c.ManifestSHA256 {
 		return errors.New("upstream compatibility review pending; inspect internal/bundle/review-report.json before explicit accept")
 	}
+	if err := checkAdaptations(); err != nil {
+		return err
+	}
 	fmt.Printf("Verified %d files, bytes, modes and accepted compatibility at %s (%s).\n", len(m.Files), m.Revision, m.Version)
 	return nil
+}
+
+func checkAdaptations() error {
+	data, err := os.ReadFile(filepath.Join(bundleDir, "adaptations.json"))
+	if err != nil {
+		return err
+	}
+	return bundle.ValidateAdaptations(os.DirFS(filepath.Join(bundleDir, "_upstream")), data)
 }
 func git(root string, args ...string) ([]byte, error) {
 	c := exec.Command("git", append([]string{"-C", root}, args...)...)

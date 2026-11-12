@@ -29,6 +29,7 @@ func TestUpdateRequiresCompatibilityAcceptance(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
+	put(filepath.Join(root, bundleDir, "adaptations.json"), `[]`)
 	put(filepath.Join(external, "pstack/plugin.json"), `{"version":"test"}`)
 	put(filepath.Join(external, "pstack/SKILL.md"), "# Test\nSpawn the model reviewer.\n")
 	command := func(args ...string) {

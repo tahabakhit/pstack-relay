@@ -14,6 +14,7 @@ go run ./cmd/upstream update --source /tmp/cursor --revision "$revision"
 1. Review the complete source diff, including additions, deletions, scripts, nested references, and role changes.
 2. Read `internal/bundle/review-report.json`. Review changed delegation candidates and the adapter's treatment of their semantics.
 3. Resolve unsupported capabilities and conflicting instructions in the runtime adaptation. Keep the source import pristine.
+	Review `internal/bundle/adaptations.json`. Its exact source hashes and anchors must still match. An upstream change to either adapted file requires explicit patch review even after inventory acceptance.
 4. Run relevant upstream helper tests with their declared dependencies when those helpers change.
 5. Accept only the reviewed candidate, then run the local checks.
 
@@ -36,6 +37,7 @@ Commit the imported source, both manifests, review report, compatibility baselin
 | `internal/bundle/_upstream/` | Pristine source data, excluded from Go package discovery |
 | `internal/bundle/review-report.json` | Changed files, lexical delegation candidates, and role candidates |
 | `internal/bundle/compatibility.json` | Explicitly accepted manifest hash |
+| `internal/bundle/adaptations.json` | Source-hash-checked model-setup and bootstrap patches |
 
 The inventory covers imported files and scans UTF-8 text for known terms. It includes false positives and can miss unfamiliar wording. File integrity, lexical classification, and semantic workflow compatibility are different checks. Review unsupported requirements and new delegation forms even when the report has no new terms.
 

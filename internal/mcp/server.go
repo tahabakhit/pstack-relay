@@ -21,7 +21,7 @@ type rpcRequest struct {
 }
 
 func Capabilities() map[string]any {
-	return map[string]any{"backends": []string{"rex"}, "native": false, "steer": false, "resume": false, "worker_mcp": false, "writer_harnesses": []string{"codex"}, "auth_modes": []string{"existing"}, "same_host_required": true, "completion_is_verification": false, "model_fallback": false}
+	return map[string]any{"backends": []string{"rex"}, "native": false, "steer": false, "resume": false, "worker_mcp": false, "writer_harnesses": []string{"codex"}, "shell_harnesses": []string{"codex"}, "auth_modes": []string{"existing"}, "same_host_required": true, "completion_is_verification": false, "model_fallback": false}
 }
 
 func schema(properties map[string]any, required ...string) map[string]any {
@@ -33,7 +33,7 @@ func stringField(description string) map[string]any {
 
 func tools() []map[string]any {
 	return []map[string]any{
-		{"name": "dispatch", "description": "Start one configured role seat in Rex. Use a stable unique idempotency key. Does not fall back or mark reviews verified.", "inputSchema": schema(map[string]any{"id": stringField("Immutable operation key, 1-80 letters/digits/underscore/hyphen"), "role": stringField("Configured pstack role"), "seat": map[string]any{"type": "integer", "minimum": 0}, "cwd": stringField("Absolute Git checkout on local Rex server host"), "prompt": stringField("Complete task brief including required skill and file paths"), "access": map[string]any{"type": "string", "enum": []string{"read-only", "isolated-write"}}, "timeout_seconds": map[string]any{"type": "integer", "minimum": 1}, "require_mcp": map[string]any{"type": "boolean"}, "expected_revision": stringField("Exact starting Git SHA")}, "id", "role", "cwd", "prompt")},
+		{"name": "dispatch", "description": "Start one configured role seat in Rex. Use a stable unique idempotency key. Does not fall back or mark reviews verified.", "inputSchema": schema(map[string]any{"id": stringField("Immutable operation key, 1-80 letters/digits/underscore/hyphen"), "role": stringField("Configured pstack role"), "seat": map[string]any{"type": "integer", "minimum": 0}, "cwd": stringField("Absolute Git checkout on local Rex server host"), "prompt": stringField("Complete task brief including required skill and file paths"), "access": map[string]any{"type": "string", "enum": []string{"read-only", "isolated-write"}}, "timeout_seconds": map[string]any{"type": "integer", "minimum": 1}, "require_mcp": map[string]any{"type": "boolean"}, "require_shell": map[string]any{"type": "boolean"}, "expected_revision": stringField("Exact starting Git SHA")}, "id", "role", "cwd", "prompt")},
 		{"name": "inspect", "description": "Inspect worker receipts and Rex process. Missing completion is never success.", "inputSchema": schema(map[string]any{"id": stringField("Worker id")}, "id")},
 		{"name": "list", "description": "List all retained worker attempts including unresolved launches.", "inputSchema": schema(map[string]any{})},
 		{"name": "wait", "description": "Wait up to 60 seconds; pending or unknown status is not success.", "inputSchema": schema(map[string]any{"id": stringField("Worker id"), "seconds": map[string]any{"type": "integer", "minimum": 1, "maximum": 60}}, "id")},
@@ -64,20 +64,21 @@ func call(ctx context.Context, s *engine.Service, name string, args json.RawMess
 	}
 	if name == "dispatch" {
 		var input struct {
-			ID         string `json:"id"`
-			Role       string `json:"role"`
-			Seat       int    `json:"seat"`
-			Cwd        string `json:"cwd"`
-			Prompt     string `json:"prompt"`
-			Access     string `json:"access"`
-			Timeout    int    `json:"timeout_seconds"`
-			RequireMCP bool   `json:"require_mcp"`
-			Revision   string `json:"expected_revision"`
+			ID           string `json:"id"`
+			Role         string `json:"role"`
+			Seat         int    `json:"seat"`
+			Cwd          string `json:"cwd"`
+			Prompt       string `json:"prompt"`
+			Access       string `json:"access"`
+			Timeout      int    `json:"timeout_seconds"`
+			RequireMCP   bool   `json:"require_mcp"`
+			RequireShell bool   `json:"require_shell"`
+			Revision     string `json:"expected_revision"`
 		}
 		if err := strict(args, &input); err != nil {
 			return nil, err
 		}
-		return s.Dispatch(ctx, engine.Request{ID: input.ID, Role: input.Role, Seat: input.Seat, Cwd: input.Cwd, Prompt: input.Prompt, Access: input.Access, TimeoutSeconds: input.Timeout, RequireMCP: input.RequireMCP, ExpectedRevision: input.Revision})
+		return s.Dispatch(ctx, engine.Request{ID: input.ID, Role: input.Role, Seat: input.Seat, Cwd: input.Cwd, Prompt: input.Prompt, Access: input.Access, TimeoutSeconds: input.Timeout, RequireMCP: input.RequireMCP, RequireShell: input.RequireShell, ExpectedRevision: input.Revision})
 	}
 	if name == "capabilities" || name == "list" {
 		var input struct{}
@@ -111,17 +112,10 @@ func call(ctx context.Context, s *engine.Service, name string, args json.RawMess
 	if err := strict(args, &input); err != nil {
 		return nil, err
 	}
-	switch name {
-	case "inspect":
-		return s.Inspect(ctx, input.ID)
-	case "cancel":
-		return s.Cancel(ctx, input.ID)
-	default:
-		if input.Seconds == 0 {
-			input.Seconds = 30
-		}
-		return s.Wait(ctx, input.ID, time.Duration(input.Seconds)*time.Second)
+	if input.Seconds == 0 {
+		input.Seconds = 30
 	}
+	return s.Wait(ctx, input.ID, time.Duration(input.Seconds)*time.Second)
 }
 
 func Serve(in io.Reader, out io.Writer, service *engine.Service) error {
