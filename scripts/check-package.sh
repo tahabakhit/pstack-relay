@@ -11,24 +11,17 @@ output=$(cd "$output" && pwd)
     shasum -a 256 -c SHA256SUMS
   fi
 )
-os=$(uname -s | tr '[:upper:]' '[:lower:]')
-case $(uname -m) in
-  x86_64) arch=amd64 ;;
-  arm64|aarch64) arch=arm64 ;;
-  *) echo 'Unsupported smoke-test architecture' >&2; exit 1 ;;
-esac
 stage=$(mktemp -d)
 trap 'rm -rf "$stage"' EXIT
-tar -xzf "$output/pstack-rex_${os}_${arch}.tar.gz" -C "$stage"
-binary="$stage/pstack-rex_${os}_${arch}/pstack-rex"
-for doc in docs/design.md docs/configuration.md docs/troubleshooting.md docs/upstream.md docs/research.md CONTRIBUTING.md; do
-  test -f "$stage/pstack-rex_${os}_${arch}/$doc"
+tar -xzf "$output/pstack-relay-plugin.tar.gz" -C "$stage"
+for file in .agents/plugins/marketplace.json .claude-plugin/marketplace.json plugins/pstack/delegation.md plugins/pstack/claude-hooks/session-start.sh plugins/pstack/skills/poteto-mode/SKILL.md plugins/pstack/bin/pstack-relay plugins/pstack/lib/relay.awk plugins/pstack/lib/setup-pstack.md plugins/pstack/UPSTREAM-REVISION; do
+  cmp "$file" "$stage/$file"
 done
-for file in .agents/plugins/marketplace.json .claude-plugin/marketplace.json plugins/pstack-rex/delegation.md plugins/pstack-rex/claude-hooks/session-start.sh plugins/pstack-rex/skills/poteto-mode/SKILL.md; do
-  cmp "$file" "$stage/pstack-rex_${os}_${arch}/$file"
-done
-test -x "$stage/pstack-rex_${os}_${arch}/plugins/pstack-rex/claude-hooks/session-start.sh"
+test -x "$stage/plugins/pstack/claude-hooks/session-start.sh"
+test -x "$stage/plugins/pstack/bin/pstack-relay"
+test ! -e "$stage/plugins/pstack/hooks"
+cmp upstream/skills/setup-pstack/SKILL.md "$stage/plugins/pstack/lib/setup-pstack.md"
 expected_revision=$(cat upstream/REVISION)
-actual=$(cd "$stage" && PATH='' "$binary" version)
-[[ "$actual" == "pstack-rex 1.0.0"$'\n'"upstream $expected_revision" ]]
+actual=$(cd "$stage" && sh "$stage/plugins/pstack/bin/pstack-relay" version)
+[[ "$actual" == "pstack-relay"$'\n'"upstream $expected_revision" ]]
 printf '%s\n' "$actual"

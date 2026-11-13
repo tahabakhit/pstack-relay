@@ -1,0 +1,11 @@
+{
+  "description": "Cursor pstack workflows with native, Orca, Rex, and hc delegation for Claude Code and Codex.",
+  "interface": {
+    "displayName": "pstack",
+    "shortDescription": "pstack workflows across Claude Code and Codex"
+  },
+  "license": "MIT",
+  "name": "pstack",
+  "repository": "https://github.com/tahabakhit/pstack-relay",
+  "skills": "./skills/"
+}

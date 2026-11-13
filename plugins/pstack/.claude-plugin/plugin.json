@@ -1,0 +1,10 @@
+{
+  "author": {
+    "name": "Taha Bakhit"
+  },
+  "description": "Cursor pstack workflows with native, Orca, Rex, and hc delegation for Claude Code and Codex.",
+  "hooks": "./claude-hooks/hooks.json",
+  "license": "MIT",
+  "name": "pstack",
+  "repository": "https://github.com/tahabakhit/pstack-relay"
+}

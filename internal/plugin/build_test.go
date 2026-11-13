@@ -16,7 +16,7 @@ func fixture(t *testing.T) string {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for name, data := range map[string]string{"internal/plugin/adaptations.json": "[]", "upstream/skills/example/SKILL.md": "---\nname: example\n---\nbody\n", "upstream/skills/example/references/ref.md": "unchanged\n", "upstream/agents/example.md": "agent\n", "upstream/LICENSE": "MIT\n", "upstream/README.md": "README\n", "overlay/delegation.md": "delegation\n", "overlay/hooks/session-start.sh": string(hook)} {
+	for name, data := range map[string]string{"overlay/bin/pstack-relay": "#!/bin/sh\necho relay\n", "overlay/lib/relay.awk": "# awk support\n", "upstream/REVISION": "0000000000000000000000000000000000000000\n", "internal/plugin/adaptations.json": "[]", "upstream/skills/setup-pstack/SKILL.md": "setup template\n", "upstream/skills/example/SKILL.md": "---\nname: example\n---\nbody\n", "upstream/skills/example/references/ref.md": "unchanged\n", "upstream/agents/example.md": "agent\n", "upstream/LICENSE": "MIT\n", "upstream/README.md": "README\n", "overlay/delegation.md": "delegation\n", "overlay/hooks/session-start.sh": string(hook)} {
 		p := filepath.Join(root, filepath.FromSlash(name))
 		if err := os.MkdirAll(filepath.Dir(p), 0755); err != nil {
 			t.Fatal(err)
@@ -36,11 +36,14 @@ func TestBuild(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, tt := range []struct{ name, path, content string }{
-		{"entrypoint pointer", "plugins/pstack-rex/skills/example/SKILL.md", "> Read [pstack delegation on this host](../../delegation.md) before following this file. It maps Cursor tools and models to this host and says how to start every subagent."},
-		{"agent pointer", "plugins/pstack-rex/agents/example.md", "(../delegation.md)"},
-		{"reference unchanged", "plugins/pstack-rex/skills/example/references/ref.md", "unchanged\n"},
-		{"verbatim delegation", "plugins/pstack-rex/delegation.md", "delegation\n"},
-		{"license", "plugins/pstack-rex/LICENSE", "MIT\n"},
+		{"entrypoint pointer", "plugins/pstack/skills/example/SKILL.md", "> Read [pstack delegation on this host](../../delegation.md) before following this file. It maps Cursor tools and models to this host and says how to start every subagent."},
+		{"agent pointer", "plugins/pstack/agents/example.md", "(../delegation.md)"},
+		{"reference unchanged", "plugins/pstack/skills/example/references/ref.md", "unchanged\n"},
+		{"verbatim delegation", "plugins/pstack/delegation.md", "delegation\n"},
+		{"license", "plugins/pstack/LICENSE", "MIT\n"},
+		{"runtime", "plugins/pstack/bin/pstack-relay", "#!/bin/sh"},
+		{"awk support", "plugins/pstack/lib/relay.awk", "# awk support"},
+		{"upstream revision", "plugins/pstack/UPSTREAM-REVISION", "0000000000000000000000000000000000000000"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			b, err := os.ReadFile(filepath.Join(root, tt.path))
@@ -52,7 +55,7 @@ func TestBuild(t *testing.T) {
 			}
 		})
 	}
-	for _, name := range []string{".agents/plugins/marketplace.json", ".claude-plugin/marketplace.json", "plugins/pstack-rex/.codex-plugin/plugin.json", "plugins/pstack-rex/.claude-plugin/plugin.json", "plugins/pstack-rex/claude-hooks/hooks.json"} {
+	for _, name := range []string{".agents/plugins/marketplace.json", ".claude-plugin/marketplace.json", "plugins/pstack/.codex-plugin/plugin.json", "plugins/pstack/.claude-plugin/plugin.json", "plugins/pstack/claude-hooks/hooks.json"} {
 		b, err := os.ReadFile(filepath.Join(root, name))
 		if err != nil {
 			t.Fatal(err)
@@ -66,14 +69,17 @@ func TestBuild(t *testing.T) {
 		mutate func(string) error
 	}{
 		{"stale file", func(root string) error {
-			return os.WriteFile(filepath.Join(root, "plugins/pstack-rex/delegation.md"), []byte("stale"), 0644)
+			return os.WriteFile(filepath.Join(root, "plugins/pstack/delegation.md"), []byte("stale"), 0644)
 		}},
-		{"missing file", func(root string) error { return os.Remove(filepath.Join(root, "plugins/pstack-rex/LICENSE")) }},
+		{"missing file", func(root string) error { return os.Remove(filepath.Join(root, "plugins/pstack/LICENSE")) }},
 		{"extra file", func(root string) error {
-			return os.WriteFile(filepath.Join(root, "plugins/pstack-rex/extra"), nil, 0644)
+			return os.WriteFile(filepath.Join(root, "plugins/pstack/extra"), nil, 0644)
+		}},
+		{"non-executable runtime", func(root string) error {
+			return os.Chmod(filepath.Join(root, "plugins/pstack/bin/pstack-relay"), 0644)
 		}},
 		{"non-executable hook", func(root string) error {
-			return os.Chmod(filepath.Join(root, "plugins/pstack-rex/claude-hooks/session-start.sh"), 0644)
+			return os.Chmod(filepath.Join(root, "plugins/pstack/claude-hooks/session-start.sh"), 0644)
 		}},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
@@ -106,7 +112,7 @@ func TestSessionHook(t *testing.T) {
 			}
 			// Exercise the installed script under a path that requires JSON escaping.
 			pluginPath := filepath.Join(root, "plugin \"quoted\"\\name\tpath\nline")
-			if err := os.Rename(filepath.Join(root, "plugins/pstack-rex"), pluginPath); err != nil {
+			if err := os.Rename(filepath.Join(root, "plugins/pstack"), pluginPath); err != nil {
 				t.Fatal(err)
 			}
 			sheetPath := filepath.Join(root, "sheet with spaces.md")
@@ -116,7 +122,7 @@ func TestSessionHook(t *testing.T) {
 				}
 			}
 			cmd := exec.Command("sh", filepath.Join(pluginPath, "claude-hooks/session-start.sh"), "codex")
-			cmd.Env = append(os.Environ(), "PSTACK_REX_SHEET="+sheetPath)
+			cmd.Env = append(os.Environ(), "PSTACK_RELAY_SHEET="+sheetPath)
 			b, err := cmd.Output()
 			if err != nil {
 				t.Fatal(err)

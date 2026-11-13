@@ -28,5 +28,5 @@ jobs:
       - name: Sync, build plugin, validate and open an upstream PR
         env:
           GH_TOKEN: ${{ github.token }}
-        # Runs go run ./cmd/pstack-rex plugin build after syncing upstream.
+        # Runs go run ./cmd/build-plugin after syncing upstream.
         run: bash scripts/check-upstream-update.sh

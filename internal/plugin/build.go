@@ -10,9 +10,8 @@ import (
 	"sort"
 )
 
-const Version = "1.0.0"
-const repository = "https://github.com/tahabakhit/pstack-rex"
-const description = "Cursor pstack workflows with native, Orca, and Rex delegation for Claude Code and Codex."
+const repository = "https://github.com/tahabakhit/pstack-relay"
+const description = "Cursor pstack workflows with native, Orca, Rex, and hc delegation for Claude Code and Codex."
 
 type generatedFile struct {
 	data []byte
@@ -42,11 +41,11 @@ func Build(root string, check bool) error {
 				return err
 			}
 			if !bytes.Equal(got, want.data) || info.Mode().Perm()&0111 != want.mode&0111 {
-				return fmt.Errorf("generated file differs: %s; run pstack-rex plugin build", name)
+				return fmt.Errorf("generated file differs: %s; run go run ./cmd/build-plugin", name)
 			}
 			seen[name] = true
 		}
-		return filepath.WalkDir(filepath.Join(root, "plugins", "pstack-rex"), func(path string, d fs.DirEntry, err error) error {
+		return filepath.WalkDir(filepath.Join(root, "plugins", "pstack"), func(path string, d fs.DirEntry, err error) error {
 			if err != nil {
 				return err
 			}
@@ -64,7 +63,7 @@ func Build(root string, check bool) error {
 		})
 	}
 	// Generate and validate everything before replacing the owned output tree.
-	if err := os.RemoveAll(filepath.Join(root, "plugins", "pstack-rex")); err != nil {
+	if err := os.RemoveAll(filepath.Join(root, "plugins", "pstack")); err != nil {
 		return err
 	}
 	names := make([]string, 0, len(files))
@@ -102,7 +101,7 @@ func generate(root string) (map[string]generatedFile, error) {
 		return nil, err
 	}
 	files := map[string]generatedFile{}
-	prefix := "plugins/pstack-rex/"
+	prefix := "plugins/pstack/"
 	for _, dir := range []string{"skills", "agents"} {
 		err := fs.WalkDir(source, dir, func(path string, d fs.DirEntry, err error) error {
 			if err != nil {
@@ -129,13 +128,13 @@ func generate(root string) (map[string]generatedFile, error) {
 			return nil, err
 		}
 	}
-	for _, pair := range [][2]string{{"upstream/LICENSE", "LICENSE"}, {"upstream/README.md", "UPSTREAM-README.md"}, {"overlay/delegation.md", "delegation.md"}, {"overlay/hooks/session-start.sh", "claude-hooks/session-start.sh"}} {
+	for _, pair := range [][2]string{{"overlay/bin/pstack-relay", "bin/pstack-relay"}, {"overlay/lib/relay.awk", "lib/relay.awk"}, {"upstream/skills/setup-pstack/SKILL.md", "lib/setup-pstack.md"}, {"upstream/REVISION", "UPSTREAM-REVISION"}, {"upstream/LICENSE", "LICENSE"}, {"upstream/README.md", "UPSTREAM-README.md"}, {"overlay/delegation.md", "delegation.md"}, {"overlay/hooks/session-start.sh", "claude-hooks/session-start.sh"}} {
 		b, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(pair[0])))
 		if err != nil {
 			return nil, err
 		}
 		mode := fs.FileMode(0644)
-		if pair[1] == "claude-hooks/session-start.sh" {
+		if pair[1] == "claude-hooks/session-start.sh" || pair[1] == "bin/pstack-relay" {
 			mode = 0755
 		}
 		files[prefix+pair[1]] = generatedFile{b, mode}
@@ -149,10 +148,10 @@ func generate(root string) (map[string]generatedFile, error) {
 		return nil
 	}
 	manifests := map[string]any{
-		prefix + ".claude-plugin/plugin.json": map[string]any{"name": "pstack-rex", "version": Version, "description": description, "license": "MIT", "repository": repository, "author": map[string]string{"name": "Taha Bakhit"}, "hooks": "./claude-hooks/hooks.json"},
-		prefix + ".codex-plugin/plugin.json":  map[string]any{"name": "pstack-rex", "version": Version, "description": description, "license": "MIT", "repository": repository, "skills": "./skills/", "interface": map[string]string{"displayName": "pstack-rex", "shortDescription": "pstack workflows across Claude Code and Codex"}},
-		".claude-plugin/marketplace.json":     map[string]any{"name": "pstack-rex", "owner": map[string]string{"name": "Taha Bakhit"}, "plugins": []any{map[string]any{"name": "pstack-rex", "source": "./plugins/pstack-rex", "description": description}}},
-		".agents/plugins/marketplace.json":    map[string]any{"name": "pstack-rex", "interface": map[string]string{"displayName": "pstack-rex"}, "plugins": []any{map[string]any{"name": "pstack-rex", "source": map[string]string{"source": "local", "path": "./plugins/pstack-rex"}, "policy": map[string]any{"installation": "AVAILABLE", "authentication": "ON_INSTALL", "products": []string{"CODEX"}}}}},
+		prefix + ".claude-plugin/plugin.json": map[string]any{"name": "pstack", "description": description, "license": "MIT", "repository": repository, "author": map[string]string{"name": "Taha Bakhit"}, "hooks": "./claude-hooks/hooks.json"},
+		prefix + ".codex-plugin/plugin.json":  map[string]any{"name": "pstack", "description": description, "license": "MIT", "repository": repository, "skills": "./skills/", "interface": map[string]string{"displayName": "pstack", "shortDescription": "pstack workflows across Claude Code and Codex"}},
+		".claude-plugin/marketplace.json":     map[string]any{"name": "pstack-relay", "owner": map[string]string{"name": "Taha Bakhit"}, "plugins": []any{map[string]any{"name": "pstack", "source": "./plugins/pstack", "description": description}}},
+		".agents/plugins/marketplace.json":    map[string]any{"name": "pstack-relay", "interface": map[string]string{"displayName": "pstack-relay"}, "plugins": []any{map[string]any{"name": "pstack", "source": map[string]string{"source": "local", "path": "./plugins/pstack"}, "policy": map[string]any{"installation": "AVAILABLE", "authentication": "ON_INSTALL", "products": []string{"CODEX"}}}}},
 	}
 	// Codex holds every new plugin hook behind a trust prompt that blocks
 	// session start, including unattended Orca workers, and it also loads
