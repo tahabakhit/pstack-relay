@@ -7,13 +7,13 @@ mkdir -p "$output"
 output=$(cd "$output" && pwd)
 go run ./cmd/upstream sync --check
 go run ./cmd/build-plugin --check
-tar -czf "$output/pstack-rex-plugin.tar.gz" plugins .claude-plugin .agents LICENSE NOTICE
+tar -czf "$output/pstack-relay-plugin.tar.gz" plugins .claude-plugin .agents LICENSE NOTICE
 (
   cd "$output"
   if command -v sha256sum >/dev/null 2>&1; then
-    sha256sum pstack-rex-plugin.tar.gz > SHA256SUMS
+    sha256sum pstack-relay-plugin.tar.gz > SHA256SUMS
   else
-    shasum -a 256 pstack-rex-plugin.tar.gz > SHA256SUMS
+    shasum -a 256 pstack-relay-plugin.tar.gz > SHA256SUMS
   fi
 )
 bash scripts/check-package.sh "$output"

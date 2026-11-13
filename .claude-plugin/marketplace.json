@@ -1,13 +1,13 @@
 {
-  "name": "pstack-rex",
+  "name": "pstack-relay",
   "owner": {
     "name": "Taha Bakhit"
   },
   "plugins": [
     {
-      "description": "Cursor pstack workflows with native, Orca, and Rex delegation for Claude Code and Codex.",
-      "name": "pstack-rex",
-      "source": "./plugins/pstack-rex"
+      "description": "Cursor pstack workflows with native, Orca, Rex, and hc delegation for Claude Code and Codex.",
+      "name": "pstack-relay",
+      "source": "./plugins/pstack-relay"
     }
   ]
 }

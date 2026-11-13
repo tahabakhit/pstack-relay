@@ -45,7 +45,7 @@ if [[ -n "$existing" ]]; then
   exit 0
 fi
 git switch -c "$branch"
-git add -- upstream plugins/pstack-rex .claude-plugin/marketplace.json .agents/plugins/marketplace.json
+git add -- upstream plugins/pstack-relay .claude-plugin/marketplace.json .agents/plugins/marketplace.json
 gitleaks git --staged --no-banner
 git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "chore: sync Cursor pstack to $revision"
 git push origin "$branch"

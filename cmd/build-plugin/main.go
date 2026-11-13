@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/tahabakhit/pstack-rex/internal/plugin"
+	"github.com/tahabakhit/pstack-relay/internal/plugin"
 )
 
 func main() {
@@ -28,7 +28,7 @@ func main() {
 	if *check {
 		fmt.Println("plugin tree is up to date")
 	} else {
-		fmt.Println("built plugins/pstack-rex and marketplace manifests")
+		fmt.Println("built plugins/pstack-relay and marketplace manifests")
 	}
 }
 func checkoutRoot() (string, error) {

@@ -1,11 +1,11 @@
 {
   "interface": {
-    "displayName": "pstack-rex"
+    "displayName": "pstack-relay"
   },
-  "name": "pstack-rex",
+  "name": "pstack-relay",
   "plugins": [
     {
-      "name": "pstack-rex",
+      "name": "pstack-relay",
       "policy": {
         "authentication": "ON_INSTALL",
         "installation": "AVAILABLE",
@@ -14,7 +14,7 @@
         ]
       },
       "source": {
-        "path": "./plugins/pstack-rex",
+        "path": "./plugins/pstack-relay",
         "source": "local"
       }
     }
