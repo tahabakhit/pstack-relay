@@ -89,7 +89,7 @@ func Resolve(s Sheet, role string, env Env, opts Options) ([]Placement, error) {
 		switch {
 		case env.Parent == "":
 			p.Note = "parent harness not detected"
-		case seat.Harness == "" || seat.Harness == env.Parent:
+		case seat.Harness == "" || seat.Harness == env.Parent || model == "":
 		case env.Backend == Orca && seat.Harness != sheet.Pi:
 			p.Mode, p.Harness = OrcaMode, seat.Harness
 			p.Command = []string{"orca", "orchestration", "worker-start", "--agent", string(seat.Harness), "--model", model}
