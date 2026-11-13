@@ -11,11 +11,13 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 
 	pstackrex "github.com/tahabakhit/pstack-rex"
 	"github.com/tahabakhit/pstack-rex/internal/discover"
 	"github.com/tahabakhit/pstack-rex/internal/plugin"
 	"github.com/tahabakhit/pstack-rex/internal/resolve"
+	"github.com/tahabakhit/pstack-rex/internal/rexworker"
 	"github.com/tahabakhit/pstack-rex/internal/setup"
 	"github.com/tahabakhit/pstack-rex/internal/sheet"
 )
@@ -58,7 +60,7 @@ func (c cli) json(value any) error {
 }
 func (c cli) execute(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: pstack-rex <models|resolve|setup|doctor|plugin build|version>")
+		return fmt.Errorf("usage: pstack-rex <models|resolve|setup|doctor|plugin build|rex start|rex report|rex wait|version>")
 	}
 	switch args[0] {
 	case "version":
@@ -113,8 +115,10 @@ func (c cli) execute(args []string) error {
 			fmt.Fprintln(c.out, "built plugins/pstack-rex and marketplace manifests")
 		}
 		return nil
+	case "rex":
+		return c.rex(args[1:])
 	case "help", "--help", "-h":
-		fmt.Fprintln(c.out, "Usage: pstack-rex <models|resolve|setup|doctor|plugin build|version>\nUse COMMAND --help for options.")
+		fmt.Fprintln(c.out, "Usage: pstack-rex <models|resolve|setup|doctor|plugin build|rex start|rex report|rex wait|version>\nUse COMMAND --help for options.")
 		return nil
 	default:
 		return fmt.Errorf("unknown command %q", args[0])
@@ -494,4 +498,80 @@ func (c cli) codexConfig() string {
 		return ""
 	}
 	return string(data)
+}
+
+func (c cli) rex(args []string) error {
+	if len(args) == 0 {
+		return fmt.Errorf("usage: pstack-rex rex <start|report|wait>")
+	}
+	byteRunner := func(name string, a ...string) ([]byte, error) {
+		out, err := c.run(name, a...)
+		return []byte(out), err
+	}
+	root := rexworker.StateRoot(c.getenv)
+	switch args[0] {
+	case "start":
+		f := c.flags("rex start")
+		h := f.String("harness", "", "worker harness: claude, codex or pi")
+		m := f.String("model", "", "worker model")
+		e := f.String("effort", "", "reasoning effort")
+		own := f.Bool("own-worktree", false, "run the worker in its own git worktree")
+		brief := f.String("brief", "", "file holding the complete brief")
+		if err := f.Parse(args[1:]); err != nil {
+			return err
+		}
+		if err := noArgs(f); err != nil {
+			return err
+		}
+		if *h == "" || *m == "" || *brief == "" {
+			return fmt.Errorf("rex start needs --harness, --model and --brief")
+		}
+		cwd, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+		launch, err := rexworker.Start(byteRunner, root, c.getenv, rexworker.Spec{Harness: *h, Model: *m, Effort: *e, OwnWorktree: *own, BriefPath: *brief, Cwd: cwd})
+		if err != nil {
+			return err
+		}
+		return c.json(launch)
+	case "report":
+		f := c.flags("rex report")
+		id := f.String("id", "", "worker id")
+		file := f.String("file", "-", "result file, or - for stdin")
+		if err := f.Parse(args[1:]); err != nil {
+			return err
+		}
+		if err := noArgs(f); err != nil {
+			return err
+		}
+		var data []byte
+		var err error
+		if *file == "-" {
+			data, err = io.ReadAll(c.in)
+		} else {
+			data, err = os.ReadFile(*file)
+		}
+		if err != nil {
+			return err
+		}
+		return rexworker.Report(root, *id, data)
+	case "wait":
+		f := c.flags("rex wait")
+		id := f.String("id", "", "worker id")
+		seconds := f.Int("seconds", 540, "longest wait before returning state running")
+		if err := f.Parse(args[1:]); err != nil {
+			return err
+		}
+		if err := noArgs(f); err != nil {
+			return err
+		}
+		status, err := rexworker.Wait(byteRunner, root, *id, time.Duration(*seconds)*time.Second)
+		if err != nil {
+			return err
+		}
+		return c.json(status)
+	default:
+		return fmt.Errorf("unknown rex command %q", args[0])
+	}
 }

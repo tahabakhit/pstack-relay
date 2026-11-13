@@ -27,10 +27,10 @@ type Launch struct {
 }
 
 type Status struct {
-	ID       string
-	State    string
-	Result   string
-	ExitCode *int
+	ID       string `json:"id"`
+	State    string `json:"state"`
+	Result   string `json:"result,omitempty"`
+	ExitCode *int   `json:"exit_code,omitempty"`
 }
 
 type Runner func(name string, args ...string) ([]byte, error)
