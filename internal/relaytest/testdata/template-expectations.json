@@ -1,0 +1,27 @@
+{
+  "invalid template": {
+    "error": true
+  },
+  "missing template": {
+    "error": true
+  },
+  "starter-shape/": {
+    "error": false,
+    "output": "feature, refactoring: codex:gpt-first @high\nnew role: claude:opus @xhigh, codex:gpt-first @high\ndefault effort: session\nsession hook: on\n"
+  },
+  "starter-shape/missing": {
+    "error": true
+  },
+  "starter-shape/only-claude": {
+    "error": false,
+    "output": "feature, refactoring: claude:opus @high\nnew role: claude:opus @xhigh, claude:opus @high\ndefault effort: session\nsession hook: on\n"
+  },
+  "starter-shape/only-codex": {
+    "error": false,
+    "output": "feature, refactoring: codex:gpt-first @high\nnew role: codex:gpt-first @xhigh, codex:gpt-first @high\ndefault effort: session\nsession hook: on\n"
+  },
+  "starter-shape/only-pi": {
+    "error": false,
+    "output": "feature, refactoring: pi:openai/gpt-a @high\nnew role: pi:openai/gpt-a @xhigh, pi:openai/gpt-a @high\ndefault effort: session\nsession hook: on\n"
+  }
+}
