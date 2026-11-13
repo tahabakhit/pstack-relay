@@ -1,40 +1,40 @@
 # Contribute to pstack-rex
 
-Use Go 1.23 or later, Git, and a POSIX environment on Linux or macOS. The Go runtime uses the standard library. Rex and the selected worker CLI are needed for live execution, not for the deterministic test suite.
+Use Go 1.23 or later and Git. Read [the design](docs/design.md) and [the delegation contract](overlay/delegation.md) before changing delegation. The CLI uses the Go standard library.
 
 ## Check a change
 
-Run these commands from the repository root.
+Run these checks from the repository root:
 
 ```zsh
-go build ./cmd/pstack-rex
+go build -o /tmp/pstack-rex ./cmd/pstack-rex
 go test ./...
 go test -race ./...
 go vet ./...
-go run ./cmd/upstream check
-bash scripts/package.sh /tmp/pstack-rex-packages
+go run ./cmd/upstream sync --check
+go run ./cmd/pstack-rex plugin build --check
+git diff --check
 ```
 
-The package script cross-compiles Linux and macOS archives for amd64 and arm64, writes checksums, and tests installation using the host archive. Cross-compilation does not prove execution on every target. The package check installs into a temporary directory with an empty `PATH` and verifies refusal to overwrite an existing installation.
+Use the binary built from your checkout when checking changes to the CLI. `sync --check` validates the recorded revision format without network access. `plugin build --check` checks generated file contents, executable bits, and the file list without writing.
 
-The ordinary Go tests use controlled fixtures and fake processes. They do not require model credentials or make inference calls. Keep credentials and paid model calls out of ordinary CI. Run live Rex and harness checks separately with explicit local configuration, and report requested versus observed model evidence and any unverified permissions or graphical behavior.
+Go tests use fixtures and fake processes. They do not establish authenticated model access or live worker behavior. Record live acceptance commands, outcomes, and qualifications in `docs/acceptance.md`. Keep credentials and model calls out of ordinary CI.
 
-## Change workflows and adapters
+## Change the plugin
 
-Read [the architecture](docs/architecture.md) and [runtime contracts](docs/contracts.md) before changing dispatch or lifecycle handling. Keep the shared CLI and MCP behavior consistent. Cover observable failure behavior when changing parsing, cancellation, idempotency, or writable ownership.
+Keep `upstream/` pristine. Put host behavior in `overlay/` and the Go implementation. Generate the plugin with `go run ./cmd/pstack-rex plugin build`, then inspect the generated diff. The generator checks source hashes before applying host adaptations.
 
-Keep `internal/bundle/_upstream/` pristine. Change runtime adaptation in this project's implementation. Follow [upstream review](docs/upstream.md) for source imports and record the source revision and compatibility decision.
+Follow [upstream maintenance](docs/upstream.md) when importing Cursor changes. Upstream helpers may require Bun, Node.js, Python, or other tools. Read each helper's declared dependencies before running its checks. Go tests do not run those suites.
 
-The imported workflows include helper scripts with their own Bun, Node, Python, or other dependencies. `go test ./...` does not run those upstream suites. When changing helper behavior or accepting a relevant source update, read the helper's package metadata and run its declared checks separately. Do not add those dependencies to the Go runtime merely because the source bundle contains them.
+The package script is `bash scripts/package.sh /tmp/pstack-rex-packages`. It builds Linux and macOS archives for amd64 and arm64 and runs a host archive check. Cross-compilation does not prove runtime behavior on every target. Building archives does not publish a release.
 
 ## Prepare a contribution
 
-Keep the change focused and describe the problem, resulting behavior, checks run, and remaining limits. Preserve source copyright and license notices. Before committing to a public repository, scan the staged patch.
+Describe the problem, resulting behavior, checks run, and remaining limits. Preserve copyright and license notices. Scan the staged patch before committing:
 
 ```zsh
-git diff --check
 git diff --cached
-gitleaks git --staged --redact
+gitleaks git --staged --no-banner
 ```
 
-Do not commit detected secrets. Report an unavailable scanner rather than claiming the scan passed. Building archives does not authorize publishing them. Release publication and hosted workflow execution are separate actions.
+Do not commit detected secrets. Report an unavailable scanner rather than claiming the scan passed. Publication and hosted workflow execution require their own evidence.

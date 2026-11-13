@@ -6,8 +6,9 @@ mkdir -p "$output"
 output=$(cd "$output" && pwd)
 stage=$(mktemp -d)
 trap 'rm -rf "$stage"' EXIT
-git ls-files -z -- README.md CONTRIBUTING.md docs examples .github/workflows > "$stage/documents"
-go run ./cmd/upstream check
+git ls-files -z -- README.md CONTRIBUTING.md docs .github/workflows > "$stage/documents"
+go run ./cmd/upstream sync --check
+go run ./cmd/pstack-rex plugin build --check
 for target in darwin/amd64 darwin/arm64 linux/amd64 linux/arm64; do
   os=${target%/*}
   arch=${target#*/}
@@ -15,7 +16,8 @@ for target in darwin/amd64 darwin/arm64 linux/amd64 linux/arm64; do
   mkdir -p "$stage/$name"
   CGO_ENABLED=0 GOOS="$os" GOARCH="$arch" go build -trimpath -o "$stage/$name/pstack-rex" ./cmd/pstack-rex
   cp LICENSE NOTICE "$stage/$name/"
-  cp internal/bundle/_upstream/LICENSE "$stage/$name/LICENSE.upstream"
+  cp -R plugins .claude-plugin .agents "$stage/$name/"
+  cp upstream/LICENSE "$stage/$name/LICENSE.upstream"
   while IFS= read -r -d '' doc; do
     if [[ ! -f "$doc" || -L "$doc" ]]; then
       echo "Package documentation must be a regular file: $doc" >&2

@@ -1,4 +1,0 @@
-{
-  "manifest_sha256": "71b5800c6f8acd6e1db7f2e02f68feeae3f3d7edf7207ccae39e8003a6cff6cc",
-  "note": "Explicitly accepted source inventory. Runtime contract overrides upstream delegation; lexical inventory is a review aid, not a semantic guarantee."
-}

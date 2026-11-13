@@ -1,48 +1,32 @@
-# Current status and continuation
+# 1.0.0 status
 
-The latest runtime milestone is a reproducible installed multi-model `interrogate` workflow. A subsequent [shell capability investigation](shell-capability.md) defines a proposed Claude profile and [acceptance tests](shell-capability-tests.md). The [disposable prototype](claude-sandbox-prototype.md) rejected its direct-CLI variant on malformed-policy admission. Shell execution remains disabled for Claude and Pi. The wider goal remains an upstream-tracking pstack integration with configurable harnesses, models, efforts and Rex execution.
+The 1.0 implementation is a Codex and Claude Code plugin with one shared model sheet and native, Orca, and interactive Rex delegation. [The design](design.md) defines the target. [The delegation reference](../overlay/delegation.md) is the agent-facing contract. The evidence below is narrower than full acceptance of every path.
 
-The next scoped release is [1.0.0](release-1.0.md). Codex is the main chat. Claude Code and Pi must both support delegated coding through Rex, including runnable verification and isolated implementation. Source-only worker support does not satisfy that release target. The release contract defines acceptance gates and delivery order.
+## Verified live
 
-## Completed milestone
+The [acceptance record](acceptance.md) holds these runs from 13 November 2026:
 
-The runtime implementation and validation baseline is commit `56de7706aedbf521863a6ef0f3a871f1267c0cc9`. Later changes record the shell investigation and align the Go module identity for GitHub publication. No release archives have been published.
+- `pstack-rex setup` installed the plugin in Codex and Claude Code from a local marketplace and wrote the shared sheet. The Claude `SessionStart` hook injected the delegation pointer in a fresh session.
+- A Claude Code parent in Orca ran `interrogate` after the user typed its slash command. Its Claude seat ran native in its own worktree. Its Codex seat ran as an Orca worker in a child worktree from the parent's branch. Both returned, and the parent reran their proofs.
+- A Codex parent in Orca ran `interrogate` with a native Codex seat and a Claude Orca worker in a child worktree. Both returned, and the parent reran every proof.
+- A Rex seat resolved to an interactive Codex worker in a Rex block. The worker returned its report, and `pstack-rex rex wait` reported `reported`.
+- The upstream sync script synced, validated, and reached the squash-merge step against a stubbed `gh` and a local origin.
 
-- [The interrogate example](../examples/codex-interrogate/main.go) installs the bundle, prepares a detached read-only worktree per configured reviewer, and launches a Codex parent through the local MCP server.
-- [The verifier](../examples/codex-interrogate/verify.go) reconciles every configured seat, requests, receipts, actual probe commands, fixture identity and the parent's later rerun. Its public structured finding is the authoritative verified report. It does not classify arbitrary narrative claims.
-- [The regression suite](../examples/codex-interrogate/verify_test.go) rejects missing or extra attempts, changed identities, invalid terminal states, fabricated execution evidence and missing parent reruns.
-- [Review evidence](validation/interrogate-evidence.json) records the observed two-seat run. [Writer evidence](validation/writer-evidence.json) records two controlled concurrent isolated writers that left the source checkout clean.
+The no-backend fallback is shown by resolver output only. A fallback seat is an ordinary native subagent on the parent's model, so no separate worker run was made.
 
-[Validation](validation.md) describes the checks, independent reviews and limits. Requested model diversity is verified; provider-served model identities and effective effort remain unknown.
+## Known limits
 
-## Retention and reproducibility
+- The Codex plugin ships no session hook. Its skill entrypoints direct the agent to read the delegation reference.
+- Interactive workers can wait for approval under the user's normal harness settings.
+- Model discovery does not prove account access, provider-served model identity, or effective reasoning effort.
+- Worker reports require parent verification. A required independent review stays blocked when no reviewer can run.
+- Cursor cloud agents, automations, and project stores have no host equivalent here.
+- `pstack-rex setup` with the default source and `go install ...@latest` need this release on the repository's default branch. Until then, use `--source <checkout>`.
+- The hosted upstream sync has not run yet. A local run with a stubbed `gh` synced, validated, and reached the squash-merge step.
 
-The temporary live receipts, raw traces, archives, design candidates and fresh clone used for validation are no longer present on the handoff host. Public evidence and local checkpoint copies of the audit reports survive. Do not describe the original run as currently replayable without checking its artifact directory.
+## After 1.0
 
-The source can rebuild archives using the documented contributor commands. A new authenticated live example run makes new model calls. Neither rebuilding nor rerunning was necessary for the subsequent documentation-only handoff. Older archive hashes identify the earlier tested bytes; they do not identify a rebuild.
-
-## Next bounded milestone
-
-The capability contract and negative-test plan are drafted from installed Claude Code 2.1.322, Pi 1.5.2, current official documentation, and adapter source. The recommendation is a Claude Bash-only native-sandbox experiment. Pi's native bash has no intrinsic OS boundary. Existing source-only profiles remain available.
-
-Selected offline and actual Claude tool-path probes ran without provider inference. The well-formed policy blocked selected forbidden accesses, but a malformed settings file permitted them. A separate agent independently reproduced both variants. [CL-001](issues/claude-invalid-policy.md) blocks promotion. Next, prototype strict prelaunch policy validation and repeat S03 before integrating a profile or completing the remaining matrix. Linux results cannot certify macOS or other platforms.
-
-A later [strict admission experiment](claude-admission-prototype.md) rejected malformed and wrong-type policies before reaching the child-launch path, and passed an immutable approved snapshot through the actual CLI. Its fake-child matrix passed 72 variants. This is a verified subset, not complete S03 or effective managed-policy certification. The production gate remains closed. Next compare execution-boundary designs for both required coding harnesses.
-
-A direct Pi loader canary also proved that disabling context files does not disable system-prompt discovery. [PI-001](issues/pi-startup-inputs.md) tracks the startup-profile gap. The canary does not demonstrate a tool escape. The latest [observation record](validation/shell-controls.json) records its scope. Do not repeat historical model tasks to reestablish prior milestones.
-
-An [actual CLI/RPC routing experiment](pi-shell-routing-prototype.md) showed a generated Pi shell wrapper in use for an untrusted project and a neutral control cwd. Explicitly approving conflicting project settings replaced the wrapper. This identifies a candidate control path and a precedence hazard, not confinement or model-directed tool-path certification.
-
-The [selected worker design](worker-execution-design.md) retains trusted harnesses and confines Bash task commands. A subsequent [Pi read-only boundary prototype](pi-command-boundary-prototype.md) passed selected actual-tool checks and independent review, with explicit syscall, descriptor and lifecycle limits. It found and corrected [PI-002](issues/pi-helper-environment.md), a synthetic helper-environment leak in the disposable wrapper. No production profile is enabled by these results.
-
-## Parked capabilities and external checks
-
-These remain explicit future work, rather than requirements silently added to the next milestone.
-
-- Certify semantic delegation coverage beyond the source hashes and broad lexical inventory.
-- Add native execution, steering, resume, deliberate crash recovery and worker MCP with their own contracts.
-- Add enforced funding selection and remote file staging.
-- Exercise macOS and graphical Rex clients directly. Cross-builds do not establish runtime behavior.
-- Exercise real hosted upstream-update proposals. Current-main [hosted CI](https://github.com/tahabakhit/pstack-rex/actions/runs/43313799064) passed Linux and macOS tests and packaging at `71e169917b44f95e2c3034d494665eddc820a2ed`. This does not certify a new worker profile or the updater's hosted proposal path.
-
-Unknown attempts retain capacity and are never automatically replayed. Preserve the existing Git-program protections and permission boundaries. Publication, remote creation and cleanup are separate operations.
+- Pi plugin installation and Pi parent acceptance. Setup currently discovers Pi models for the sheet.
+- Pi workers on Orca. Orca currently has no Pi agent, so those seats fall back to the parent's model.
+- A herdr backend.
+- The first hosted upstream sync run, with its actual outcome recorded.

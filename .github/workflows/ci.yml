@@ -23,7 +23,8 @@ jobs:
           cache: false
       - run: go test -race ./...
       - run: go vet ./...
-      - run: go run ./cmd/upstream check
+      - run: go run ./cmd/upstream sync --check
+      - run: go run ./cmd/pstack-rex plugin build --check
       - run: go build -trimpath -o bin/pstack-rex ./cmd/pstack-rex
       - run: bash scripts/package.sh
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

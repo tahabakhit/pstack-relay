@@ -21,14 +21,14 @@ stage=$(mktemp -d)
 trap 'rm -rf "$stage"' EXIT
 tar -xzf "$output/pstack-rex_${os}_${arch}.tar.gz" -C "$stage"
 binary="$stage/pstack-rex_${os}_${arch}/pstack-rex"
-for doc in docs/configuration.md docs/troubleshooting.md docs/upstream.md docs/research.md docs/validation.md docs/validation/live-evidence.json docs/validation/writer-evidence.json docs/validation/interrogate-evidence.json CONTRIBUTING.md examples/codex-parent/main.go examples/codex-interrogate/main.go examples/codex-interrogate/verify.go; do
+for doc in docs/design.md docs/configuration.md docs/troubleshooting.md docs/upstream.md docs/research.md CONTRIBUTING.md; do
   test -f "$stage/pstack-rex_${os}_${arch}/$doc"
 done
-"$binary" version
-PATH='' "$binary" install --dest "$stage/installed"
-test -f "$stage/installed/runtime-contract.md"
-test -f "$stage/installed/LICENSE"
-if PATH='' "$binary" install --dest "$stage/installed"; then
-  echo 'Installation unexpectedly overwrote a populated directory' >&2
-  exit 1
-fi
+for file in .agents/plugins/marketplace.json .claude-plugin/marketplace.json plugins/pstack-rex/delegation.md plugins/pstack-rex/claude-hooks/session-start.sh plugins/pstack-rex/skills/poteto-mode/SKILL.md; do
+  cmp "$file" "$stage/pstack-rex_${os}_${arch}/$file"
+done
+test -x "$stage/pstack-rex_${os}_${arch}/plugins/pstack-rex/claude-hooks/session-start.sh"
+expected_revision=$(cat upstream/REVISION)
+actual=$(cd "$stage" && PATH='' "$binary" version)
+[[ "$actual" == "pstack-rex 1.0.0"$'\n'"upstream $expected_revision" ]]
+printf '%s\n' "$actual"
