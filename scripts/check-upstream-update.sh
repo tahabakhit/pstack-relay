@@ -18,6 +18,12 @@ if [[ "$before" == "$revision" ]]; then
   exit 0
 fi
 validation=passed
+if go run ./cmd/pstack-rex plugin build > "$work/plugin.log" 2>&1; then
+  cat "$work/plugin.log"
+else
+  cat "$work/plugin.log"
+  validation=failed
+fi
 if go test ./... > "$work/tests.log" 2>&1; then
   cat "$work/tests.log"
 else
@@ -32,14 +38,14 @@ else
 fi
 branch="automation/cursor-pstack-$revision"
 body="$work/body.md"
-printf 'Sync Cursor pstack from %s to %s.\n\nSource: https://github.com/cursor/plugins/commit/%s\n\ngo test ./... and go vet ./...: %s.\n' "$before" "$revision" "$revision" "$validation" > "$body"
+printf 'Sync Cursor pstack from %s to %s.\n\nSource: https://github.com/cursor/plugins/commit/%s\n\nplugin build, go test ./... and go vet ./...: %s.\n' "$before" "$revision" "$revision" "$validation" > "$body"
 existing=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$branch" --state all --json number --jq '.[0].number // empty')
 if [[ -n "$existing" ]]; then
   echo "Sync already proposed in PR #$existing" >> "$GITHUB_STEP_SUMMARY"
   exit 0
 fi
 git switch -c "$branch"
-git add -- upstream
+git add -- upstream plugins/pstack-rex .claude-plugin/marketplace.json .agents/plugins/marketplace.json
 gitleaks git --staged --no-banner
 git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "chore: sync Cursor pstack to $revision"
 git push origin "$branch"

@@ -25,7 +25,8 @@ jobs:
           cache: false
       - name: Install pinned staged-secret scanner
         run: go install github.com/gitleaks/gitleaks/v8@v8.30.1
-      - name: Sync, validate and open an upstream PR
+      - name: Sync, build plugin, validate and open an upstream PR
         env:
           GH_TOKEN: ${{ github.token }}
+        # Runs go run ./cmd/pstack-rex plugin build after syncing upstream.
         run: bash scripts/check-upstream-update.sh

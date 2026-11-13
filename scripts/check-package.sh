@@ -24,7 +24,11 @@ binary="$stage/pstack-rex_${os}_${arch}/pstack-rex"
 for doc in docs/design.md docs/configuration.md docs/troubleshooting.md docs/upstream.md docs/research.md CONTRIBUTING.md; do
   test -f "$stage/pstack-rex_${os}_${arch}/$doc"
 done
+for file in .agents/plugins/marketplace.json .claude-plugin/marketplace.json plugins/pstack-rex/delegation.md plugins/pstack-rex/hooks/session-start.sh plugins/pstack-rex/skills/poteto-mode/SKILL.md; do
+  cmp "$file" "$stage/pstack-rex_${os}_${arch}/$file"
+done
+test -x "$stage/pstack-rex_${os}_${arch}/plugins/pstack-rex/hooks/session-start.sh"
 expected_revision=$(cat upstream/REVISION)
 actual=$(cd "$stage" && PATH='' "$binary" version)
-[[ "$actual" == "pstack-rex 1.0.0-dev"$'\n'"upstream $expected_revision" ]]
+[[ "$actual" == "pstack-rex 1.0.0"$'\n'"upstream $expected_revision" ]]
 printf '%s\n' "$actual"
