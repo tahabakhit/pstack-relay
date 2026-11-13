@@ -6,8 +6,8 @@
   "plugins": [
     {
       "description": "Cursor pstack workflows with native, Orca, Rex, and hc delegation for Claude Code and Codex.",
-      "name": "pstack-relay",
-      "source": "./plugins/pstack-relay"
+      "name": "pstack",
+      "source": "./plugins/pstack"
     }
   ]
 }

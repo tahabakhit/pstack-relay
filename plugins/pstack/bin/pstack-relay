@@ -245,8 +245,8 @@ setup|doctor)
         for h in codex claude; do
             [ "$(cat "$scratch/$h.installed")" = yes ] || continue
             displaycommand "$h" plugin marketplace add "$source"
-            if [ "$h" = claude ]; then displaycommand claude plugin install pstack-relay@pstack-relay
-            else displaycommand codex plugin add pstack-relay@pstack-relay; fi
+            if [ "$h" = claude ]; then displaycommand claude plugin install pstack@pstack-relay
+            else displaycommand codex plugin add pstack@pstack-relay; fi
         done
         printf 'Write the sheet and install these plugins? [y/N] '
         answer=; IFS= read -r answer || :
@@ -257,8 +257,8 @@ setup|doctor)
         [ "$(cat "$scratch/$h.installed")" = yes ] || continue
         for step in marketplace install; do
             if [ "$step" = marketplace ]; then set -- "$h" plugin marketplace add "$source"
-            elif [ "$h" = claude ]; then set -- claude plugin install pstack-relay@pstack-relay
-            else set -- codex plugin add pstack-relay@pstack-relay; fi
+            elif [ "$h" = claude ]; then set -- claude plugin install pstack@pstack-relay
+            else set -- codex plugin add pstack@pstack-relay; fi
             array=; for arg do array=$array${array:+,}$(quote "$arg"); done
             item='{"command":['$array'],"dry_run":'$dry
             if [ "$dry" = false ]; then

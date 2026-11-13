@@ -9,7 +9,7 @@
     "path": "agents/poteto-agent.md",
     "source_sha256": "979f18abd000d185a0b4c41a2a4111c0910596a7f5c81cbb571885bc721b2bf7",
     "old": "With no path, before any other work, search `~/.cursor/plugins/` for a file whose path ends in `skills/poteto-mode/SKILL.md`. If more than one file matches, use the copy whose `.cursor-plugin/plugin.json` has the highest `version`. Your skill catalog hides this skill, so a missing catalog entry does not mean pstack is absent. If no such file exists, stop and tell your parent.",
-    "replacement": "With no path, before any other work, read this plugin's `skills/poteto-mode/SKILL.md` in full. Resolve it relative to this plugin's root (the parent directory of this `agents/` directory). If that file is missing, stop and tell your parent."
+    "replacement": "With no path, before any other work, read this plugin's `skills/poteto-mode/SKILL.md` in full. Resolve it relative to this plugin's root (the parent directory of this `agents/` directory). If that file is missing, stop and tell your parent. In Claude Code, parents start this agent with `subagent_type: \"pstack:poteto-agent\"`."
   },
   {
     "path": "skills/setup-pstack/SKILL.md",

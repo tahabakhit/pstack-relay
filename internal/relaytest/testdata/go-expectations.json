@@ -1192,7 +1192,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -1211,7 +1211,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -1303,7 +1303,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -1322,7 +1322,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -1412,7 +1412,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -1431,7 +1431,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -1565,7 +1565,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -1584,7 +1584,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -6094,7 +6094,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -6113,7 +6113,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -6204,7 +6204,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": false,
           "output": "installed"
@@ -6225,7 +6225,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": false,
           "output": "installed"
@@ -6277,7 +6277,7 @@
         "codex",
         "plugin",
         "add",
-        "pstack-relay@pstack-relay"
+        "pstack@pstack-relay"
       ],
       [
         "claude",
@@ -6290,7 +6290,7 @@
         "claude",
         "plugin",
         "install",
-        "pstack-relay@pstack-relay"
+        "pstack@pstack-relay"
       ]
     ],
     "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
@@ -6344,7 +6344,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": false,
           "output": "installed"
@@ -6365,7 +6365,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": false,
           "output": "installed"
@@ -6417,7 +6417,7 @@
         "codex",
         "plugin",
         "add",
-        "pstack-relay@pstack-relay"
+        "pstack@pstack-relay"
       ],
       [
         "claude",
@@ -6430,7 +6430,7 @@
         "claude",
         "plugin",
         "install",
-        "pstack-relay@pstack-relay"
+        "pstack@pstack-relay"
       ]
     ],
     "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
@@ -6493,7 +6493,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": false,
           "output": "installed"
@@ -6514,7 +6514,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": false,
           "output": "installed"
@@ -6566,7 +6566,7 @@
         "codex",
         "plugin",
         "add",
-        "pstack-relay@pstack-relay"
+        "pstack@pstack-relay"
       ],
       [
         "claude",
@@ -6579,7 +6579,7 @@
         "claude",
         "plugin",
         "install",
-        "pstack-relay@pstack-relay"
+        "pstack@pstack-relay"
       ]
     ],
     "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
@@ -6633,7 +6633,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": false,
           "output": "installed"
@@ -6654,7 +6654,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": false,
           "output": "installed"
@@ -6707,7 +6707,7 @@
         "codex",
         "plugin",
         "add",
-        "pstack-relay@pstack-relay"
+        "pstack@pstack-relay"
       ],
       [
         "claude",
@@ -6720,7 +6720,7 @@
         "claude",
         "plugin",
         "install",
-        "pstack-relay@pstack-relay"
+        "pstack@pstack-relay"
       ]
     ],
     "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
@@ -6774,7 +6774,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": false,
           "output": "installed"
@@ -6795,7 +6795,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": false,
           "output": "installed"
@@ -6847,7 +6847,7 @@
         "codex",
         "plugin",
         "add",
-        "pstack-relay@pstack-relay"
+        "pstack@pstack-relay"
       ],
       [
         "claude",
@@ -6860,7 +6860,7 @@
         "claude",
         "plugin",
         "install",
-        "pstack-relay@pstack-relay"
+        "pstack@pstack-relay"
       ]
     ],
     "sheet": "my role: auto\nsession hook: off\n"
@@ -6913,7 +6913,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -6932,7 +6932,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -7021,7 +7021,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -7087,7 +7087,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -7218,7 +7218,7 @@
   },
   "text/setup": {
     "error": false,
-    "output": "Shared sheet: {tmp}/sheet.md\nfeature, refactoring: codex:c @xhigh\nbug-fix: codex:c @xhigh\nperf-issue: codex:c @xhigh\nhillclimb: codex:c @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:c @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:c @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:c @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:c @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:c @xhigh\nswarm workers: codex:c @xhigh\narchitect runners: claude:opus @xhigh, codex:c @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\ncodex: installed=true models=c, gpt-first, gpt-next \nclaude: installed=true models=opus, sonnet, haiku, fable aliases; Claude has no model list command\npi: installed=true models=openai/gpt-a \n$ codex plugin marketplace add tahabakhit/pstack-relay\n  OK: installed\n$ codex plugin add pstack-relay@pstack-relay\n  OK: installed\n$ claude plugin marketplace add tahabakhit/pstack-relay\n  OK: installed\n$ claude plugin install pstack-relay@pstack-relay\n  OK: installed\nPi is discovered for the sheet; Pi plugin installation is deferred until after 1.0.\n",
+    "output": "Shared sheet: {tmp}/sheet.md\nfeature, refactoring: codex:c @xhigh\nbug-fix: codex:c @xhigh\nperf-issue: codex:c @xhigh\nhillclimb: codex:c @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:c @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:c @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:c @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:c @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:c @xhigh\nswarm workers: codex:c @xhigh\narchitect runners: claude:opus @xhigh, codex:c @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\ncodex: installed=true models=c, gpt-first, gpt-next \nclaude: installed=true models=opus, sonnet, haiku, fable aliases; Claude has no model list command\npi: installed=true models=openai/gpt-a \n$ codex plugin marketplace add tahabakhit/pstack-relay\n  OK: installed\n$ codex plugin add pstack@pstack-relay\n  OK: installed\n$ claude plugin marketplace add tahabakhit/pstack-relay\n  OK: installed\n$ claude plugin install pstack@pstack-relay\n  OK: installed\nPi is discovered for the sheet; Pi plugin installation is deferred until after 1.0.\n",
     "calls": [
       [
         "codex",
@@ -7259,7 +7259,7 @@
         "codex",
         "plugin",
         "add",
-        "pstack-relay@pstack-relay"
+        "pstack@pstack-relay"
       ],
       [
         "claude",
@@ -7272,7 +7272,7 @@
         "claude",
         "plugin",
         "install",
-        "pstack-relay@pstack-relay"
+        "pstack@pstack-relay"
       ]
     ],
     "sheet": "feature, refactoring: codex:c @xhigh\nbug-fix: codex:c @xhigh\nperf-issue: codex:c @xhigh\nhillclimb: codex:c @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:c @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:c @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:c @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:c @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:c @xhigh\nswarm workers: codex:c @xhigh\narchitect runners: claude:opus @xhigh, codex:c @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
@@ -7329,7 +7329,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -7348,7 +7348,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -7438,7 +7438,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -7457,7 +7457,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -7547,7 +7547,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -7566,7 +7566,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -7656,7 +7656,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -7675,7 +7675,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -7765,7 +7765,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -7784,7 +7784,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -7874,7 +7874,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -7893,7 +7893,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -7983,7 +7983,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -8002,7 +8002,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -8092,7 +8092,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -8111,7 +8111,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -8201,7 +8201,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -8220,7 +8220,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -8310,7 +8310,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -8329,7 +8329,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -8419,7 +8419,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -8438,7 +8438,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -8528,7 +8528,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -8547,7 +8547,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -8637,7 +8637,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -8656,7 +8656,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -8746,7 +8746,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -8765,7 +8765,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -8854,7 +8854,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -8873,7 +8873,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }
@@ -8985,7 +8985,7 @@
             "codex",
             "plugin",
             "add",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         },
@@ -9004,7 +9004,7 @@
             "claude",
             "plugin",
             "install",
-            "pstack-relay@pstack-relay"
+            "pstack@pstack-relay"
           ],
           "dry_run": true
         }

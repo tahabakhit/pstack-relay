@@ -28,7 +28,7 @@ func main() {
 	if *check {
 		fmt.Println("plugin tree is up to date")
 	} else {
-		fmt.Println("built plugins/pstack-relay and marketplace manifests")
+		fmt.Println("built plugins/pstack and marketplace manifests")
 	}
 }
 func checkoutRoot() (string, error) {

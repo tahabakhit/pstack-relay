@@ -5,7 +5,7 @@
   "name": "pstack-relay",
   "plugins": [
     {
-      "name": "pstack-relay",
+      "name": "pstack",
       "policy": {
         "authentication": "ON_INSTALL",
         "installation": "AVAILABLE",
@@ -14,7 +14,7 @@
         ]
       },
       "source": {
-        "path": "./plugins/pstack-relay",
+        "path": "./plugins/pstack",
         "source": "local"
       }
     }

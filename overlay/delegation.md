@@ -10,7 +10,7 @@ The script `bin/pstack-relay` sits next to this file. Run it by absolute path. I
 | --- | --- | --- |
 | The `Task` tool | The `Agent` tool | `spawn_agent`, then `wait_agent` for the result |
 | `subagent_type: generalPurpose` | `subagent_type: "general-purpose"` | A plain `spawn_agent` |
-| `subagent_type: "poteto-agent"` | `subagent_type: "pstack-relay:poteto-agent"` | A plain `spawn_agent` whose brief says to read the `poteto-mode` `SKILL.md` in full first |
+| `subagent_type: "poteto-agent"` | `subagent_type: "pstack:poteto-agent"` | A plain `spawn_agent` whose brief says to read the `poteto-mode` `SKILL.md` in full first |
 | `readonly: true` | Say in the brief that the subagent must not edit files | Same as Claude Code |
 | `run_in_background: true` | `run_in_background: true` | `spawn_agent` already runs in the background |
 | `AskQuestion` | `AskUserQuestion` | Ask in plain text |

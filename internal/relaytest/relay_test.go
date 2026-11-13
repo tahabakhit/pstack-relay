@@ -272,7 +272,6 @@ func normalized(v any, dir, script, id string) any {
 	switch x := v.(type) {
 	case string:
 		x = strings.ReplaceAll(x, script, "{script}")
-		x = strings.ReplaceAll(x, "pstack-rex", "pstack-relay")
 		x = strings.ReplaceAll(x, "pstack-relay 1.0.0", "pstack-relay 2.0.0")
 		x = strings.ReplaceAll(x, "then run: pstack-relay rex", "then run: {script} rex")
 		if x == "pstack-relay" {
@@ -326,7 +325,7 @@ func execute(t *testing.T, c fixture, exe, shell string) expected {
 	write(t, filepath.Join(dir, ".codex/config.toml"), c.Config)
 	log := filepath.Join(dir, "calls.jsonl")
 	write(t, log, "")
-	env := map[string]string{"HOME": dir, "PATH": filepath.Join(dir, "bin") + ":/usr/bin:/bin", "TMPDIR": dir, "PSTACK_RELAY_SHEET": sheet, "PSTACK_REX_SHEET": sheet, "PSTACK_RELAY_STATE": filepath.Join(dir, "state"), "PSTACK_REX_STATE": filepath.Join(dir, "state/rex"), "RELAY_FAKE": "1", "GORACE": "atexit_sleep_ms=0", "CALL_LOG": log, "FAKE_MODE": c.Fake, "REX_LAUNCH": `{"block_id":"block-1"}`, "REX_PROCESS": c.Process, "WAIT_DIR": filepath.Join(dir, "state/rex/fixture")}
+	env := map[string]string{"HOME": dir, "PATH": filepath.Join(dir, "bin") + ":/usr/bin:/bin", "TMPDIR": dir, "PSTACK_RELAY_SHEET": sheet, "PSTACK_RELAY_STATE": filepath.Join(dir, "state"), "RELAY_FAKE": "1", "GORACE": "atexit_sleep_ms=0", "CALL_LOG": log, "FAKE_MODE": c.Fake, "REX_LAUNCH": `{"block_id":"block-1"}`, "REX_PROCESS": c.Process, "WAIT_DIR": filepath.Join(dir, "state/rex/fixture")}
 	for k, v := range c.Env {
 		env[k] = v
 	}
