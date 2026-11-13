@@ -51,7 +51,9 @@ git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bo
 git push origin "$branch"
 pr=$(gh pr create --repo "$GITHUB_REPOSITORY" --head "$branch" --title "chore: sync Cursor pstack to ${revision:0:12}" --body-file "$body")
 if [[ "$validation" == passed ]]; then
-  gh pr merge "$pr" --repo "$GITHUB_REPOSITORY" --auto --squash
+  # The job already ran plugin build, go test and go vet. Auto-merge needs a
+  # repository setting and branch protection this repository may not have.
+  gh pr merge "$pr" --repo "$GITHUB_REPOSITORY" --squash --delete-branch
 else
   gh label create upstream-sync-failed --repo "$GITHUB_REPOSITORY" --color B60205 --description 'Upstream sync failed Go validation' --force
   gh pr edit "$pr" --repo "$GITHUB_REPOSITORY" --add-label upstream-sync-failed
