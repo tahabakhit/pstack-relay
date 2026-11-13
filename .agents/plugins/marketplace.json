@@ -1,0 +1,22 @@
+{
+  "interface": {
+    "displayName": "pstack-rex"
+  },
+  "name": "pstack-rex",
+  "plugins": [
+    {
+      "name": "pstack-rex",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "source": {
+        "path": "./plugins/pstack-rex",
+        "source": "local"
+      }
+    }
+  ]
+}

@@ -33,7 +33,7 @@ func Transform(p string, b []byte, rules []Adaptation) []byte {
 		return b
 	}
 	rel, _ := filepath.Rel(filepath.FromSlash(path.Dir(p)), "delegation.md")
-	pointer := []byte("\n> pstack delegation: read [the delegation reference](" + filepath.ToSlash(rel) + ") before following this entrypoint. It maps upstream delegation to this host.\n\n")
+	pointer := []byte("\n> Read [pstack delegation on this host](" + filepath.ToSlash(rel) + ") before following this file. It maps Cursor tools and models to this host and says how to start every subagent.\n\n")
 	offset := 0
 	if bytes.HasPrefix(b, []byte("---\n")) {
 		if end := bytes.Index(b[4:], []byte("\n---\n")); end >= 0 {
