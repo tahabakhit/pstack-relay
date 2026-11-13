@@ -31,6 +31,10 @@ EOF
 fatal() { printf 'pstack-relay: %s\n' "$*" >&2; exit 1; }
 # Pass values through the environment: awk -v interprets backslash escapes.
 quote() { text=$1 action=quote LC_ALL=C awk -f "$lib"; }
+quotefile() {
+    bytes=$(LC_ALL=C wc -c < "$1") || return
+    input=$1 bytes=$bytes action=quotefile LC_ALL=C awk -f "$lib"
+}
 shellquote() {
     printf "'"
     printf '%s' "$1" | sed "s/'/'\"'\"'/g"
@@ -73,6 +77,11 @@ trap 'exit 143' TERM
 scratchdir() { scratch=$(mktemp -d "${TMPDIR:-/tmp}/pstack-relay.XXXXXXXX") || exit; export scratch; }
 # Normalize file operands without resolving symlinks or requiring existence.
 absolute() { case $1 in /*) printf '%s\n' "$1";; *) printf '%s/%s\n' "$PWD" "$1";; esac; }
+secure_dir() {
+    mkdir -p -- "$1"
+    [ "$(find "$1" -prune -type d -user "$(id -u)" ! -perm -020 ! -perm -002 -exec printf x \;)" = x ] ||
+        fatal "state directory must be owned by the current user and not group/world writable: $1"
+}
 readsheet() { sheetfile=$sheet; [ -e "$sheetfile" ] || sheetfile=; export sheetfile; }
 write_sheet() {
     mkdir -p -- "$(dirname -- "$sheet")"
@@ -334,8 +343,12 @@ rex|hc)
             --own-worktree) own=true;; *) fatal "unexpected argument: $option";;
         esac
     done
-    state_root=${PSTACK_RELAY_STATE:-${TMPDIR:-/tmp}/pstack-relay-$(id -u)}/$backend
-    state_root=$(absolute "$state_root")
+    state_base=$(absolute "${PSTACK_RELAY_STATE:-${TMPDIR:-/tmp}/pstack-relay-$(id -u)}")
+    while [ "$state_base" != / ] && [ "${state_base%/}" != "$state_base" ]; do state_base=${state_base%/}; done
+    state_root=$state_base/$backend
+    umask 077
+    secure_dir "$state_base"
+    secure_dir "$state_root"
     case $operation in
     start)
         [ -n "$h" ] && [ -n "$m" ] && [ -n "$brief" ] || fatal "$backend start needs --harness, --model and --brief"
@@ -343,8 +356,6 @@ rex|hc)
         else [ -n "${HC_TERMINAL_ID:-}" ] || fatal 'not inside hc'; fi
         case $h in claude|codex|pi) :;; *) fatal "unsupported harness $h";; esac
         [ -f "$brief" ] || fatal "read brief: $brief"
-        umask 077
-        mkdir -p -- "$state_root"
         state_dir=$(mktemp -d "$state_root/worker-XXXXXXXXXXXX") || exit
         id=$(basename -- "$state_dir")
         cp -- "$brief" "$state_dir/brief.md"
@@ -355,11 +366,14 @@ rex|hc)
         fi
         if [ "$backend" = rex ]; then
             draft=$state_dir/result-draft.md
-            prompt="Read and do the task in $state_dir/brief.md. When you are finished, write your final report (results and the evidence asked for) to $draft, then run: $(shellquote "$self") rex report --id $id --file $(shellquote "$draft")"
+            prompt="Read and do the task in $state_dir/brief.md. When you are finished, write your final report (results and the evidence asked for) to $draft, then run: PSTACK_RELAY_STATE=$(shellquote "$state_base") $(shellquote "$self") rex report --id $id --file $(shellquote "$draft")"
         else
-            prompt="Read and do the task in $state_dir/brief.md. When finished report the final result with: hc send $(shellquote "$HC_TERMINAL_ID") \"<report>\". For a long report, write it to $state_dir/result.md first and send its absolute path."
+            result=$state_dir/result.md
+            prompt="Read and do the task in $state_dir/brief.md. When you are finished, write your final report (results and the evidence asked for) to $(shellquote "$result"), then run: hc send $(shellquote "$HC_TERMINAL_ID") $(shellquote "$result")"
         fi
-        set -- "$h" --model "$m"
+        set -- "$h"
+        if [ "$backend" = hc ] && [ "$h" = codex ]; then set -- "$@" --no-daemon; fi
+        set -- "$@" --model "$m"
         if [ -n "$e" ]; then
             case $h in claude) set -- "$@" --effort "$e";; codex) set -- "$@" -c "model_reasoning_effort=$(quote "$e")";; pi) set -- "$@" --thinking "$e";; esac
         fi
@@ -399,13 +413,27 @@ rex|hc)
         if [ "$backend" = hc ]; then
             name=$(jsonfield "$state_dir/launch.json" name)
             [ -n "$name" ] || fatal 'launch has no name'
-            hc wait "$name" --timeout "$seconds" --json > "$scratch/wait" || fatal 'hc wait failed'
-            reason=$(jsonfield "$scratch/wait" reason)
-            status=$(jsonfield "$scratch/wait" status)
-            live=$(jsonfield "$scratch/wait" reason)
-            case $status in blocked|error) state=$status;; done) state=reported;; *) if [ "$live" = exit ]; then state=exited; elif [ "$reason" != timeout ] && [ "$reason" != message ]; then state=idle; fi;; esac
-            if [ -f "$state_dir/result.md" ]; then state=reported; cp -- "$state_dir/result.md" "$scratch/result"
-            else hc read --lines 200 "$name" > "$scratch/result" || fatal 'hc read failed'; fi
+            deadline=$(($(date +%s)+seconds))
+            while :; do
+                if [ -f "$state_dir/result.md" ]; then state=reported; cp -- "$state_dir/result.md" "$scratch/result"; break; fi
+                remaining=$((deadline-$(date +%s)))
+                [ "$remaining" -ge 0 ] || remaining=0
+                hc wait "$name" --timeout "$remaining" --json > "$scratch/wait" || fatal 'hc wait failed'
+                if [ -f "$state_dir/result.md" ]; then state=reported; cp -- "$state_dir/result.md" "$scratch/result"; break; fi
+                reason=$(jsonfield "$scratch/wait" reason)
+                status=$(jsonfield "$scratch/wait" status)
+                turn=$(jsonfield "$scratch/wait" turn true)
+                case $turn in ''|null) turn=0;; *[!0-9]*) fatal 'invalid hc turn';; esac
+                case $status in blocked|error) state=$status; break;; esac
+                if [ "$reason" = exit ]; then state=exited; break; fi
+                if [ "$turn" -gt 0 ]; then
+                    case $status in done) state=reported;; *) if [ "$reason" != timeout ] && [ "$reason" != message ]; then state=idle; fi;; esac
+                    break
+                fi
+                [ "$(date +%s)" -lt "$deadline" ] || break
+                sleep 1
+            done
+            if [ ! -f "$scratch/result" ]; then hc read --lines 200 "$name" > "$scratch/result" || fatal 'hc read failed'; fi
         else
             session=$(jsonfield "$state_dir/launch.json" session)
             block=$(jsonfield "$state_dir/launch.json" block)
@@ -427,7 +455,7 @@ rex|hc)
             done
         fi
         printf '{"id":%s,"state":%s' "$(quote "$id")" "$(quote "$state")"
-        if [ -s "$scratch/result" ]; then result=$(cat "$scratch/result"; printf x); result=${result%x}; printf ',"result":%s' "$(quote "$result")"; fi
+        if [ -s "$scratch/result" ]; then printf ',"result":'; quotefile "$scratch/result"; fi
         if [ -n "$exit_code" ]; then printf ',"exit_code":%s' "$exit_code"; fi
         printf '}\n'
         ;;

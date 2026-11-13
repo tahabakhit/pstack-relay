@@ -182,6 +182,7 @@ BEGIN {
   if(needs) { gsub(/\047/, "\047\"\047\"\047",t); t="\047" t "\047" }; printf "%s",t; exit
  }
  if(action=="quote") { printf "%s",quote(ENVIRON["text"]); exit }
+ if(action=="quotefile") { printf "%s",quote(substr(readall(ENVIRON["input"]),1,ENVIRON["bytes"]+0)); exit }
  if(action=="json") { id=json(readall(ENVIRON["input"])); n=split(ENVIRON["field"],a,"."); for(i=1;i<=n;i++) id=child[id,a[i]]; if(ENVIRON["raw"]=="true") print raw[id]; else if(typ[id]=="string" || typ[id]=="number") printf "%s", val[id]; else if(typ[id]!="" && typ[id]!="null") fail("unexpected JSON field type"); exit }
  if(action=="rexlaunchvalidate" || action=="rexprocessvalidate") {
   id=json(readall(ENVIRON["input"])); if(typ[id]!="object" && typ[id]!="null") fail("expected Rex object")

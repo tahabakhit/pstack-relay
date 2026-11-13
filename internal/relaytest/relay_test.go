@@ -105,9 +105,29 @@ func fake() {
 		case h == "hc" && len(args) > 0 && args[0] == "run":
 			fmt.Print(`{"address":"t7","state":"live"}`)
 		case h == "hc" && len(args) > 0 && args[0] == "wait":
-			fmt.Print(os.Getenv("HC_WAIT"))
+			if sequence := os.Getenv("HC_WAIT_SEQUENCE"); sequence != "" {
+				var responses []json.RawMessage
+				if err := json.Unmarshal([]byte(sequence), &responses); err != nil {
+					panic(err)
+				}
+				stepFile := os.Getenv("CALL_LOG") + ".step"
+				data, _ := os.ReadFile(stepFile)
+				step := len(data)
+				os.WriteFile(stepFile, append(data, 'x'), 0600)
+				if step >= len(responses) {
+					step = len(responses) - 1
+				}
+				fmt.Print(string(responses[step]))
+			} else {
+				fmt.Print(os.Getenv("HC_WAIT"))
+			}
+			if mode == "hc-report-during-wait" {
+				os.WriteFile(filepath.Join(os.Getenv("WAIT_DIR"), "result.md"), []byte("finished\n"), 0600)
+			}
 		case h == "hc" && len(args) > 0 && args[0] == "read":
 			fmt.Print("final screen\n")
+		case h == "hc" && len(args) > 0 && args[0] == "send":
+			fmt.Print("sent")
 		default:
 			fmt.Fprint(os.Stderr, "unexpected command: "+key)
 			os.Exit(1)

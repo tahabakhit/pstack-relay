@@ -107,7 +107,11 @@ func TestHC(t *testing.T) {
 					if e = json.Unmarshal(lines[0], &call); e != nil {
 						t.Fatal(e)
 					}
-					want := []string{"hc", "run", "--json", "--bg", "--name", name, "--cwd", launch["cwd"].(string), h, "--model", "model with spaces"}
+					want := []string{"hc", "run", "--json", "--bg", "--name", name, "--cwd", launch["cwd"].(string), h}
+					if h == "codex" {
+						want = append(want, "--no-daemon")
+					}
+					want = append(want, "--model", "model with spaces")
 					if effort != "" {
 						switch h {
 						case "claude":
@@ -127,7 +131,7 @@ func TestHC(t *testing.T) {
 							t.Fatalf("prompt missing %s: %s", part, prompt)
 						}
 					}
-					for _, wait := range []struct{ raw, state string }{{`{"terminal":"t7","reason":"timeout","status":"working"}`, "running"}, {`{"terminal":"t7","reason":"status","status":"done"}`, "reported"}, {`{"terminal":"t7","reason":"status","status":"blocked"}`, "blocked"}, {`{"terminal":"t7","reason":"status","status":"error"}`, "error"}, {`{"terminal":"t7","reason":"exit"}`, "exited"}, {`{"terminal":"t7","reason":"message"}`, "running"}} {
+					for _, wait := range []struct{ raw, state string }{{`{"terminal":"t7","reason":"timeout","status":"working","turn":1}`, "running"}, {`{"terminal":"t7","reason":"status","status":"done","turn":1}`, "reported"}, {`{"terminal":"t7","reason":"status","status":"blocked"}`, "blocked"}, {`{"terminal":"t7","reason":"status","status":"error"}`, "error"}, {`{"terminal":"t7","reason":"exit"}`, "exited"}, {`{"terminal":"t7","reason":"message","turn":1}`, "running"}} {
 						b, e = invoke(t, dir, append(env, "HC_WAIT="+wait.raw), "", "hc", "wait", "--id", id, "--seconds", "0")
 						if e != nil {
 							t.Fatal(e)

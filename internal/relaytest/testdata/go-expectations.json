@@ -5492,7 +5492,7 @@
         "claude",
         "--model",
         "opus",
-        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
+        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: PSTACK_RELAY_STATE={tmp}/state' {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
       ]
     ]
   },
@@ -5532,7 +5532,7 @@
         "claude",
         "--model",
         "opus",
-        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
+        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: PSTACK_RELAY_STATE={tmp}/state' {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
       ]
     ]
   },
@@ -5574,7 +5574,7 @@
         "claude",
         "--model",
         "opus",
-        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
+        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: PSTACK_RELAY_STATE={tmp}/state' {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
       ]
     ]
   },
@@ -5607,7 +5607,7 @@
         "opus",
         "--effort",
         "high",
-        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
+        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: PSTACK_RELAY_STATE={tmp}/state' {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
       ]
     ]
   },
@@ -5651,7 +5651,7 @@
         "opus",
         "--effort",
         "high",
-        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
+        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: PSTACK_RELAY_STATE={tmp}/state' {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
       ]
     ]
   },
@@ -5682,7 +5682,7 @@
         "codex",
         "--model",
         "opus",
-        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
+        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: PSTACK_RELAY_STATE={tmp}/state' {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
       ]
     ]
   },
@@ -5724,7 +5724,7 @@
         "codex",
         "--model",
         "opus",
-        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
+        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: PSTACK_RELAY_STATE={tmp}/state' {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
       ]
     ]
   },
@@ -5757,7 +5757,7 @@
         "opus",
         "-c",
         "model_reasoning_effort=\"high\"",
-        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
+        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: PSTACK_RELAY_STATE={tmp}/state' {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
       ]
     ]
   },
@@ -5801,7 +5801,7 @@
         "opus",
         "-c",
         "model_reasoning_effort=\"high\"",
-        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
+        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: PSTACK_RELAY_STATE={tmp}/state' {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
       ]
     ]
   },
@@ -5832,7 +5832,7 @@
         "pi",
         "--model",
         "opus",
-        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
+        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: PSTACK_RELAY_STATE={tmp}/state' {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
       ]
     ]
   },
@@ -5874,7 +5874,7 @@
         "pi",
         "--model",
         "opus",
-        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
+        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: PSTACK_RELAY_STATE={tmp}/state' {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
       ]
     ]
   },
@@ -5907,7 +5907,7 @@
         "opus",
         "--thinking",
         "high",
-        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
+        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: PSTACK_RELAY_STATE={tmp}/state' {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
       ]
     ]
   },
@@ -5951,7 +5951,7 @@
         "opus",
         "--thinking",
         "high",
-        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
+        "Read and do the task in {tmp}/state/rex/{id}/brief.md. When you are finished, write your final report (results and the evidence asked for) to {tmp}/state/rex/{id}/result-draft.md, then run: PSTACK_RELAY_STATE={tmp}/state' {script} rex report --id {id} --file {tmp}/state/rex/{id}/result-draft.md"
       ]
     ]
   },

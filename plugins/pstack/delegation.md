@@ -39,6 +39,8 @@ It prints one JSON object per seat. Each seat has a `mode` and the exact values 
 - `hc` means run the seat's command. The worker reports back with `hc send` into your terminal. Wait with `<plugin root>/bin/pstack-relay hc wait --id <id>`, or let hc's notes wake you. Answer a blocked worker with `hc keys <name> ...` only for its startup trust dialog.
 - `fallback` means the seat's harness cannot run here. Run it native with the seat's `model`, which follows upstream's fallback order, and tell the user which model ran instead of the configured one.
 
+Rex and hc waits default to 100 seconds. A timeout means the worker is still running. Wait again until it reports, blocks, errors, or exits.
+
 A brief for an Orca, Rex, or hc worker is a complete prompt. Give it the upstream brief, the absolute path of this plugin's `skills/poteto-mode/SKILL.md` when the skill asks for `poteto-agent`, the absolute paths of the files involved, and the evidence the worker must return.
 
 ## Worktrees
