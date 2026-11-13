@@ -57,6 +57,10 @@ func TestSyncLocalRepository(t *testing.T) {
 	if err != nil || revision != first {
 		t.Fatalf("revision=%s err=%v", revision, err)
 	}
+	directory, err := os.Stat(dest)
+	if err != nil || directory.Mode().Perm() != 0755 {
+		t.Fatalf("snapshot directory mode: %v %v", directory, err)
+	}
 	info, err := os.Stat(filepath.Join(dest, "run.sh"))
 	if err != nil || info.Mode().Perm() != 0755 {
 		t.Fatalf("executable mode: %v %v", info, err)

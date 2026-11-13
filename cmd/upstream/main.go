@@ -133,7 +133,10 @@ func replaceTree(source, dest, revision string) error {
 		}
 		switch {
 		case entry.IsDir():
-			return os.MkdirAll(target, info.Mode().Perm())
+			if err := os.MkdirAll(target, info.Mode().Perm()); err != nil {
+				return err
+			}
+			return os.Chmod(target, info.Mode().Perm())
 		case info.Mode()&os.ModeSymlink != 0:
 			link, err := os.Readlink(p)
 			if err != nil {
