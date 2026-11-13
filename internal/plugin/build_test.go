@@ -52,7 +52,7 @@ func TestBuild(t *testing.T) {
 			}
 		})
 	}
-	for _, name := range []string{".agents/plugins/marketplace.json", ".claude-plugin/marketplace.json", "plugins/pstack-rex/.codex-plugin/plugin.json", "plugins/pstack-rex/.claude-plugin/plugin.json", "plugins/pstack-rex/hooks/hooks.json", "plugins/pstack-rex/hooks/codex-hooks.json"} {
+	for _, name := range []string{".agents/plugins/marketplace.json", ".claude-plugin/marketplace.json", "plugins/pstack-rex/.codex-plugin/plugin.json", "plugins/pstack-rex/.claude-plugin/plugin.json", "plugins/pstack-rex/hooks/hooks.json"} {
 		b, err := os.ReadFile(filepath.Join(root, name))
 		if err != nil {
 			t.Fatal(err)

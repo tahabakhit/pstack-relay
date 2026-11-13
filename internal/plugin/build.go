@@ -150,17 +150,14 @@ func generate(root string) (map[string]generatedFile, error) {
 	}
 	manifests := map[string]any{
 		prefix + ".claude-plugin/plugin.json": map[string]any{"name": "pstack-rex", "version": Version, "description": description, "license": "MIT", "repository": repository, "author": map[string]string{"name": "Taha Bakhit"}},
-		prefix + ".codex-plugin/plugin.json":  map[string]any{"name": "pstack-rex", "version": Version, "description": description, "license": "MIT", "repository": repository, "skills": "./skills/", "hooks": "./hooks/codex-hooks.json", "interface": map[string]string{"displayName": "pstack-rex", "shortDescription": "pstack workflows across Claude Code and Codex"}},
+		prefix + ".codex-plugin/plugin.json":  map[string]any{"name": "pstack-rex", "version": Version, "description": description, "license": "MIT", "repository": repository, "skills": "./skills/", "interface": map[string]string{"displayName": "pstack-rex", "shortDescription": "pstack workflows across Claude Code and Codex"}},
 		".claude-plugin/marketplace.json":     map[string]any{"name": "pstack-rex", "owner": map[string]string{"name": "Taha Bakhit"}, "plugins": []any{map[string]any{"name": "pstack-rex", "source": "./plugins/pstack-rex", "description": description}}},
 		".agents/plugins/marketplace.json":    map[string]any{"name": "pstack-rex", "interface": map[string]string{"displayName": "pstack-rex"}, "plugins": []any{map[string]any{"name": "pstack-rex", "source": map[string]string{"source": "local", "path": "./plugins/pstack-rex"}, "policy": map[string]any{"installation": "AVAILABLE", "authentication": "ON_INSTALL", "products": []string{"CODEX"}}}}},
 	}
-	for _, h := range []string{"claude", "codex"} {
-		name := "hooks/hooks.json"
-		if h == "codex" {
-			name = "hooks/codex-hooks.json"
-		}
-		manifests[prefix+name] = map[string]any{"hooks": map[string]any{"SessionStart": []any{map[string]any{"matcher": "startup|resume|clear|compact", "hooks": []any{map[string]string{"type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh\" " + h}}}}}}
-	}
+	// Codex holds every new plugin hook behind a trust prompt that blocks
+	// session start, including unattended Orca workers, so the Codex plugin
+	// ships no hook. Each entrypoint's pointer to delegation.md covers it.
+	manifests[prefix+"hooks/hooks.json"] = map[string]any{"hooks": map[string]any{"SessionStart": []any{map[string]any{"matcher": "startup|resume|clear|compact", "hooks": []any{map[string]string{"type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh\" claude"}}}}}}
 	for name, manifest := range manifests {
 		if err := putJSON(name, manifest); err != nil {
 			return nil, err
