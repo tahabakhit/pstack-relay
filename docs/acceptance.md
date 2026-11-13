@@ -4,10 +4,16 @@
 
 The current candidate ships a versionless `pstack` plugin in the pstack-relay marketplace. Release acceptance is broader than local fixture checks.
 
-- Marketplace-only install in both harnesses from the public repository: pending.
-- Orca seat: pending.
-- Rex seat: pending.
-- hc seat: pending.
+Live checks on 13 November 2026 on Linux, with the plugin installed only through the marketplaces from the public repository at the PR branch. Each seat came from the installed copy's `resolve --role "swarm workers"` with a Claude parent, and its worker was Codex `gpt-6.1-sol` at `xhigh`. Every worker ran the installed `bin/pstack-relay version` and returned `pstack-relay` and upstream `6e359ce0aba9e927914d8a940510aa2ef66a8f23`.
+
+- Marketplace-only install: passed. `claude plugin marketplace add https://github.com/tahabakhit/pstack-relay.git#tahabakhit/pstack-relay` with `claude plugin install pstack@pstack-relay`, and `codex plugin marketplace add tahabakhit/pstack-relay --ref tahabakhit/pstack-relay` with `codex plugin add pstack@pstack-relay`, in the user's real configuration. The installed `setup --yes` migrated the 1.0 sheet unchanged and `doctor` passed.
+- Versionless update: passed. After new commits, `claude plugin update pstack@pstack-relay` moved the install from `44a082e9b392` to `428f99c1acf7`, and `codex plugin marketplace upgrade pstack-relay` refreshed the Codex copy. No version was bumped.
+- Bare skill names: passed. A fresh `claude -p "/poteto-help ..."` loaded the plugin's `poteto-help` skill, which is not model-invocable.
+- Orca seat: passed. The parent ran inside Orca; the seat's `orca orchestration worker-start` command started the worker, which reported with `worker_done` (dispatch `ctx_af1edbb093d6`).
+- Rex seat: passed. The parent ran in a throwaway `rex new` session; `rex start` opened the worker block, the worker ran the generated `rex report` command, and `rex wait` returned `state: reported`. Codex asked once for approval to run `rex session rename`, which the user's global agent instructions request; the approval was given by hand.
+- hc seat: passed. The parent ran under `hc run --bg`; `hc start` launched `codex --no-daemon`, the worker wrote `result.md` and sent its path with `hc send`, and `hc wait` returned `state: reported`. Before the startup-wait fix, the same probe returned `idle` at worker startup.
+
+These parents were shell scripts acting for a Claude parent (`--parent claude`), not interactive agent sessions. macOS, dash and Pi workers were not exercised live.
 
 ### Local marketplace and repository checks
 
