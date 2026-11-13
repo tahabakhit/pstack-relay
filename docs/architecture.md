@@ -1,5 +1,7 @@
 # Architecture decision 001
 
+Superseded by [the delegation design](design.md) on 13 November 2026. This page describes the 0.1 implementation.
+
 Status is accepted for the first usable milestone. The independent architecture comparison selected the thin design, with per-attempt supervisors instead of a socket service. See [research](research.md) for source evidence and the comparison rubric.
 
 ## Goal

@@ -1,5 +1,7 @@
 # 1.0.0 release contract
 
+Superseded by [the delegation design](design.md) on 13 November 2026. This page describes the 0.1 implementation.
+
 Status is the selected delivery target, not a declaration of readiness. The next scoped release is 1.0.0. A restricted source-investigation release does not satisfy this contract.
 
 ## User outcome
