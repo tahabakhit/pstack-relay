@@ -268,9 +268,15 @@ func write(t *testing.T, p, s string) {
 		t.Fatal(e)
 	}
 }
+
+var upstreamRevision string
+
 func normalized(v any, dir, script, id string) any {
 	switch x := v.(type) {
 	case string:
+		if upstreamRevision != "" {
+			x = strings.ReplaceAll(x, upstreamRevision, "{revision}")
+		}
 		x = strings.ReplaceAll(x, script, "{script}")
 		x = strings.ReplaceAll(x, "then run: pstack-relay rex", "then run: {script} rex")
 		if x == "pstack-relay" {
@@ -416,6 +422,11 @@ func execute(t *testing.T, c fixture, exe, shell string) expected {
 }
 func TestRuntime(t *testing.T) {
 	root := rootpath(t)
+	revision, e := os.ReadFile(filepath.Join(root, "upstream/REVISION"))
+	if e != nil {
+		t.Fatal(e)
+	}
+	upstreamRevision = strings.TrimSpace(string(revision))
 	script := filepath.Join(root, "overlay/bin/pstack-relay")
 	var golden map[string]expected
 	data, e := os.ReadFile("testdata/go-expectations.json")
