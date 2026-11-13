@@ -455,6 +455,10 @@ func TestNormalizeSymlinkedTemp(t *testing.T) {
 	if err := os.Mkdir(physical, 0700); err != nil {
 		t.Fatal(err)
 	}
+	physical, err := filepath.EvalSymlinks(physical)
+	if err != nil {
+		t.Fatal(err)
+	}
 	alias := filepath.Join(dir, "alias")
 	if err := os.Symlink(physical, alias); err != nil {
 		t.Fatal(err)
