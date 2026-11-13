@@ -4,13 +4,15 @@ The 1.0 implementation is a Codex and Claude Code plugin with one shared model s
 
 ## Verified live
 
-The [acceptance record](../notes/v1-evidence.md) records these runs on 13 November 2026:
+The [acceptance record](acceptance.md) holds these runs from 13 November 2026:
 
-- A Rex seat resolved from a Claude parent to an interactive Codex worker. The worker returned a report, and `rex wait` observed `reported`. Two approval prompts were answered in its terminal. See item 3.
-- A Codex parent in Orca ran `interrogate` with a native Codex seat and a Claude Orca worker in a child worktree. Both returned, and the parent reran every proof. See item 2b, including its recorded fixes and qualifications.
-- A Claude parent invoked `interrogate` after the user typed its slash command. Its native Claude seat returned findings that the parent reran. The Codex Orca seat stopped at the old hooks-review prompt, so the record still requires that seat's rerun. See item 2a.
+- `pstack-rex setup` installed the plugin in Codex and Claude Code from a local marketplace and wrote the shared sheet. The Claude `SessionStart` hook injected the delegation pointer in a fresh session.
+- A Claude Code parent in Orca ran `interrogate` after the user typed its slash command. Its Claude seat ran native in its own worktree. Its Codex seat ran as an Orca worker in a child worktree from the parent's branch. Both returned, and the parent reran their proofs.
+- A Codex parent in Orca ran `interrogate` with a native Codex seat and a Claude Orca worker in a child worktree. Both returned, and the parent reran every proof.
+- A Rex seat resolved to an interactive Codex worker in a Rex block. The worker returned its report, and `pstack-rex rex wait` reported `reported`.
+- The upstream sync script synced, validated, and reached the squash-merge step against a stubbed `gh` and a local origin.
 
-The record does not yet establish a complete setup acceptance run or a live no-backend fallback run. Resolver behavior is specified in [configuration](configuration.md#resolver-modes), separately from live acceptance.
+The no-backend fallback is shown by resolver output only. A fallback seat is an ordinary native subagent on the parent's model, so no separate worker run was made.
 
 ## Known limits
 
@@ -19,6 +21,7 @@ The record does not yet establish a complete setup acceptance run or a live no-b
 - Model discovery does not prove account access, provider-served model identity, or effective reasoning effort.
 - Worker reports require parent verification. A required independent review stays blocked when no reviewer can run.
 - Cursor cloud agents, automations, and project stores have no host equivalent here.
+- `pstack-rex setup` with the default source and `go install ...@latest` need this release on the repository's default branch. Until then, use `--source <checkout>`.
 - The hosted upstream sync has not run yet. A local run with a stubbed `gh` synced, validated, and reached the squash-merge step.
 
 ## After 1.0

@@ -18,7 +18,7 @@ git diff --check
 
 Use the binary built from your checkout when checking changes to the CLI. `sync --check` validates the recorded revision format without network access. `plugin build --check` checks generated file contents, executable bits, and the file list without writing.
 
-Go tests use fixtures and fake processes. They do not establish authenticated model access or live worker behavior. Record live acceptance commands, outcomes, and qualifications in `notes/v1-evidence.md`. Keep credentials and model calls out of ordinary CI.
+Go tests use fixtures and fake processes. They do not establish authenticated model access or live worker behavior. Record live acceptance commands, outcomes, and qualifications in `docs/acceptance.md`. Keep credentials and model calls out of ordinary CI.
 
 ## Change the plugin
 

@@ -15,7 +15,7 @@ Restart the session after reinstalling. The Claude hook lives under `claude-hook
 
 Orca and Rex workers are interactive harness sessions. They use your normal approval settings and can pause at a prompt. Open the worker's terminal, read the requested action, and answer there. A waiting approval is not a completed worker result.
 
-The [live Rex record](../notes/v1-evidence.md#item-3-rex-worker-2026-11-13) includes approval prompts answered in the worker terminal. The Rex report state now defaults to a temporary directory, but other harness actions can still need approval.
+The [live Rex record](acceptance.md#item-3-rex-worker-2026-11-13) includes approval prompts answered in the worker terminal. The Rex report state now defaults to a temporary directory, but other harness actions can still need approval.
 
 ## A skill refuses the Skill tool
 

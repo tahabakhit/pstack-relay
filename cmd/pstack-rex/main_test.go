@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -271,5 +272,31 @@ func TestDoctor(t *testing.T) {
 				t.Fatalf("%s", out)
 			}
 		})
+	}
+}
+
+func TestWriteSheetKeepsSheetThatAppeared(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "pstack-models.md")
+	if err := os.WriteFile(path, []byte("interrogate reviewers: codex:mine @low\n"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	s, err := sheet.Parse("interrogate reviewers: claude:opus\n")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := writeSheet(path, s, false); !errors.Is(err, os.ErrExist) {
+		t.Fatalf("want ErrExist, got %v", err)
+	}
+	if b, _ := os.ReadFile(path); !strings.Contains(string(b), "codex:mine") {
+		t.Fatalf("existing sheet replaced: %s", b)
+	}
+	if err := writeSheet(path, s, true); err != nil {
+		t.Fatal(err)
+	}
+	if b, _ := os.ReadFile(path); !strings.Contains(string(b), "claude:opus") {
+		t.Fatalf("--force did not replace: %s", b)
+	}
+	if left, _ := filepath.Glob(filepath.Join(filepath.Dir(path), ".pstack-models-*")); len(left) > 0 {
+		t.Fatalf("temporary files left: %v", left)
 	}
 }

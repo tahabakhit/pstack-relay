@@ -94,7 +94,7 @@ orca orchestration worker-start --agent claude --model opus --effort high \
 
 The parent then ends its turn. Orca wakes it when the worker sends `worker_done`. `orca orchestration worker-read` returns the transcript. Stop, abandon, and retry follow Orca's orchestration guide.
 
-**Rex.** Rex runs terminals and has no concept of an agent. A small launcher supplies the missing parts. It creates a worktree when the calling skill asks for one, then starts the harness's interactive session in a Rex block with the brief. The worker runs `pstack-deleg report` when it finishes. That command writes the result file and sets Rex program status. The parent waits on that report, not on process exit.
+**Rex.** Rex runs terminals and has no concept of an agent. A small launcher supplies the missing parts. It creates a worktree when the calling skill asks for one, then starts the harness's interactive session in a Rex block with the brief. The worker runs `pstack-rex rex report` when it finishes. That command writes the result file and sets Rex program status. The parent waits on that report, not on process exit.
 
 ### Upstream sync
 

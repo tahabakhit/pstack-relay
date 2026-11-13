@@ -137,7 +137,7 @@ func readSheet(path string) (sheet.Sheet, error) {
 	}
 	return sheet.Parse(string(b))
 }
-func writeSheet(path string, s sheet.Sheet) error {
+func writeSheet(path string, s sheet.Sheet, replace bool) error {
 	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
 		return err
 	}
@@ -154,7 +154,12 @@ func writeSheet(path string, s sheet.Sheet) error {
 	if err := f.Close(); err != nil {
 		return err
 	}
-	return os.Rename(f.Name(), path)
+	if replace {
+		return os.Rename(f.Name(), path)
+	}
+	// A hard link fails when the destination exists, so a sheet that appeared
+	// after setup looked is kept rather than replaced.
+	return os.Link(f.Name(), path)
 }
 func (c cli) models(args []string) error {
 	f := c.flags("models")
@@ -196,7 +201,7 @@ func (c cli) models(args []string) error {
 			}
 			s.Roles[key] = edit.Roles[key]
 		}
-		if err := writeSheet(*path, s); err != nil {
+		if err := writeSheet(*path, s, true); err != nil {
 			return err
 		}
 	}
@@ -343,7 +348,13 @@ func (c cli) setup(args []string) error {
 		}
 	}
 	if create && !*dry {
-		if err := writeSheet(*path, s); err != nil {
+		err := writeSheet(*path, s, *force)
+		if errors.Is(err, os.ErrExist) {
+			if s, err = readSheet(*path); err != nil {
+				return err
+			}
+			fmt.Fprintf(c.errOut, "kept the sheet that appeared at %s during setup; rerun with --force to replace it\n", *path)
+		} else if err != nil {
 			return err
 		}
 	}
