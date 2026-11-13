@@ -6,10 +6,26 @@ self=$self_dir/$(basename -- "$0")
 plugin_root=$(dirname -- "$self_dir")
 lib=$plugin_root/lib/relay.awk
 export self
+usage() { printf 'Usage: pstack-relay %s\n' "$command" >&2; exit 0; }
 fatal() { printf 'pstack-relay: %s\n' "$*" >&2; exit 1; }
 # Pass values through the environment: awk -v interprets backslash escapes.
-quote() { text=$1 action=quote awk -f "$lib"; }
-jsonfield() { input=$1 field=$2 action=json raw=${3:-false} awk -f "$lib"; }
+quote() { text=$1 action=quote LC_ALL=C awk -f "$lib"; }
+shellquote() {
+    printf "'"
+    printf '%s' "$1" | sed "s/'/'\"'\"'/g"
+    printf "'"
+}
+trimfile() { input=$1 action=trimfile LC_ALL=C awk -f "$lib"; }
+displaycommand() {
+    separator=''
+    for arg do
+        printf '%s' "$separator"
+        text=$arg action=word LC_ALL=C awk -f "$lib"
+        separator=' '
+    done
+    printf '\n'
+}
+jsonfield() { input=$1 field=$2 action=json raw=${3:-false} LC_ALL=C awk -f "$lib"; }
 revision() {
     if [ -f "$plugin_root/UPSTREAM-REVISION" ]; then cat "$plugin_root/UPSTREAM-REVISION"
     else cat "$self_dir/../../upstream/REVISION"; fi
@@ -41,18 +57,20 @@ write_sheet() {
     mkdir -p -- "$(dirname -- "$sheet")"
     candidate=$(mktemp "$(dirname -- "$sheet")/.pstack-models-XXXXXXXX") || exit
     cat -- "$1" > "$candidate"
-    if [ "$force" = true ]; then mv -f -- "$candidate" "$sheet"
+    if [ "$force" = true ]; then
+        [ ! -d "$sheet" ] || fatal "cannot replace directory $sheet"
+        mv -f -- "$candidate" "$sheet"
     elif ! ln -- "$candidate" "$sheet" 2>/dev/null; then
         [ -f "$sheet" ] || fatal "cannot create sheet $sheet"
         printf 'kept the sheet that appeared at %s during setup; rerun with --force to replace it\n' "$sheet" >&2
-        sheetfile=$sheet action=models awk -f "$lib" > "$1"
+        sheetfile=$sheet action=models LC_ALL=C awk -f "$lib" > "$1"
     fi
     rm -f -- "$candidate"; candidate=
 }
 # Capture stdout separately, just as Go's runCommand does.
 run() {
     if "$@" > "$scratch/output" 2> "$scratch/stderr"; then return 0
-    else code=$?; error="$1: exit status $code: $(cat "$scratch/stderr")"; return "$code"; fi
+    else code=$?; error="$1: exit status $code: $(trimfile "$scratch/stderr")"; return "$code"; fi
 }
 discover() {
     for h in codex claude pi; do
@@ -66,7 +84,7 @@ discover() {
         esac
         if run "$@"; then
             cp -- "$scratch/output" "$scratch/$h.models"
-            if [ "$h" = codex ] && ! input=$scratch/output action=codexvalidate awk -f "$lib" 2> "$scratch/json-error"; then
+            if [ "$h" = codex ] && ! input=$scratch/output action=codexvalidate LC_ALL=C awk -f "$lib" 2> "$scratch/json-error"; then
                 printf 'invalid JSON' > "$scratch/$h.error"
             fi
         else printf '%s' "$error" > "$scratch/$h.error"; fi
@@ -77,7 +95,7 @@ command=$1; shift
 case $command in
 version)
     asjson=false
-    case ${1:-} in --json) asjson=true; shift;; esac
+    case ${1:-} in --json|--json=true) asjson=true; shift;; --json=false) shift;; --help|-h) usage;; esac
     [ "$#" = 0 ] || fatal "unexpected arguments: $*"
     rev=$(revision)
     if [ "$asjson" = true ]; then printf '{"version":"2.0.0","upstream":%s}\n' "$(quote "$rev")"
@@ -87,8 +105,9 @@ models|resolve)
     role='' own=false edit='' asjson=false
     while [ "$#" -gt 0 ]; do
         case $1 in
+            --help|-h) usage;;
             --json=true|--json=false) asjson=${1#*=}; shift; continue;;
-            --own-worktree=true|--own-worktree=false|--worktree-own=true|--worktree-own=false) own=${1#*=}; shift; continue;;
+            --own-worktree=true|--own-worktree=false|--worktree-own=true|--worktree-own=false) [ "$command" = resolve ] || fatal "unknown flag: $1"; own=${1#*=}; shift; continue;;
             --*=*) value=${1#*=}; option=${1%%=*}; shift; set -- "$option" "$value" "$@";;
         esac
         option=$1; shift
@@ -98,7 +117,7 @@ models|resolve)
         case $option in
             --sheet|--role|--parent|--backend|--set)
                 [ "$#" -gt 0 ] || fatal "$option needs a value"
-                case $option in --sheet) sheet=$1;; --role) role=$1;; --parent) parent=$1;; --backend) backend=$1;; --set) edit=$1;; esac; shift;;
+                case $option in --sheet) sheet=$1;; --role) role=$1;; --parent) [ -z "$1" ] || parent=$1;; --backend) [ -z "$1" ] || backend=$1;; --set) edit=$1;; esac; shift;;
             --json) asjson=true;;
             --own-worktree|--worktree-own) own=true;;
             *) fatal "unexpected argument: $option";;
@@ -110,23 +129,29 @@ models|resolve)
         [ -n "$sheetfile" ] || [ -n "$edit" ] || fatal "cannot read sheet $sheet"
         if [ -n "$edit" ]; then
             scratchdir
-            asjson=false action=models awk -f "$lib" > "$scratch/sheet"
+            asjson=false action=models LC_ALL=C awk -f "$lib" > "$scratch/sheet"
             force=true; write_sheet "$scratch/sheet"
             readsheet; edit=; export edit
         fi
-        action=models awk -f "$lib"
+        action=models LC_ALL=C awk -f "$lib"
     else
         [ -n "$role" ] || fatal '--role is required'
-        branch=$(git branch --show-current) || { [ "$own" = false ] || exit 1; branch=; }
+        if [ "$own" = true ]; then branch=$(git branch --show-current) || exit 1
+        else branch=$(git branch --show-current 2>/dev/null) || branch=; fi
         export branch
-        action=resolve awk -f "$lib"
+        action=resolve LC_ALL=C awk -f "$lib"
     fi
     ;;
 setup|doctor)
     yes=false dry=false force=false asjson=false source=tahabakhit/pstack-relay
     while [ "$#" -gt 0 ]; do
         case $1 in
+            --help|-h) usage;;
             --json=true|--json=false) asjson=${1#*=}; shift; continue;;
+            --yes=true|--yes=false|--force=true|--force=false|--dry-run=true|--dry-run=false)
+                [ "$command" = setup ] || fatal "unknown flag: $1"
+                case $1 in --yes=*) yes=${1#*=};; --force=*) force=${1#*=};; --dry-run=*) dry=${1#*=};; esac
+                shift; continue;;
             --*=*) value=${1#*=}; option=${1%%=*}; shift; set -- "$option" "$value" "$@";;
         esac
         option=$1; shift
@@ -152,16 +177,16 @@ setup|doctor)
             fi
         }
         addcheck binary true "pstack-relay 2.0.0; upstream $(revision)"
-        if sheetfile=$sheet action=models awk -f "$lib" > /dev/null 2> "$scratch/sheet-error"; then addcheck sheet true "$sheet"
+        if sheetfile=$sheet action=models LC_ALL=C awk -f "$lib" > /dev/null 2> "$scratch/sheet-error"; then addcheck sheet true "$sheet"
         else addcheck sheet false "$(cat "$scratch/sheet-error")"; fi
         ok=false; [ -z "$parent" ] || ok=true
         addcheck environment "$ok" "parent=$parent backend=$backend"
-        action=catalogs awk -f "$lib" > "$scratch/catalogs"
+        action=catalogs LC_ALL=C awk -f "$lib" > "$scratch/catalogs"
         for h in codex claude pi; do
             if [ "$(cat "$scratch/$h.installed")" = yes ]; then installed=$((installed+1)); fi
         done
         # Counts and notes are computed by the same parser as setup.
-        action=doctor awk -f "$lib" > "$scratch/harness-checks"
+        action=doctor LC_ALL=C awk -f "$lib" > "$scratch/harness-checks"
         while IFS= read -r line; do
             printf '%s\n' "$line" > "$scratch/check"
             name=$(jsonfield "$scratch/check" name); ok=$(jsonfield "$scratch/check" ok true); detail=$(jsonfield "$scratch/check" detail)
@@ -174,7 +199,7 @@ setup|doctor)
             if [ "$h" = hc ] && [ "$backend" != hc ]; then continue; fi
             case $h in orca|hc) set -- "$h" --version;; rex) set -- rex whoami;; esac
             ok=true
-            if run "$@"; then detail=$(cat "$scratch/output")
+            if run "$@"; then detail=$(trimfile "$scratch/output")
             else detail=$error; [ "$backend" != "$h" ] || ok=false; fi
             addcheck "$h" "$ok" "$detail"
         done
@@ -195,13 +220,15 @@ setup|doctor)
         create=true
         legacy=$HOME/.config/pstack-rex/pstack-models.md
         if [ "$force" = false ] && [ -f "$legacy" ]; then
-            sheetfile=$legacy asjson=false action=models awk -f "$lib" > "$scratch/sheet"
+            sheetfile=$legacy asjson=false action=models LC_ALL=C awk -f "$lib" > "$scratch/sheet"
             migrated=true
-        else action=starter awk -f "$lib" > "$scratch/sheet"; fi
-    else sheetfile=$sheet asjson=false action=models awk -f "$lib" > "$scratch/sheet"; fi
-    action=catalogs awk -f "$lib" > "$scratch/catalogs"
+        else action=starter LC_ALL=C awk -f "$lib" > "$scratch/sheet"; fi
+    else sheetfile=$sheet asjson=false action=models LC_ALL=C awk -f "$lib" > "$scratch/sheet"; fi
+    action=catalogs LC_ALL=C awk -f "$lib" > "$scratch/catalogs"
     commands='' notes='' failed=false
-    addnote() { notes=$notes${notes:+,}$(quote "$1"); }
+    : > "$scratch/notes-text"
+    : > "$scratch/commands-text"
+    addnote() { notes=$notes${notes:+,}$(quote "$1"); printf '%s\n' "$1" >> "$scratch/notes-text"; }
     if [ "$migrated" = true ]; then addnote "Migrated model sheet from $legacy"; fi
     for h in pi codex claude; do
         [ "$(cat "$scratch/$h.installed")" = yes ] || continue
@@ -215,6 +242,12 @@ setup|doctor)
     if [ "$dry" = false ] && [ "$yes" = false ]; then
         [ "$asjson" = false ] || fatal 'setup --json requires --yes or --dry-run'
         printf 'Shared sheet: %s\n' "$sheet"; cat "$scratch/sheet"
+        for h in codex claude; do
+            [ "$(cat "$scratch/$h.installed")" = yes ] || continue
+            displaycommand "$h" plugin marketplace add "$source"
+            if [ "$h" = claude ]; then displaycommand claude plugin install pstack-relay@pstack-relay
+            else displaycommand codex plugin add pstack-relay@pstack-relay; fi
+        done
         printf 'Write the sheet and install these plugins? [y/N] '
         answer=; IFS= read -r answer || :
         case $answer in y|Y|yes|YES|Yes) :;; *) fatal 'setup cancelled';; esac
@@ -231,15 +264,17 @@ setup|doctor)
             if [ "$dry" = false ]; then
                 error=
                 if run "$@"; then :; else failed=true; item=$item',"error":'$(quote "$error"); fi
-                output=$(cat "$scratch/output")
+                output=$(trimfile "$scratch/output")
                 [ -z "$output" ] || item=$item',"output":'$(quote "$output")
             fi
             commands=$commands${commands:+,}$item'}'
             if [ "$asjson" = false ]; then
-                printf '$'; for arg do printf ' %s' "$arg"; done; printf '\n'
-                if [ "$dry" = true ]; then printf '  dry-run; not executed\n'
-                elif [ -n "$error" ]; then printf '  ERROR: %s\n' "$error"
-                else printf '  OK: %s\n' "$output"; fi
+                {
+                    printf '$ '; displaycommand "$@"
+                    if [ "$dry" = true ]; then printf '  dry-run; not executed\n'
+                    elif [ -n "$error" ]; then printf '  ERROR: %s\n' "$error"
+                    else printf '  OK: %s\n' "$output"; fi
+                } >> "$scratch/commands-text"
             fi
         done
     done
@@ -249,8 +284,8 @@ setup|doctor)
         printf '{"path":%s,"sheet":%s,"catalogs":%s,"commands":[%s],"notes":[%s]}\n' "$(quote "$sheet")" "$(quote "$text")" "$(cat "$scratch/catalogs")" "$commands" "$notes"
     else
         printf 'Shared sheet: %s\n' "$sheet"; cat "$scratch/sheet"
-        action=setup awk -f "$lib"
-        if [ -n "$notes" ]; then printf '%s\n' "$notes"; fi
+        action=setup LC_ALL=C awk -f "$lib"
+        cat "$scratch/commands-text" "$scratch/notes-text"
     fi
     [ "$failed" = false ] || fatal 'one or more plugin installation commands failed'
     ;;
@@ -260,6 +295,11 @@ rex|hc)
     operation=$1; shift
     h='' m='' e='' own=false brief='' id='' file=- seconds=540
     while [ "$#" -gt 0 ]; do
+        case $1 in
+            --help|-h) usage;;
+            --own-worktree=true|--own-worktree=false) own=${1#*=}; shift; continue;;
+            --*=*) value=${1#*=}; option=${1%%=*}; shift; set -- "$option" "$value" "$@";;
+        esac
         option=$1; shift
         case $option in
             --harness|--model|--effort|--brief|--id|--file|--seconds)
@@ -289,18 +329,18 @@ rex|hc)
         fi
         if [ "$backend" = rex ]; then
             draft=$state_dir/result-draft.md
-            prompt="Read and do the task in $state_dir/brief.md. When you are finished, write your final report (results and the evidence asked for) to $draft, then run: '$self' rex report --id $id --file '$draft'"
+            prompt="Read and do the task in $state_dir/brief.md. When you are finished, write your final report (results and the evidence asked for) to $draft, then run: $(shellquote "$self") rex report --id $id --file $(shellquote "$draft")"
         else
-            prompt="Read and do the task in $state_dir/brief.md. When finished report the final result with: hc send '$HC_TERMINAL_ID' \"<report>\". For a long report, write it to $state_dir/result.md first and send its absolute path."
+            prompt="Read and do the task in $state_dir/brief.md. When finished report the final result with: hc send $(shellquote "$HC_TERMINAL_ID") \"<report>\". For a long report, write it to $state_dir/result.md first and send its absolute path."
         fi
         set -- "$h" --model "$m"
         if [ -n "$e" ]; then
-            case $h in claude) set -- "$@" --effort "$e";; codex) set -- "$@" -c "model_reasoning_effort=\"$e\"";; pi) set -- "$@" --thinking "$e";; esac
+            case $h in claude) set -- "$@" --effort "$e";; codex) set -- "$@" -c "model_reasoning_effort=$(quote "$e")";; pi) set -- "$@" --thinking "$e";; esac
         fi
         set -- "$@" "$prompt"
         if [ "$backend" = rex ]; then
             rex run -s "$REX_SESSION" --split right --focus=false --label "pstack-$id" -c "$cwd" --json -- "$@" > "$state_dir/response.json" || fatal 'launch Rex worker failed'
-            input=$state_dir/response.json action=rexlaunchvalidate awk -f "$lib"
+            input=$state_dir/response.json action=rexlaunchvalidate LC_ALL=C awk -f "$lib"
             block=$(jsonfield "$state_dir/response.json" block_id)
             [ -n "$block" ] || block=$(jsonfield "$state_dir/response.json" block_ids.1)
             [ -n "$block" ] || fatal 'Rex launch returned no block id'
@@ -343,11 +383,11 @@ rex|hc)
         else
             session=$(jsonfield "$state_dir/launch.json" session)
             block=$(jsonfield "$state_dir/launch.json" block)
-            deadline=$(($(date +%s)+seconds))
+            remaining=$seconds
             while :; do
                 if [ -f "$state_dir/result.md" ]; then state=reported; cp -- "$state_dir/result.md" "$scratch/result"; break; fi
                 rex block call -s "$session" -b "$block" process > "$scratch/process" || fatal 'query Rex process failed'
-                input=$scratch/process action=rexprocessvalidate awk -f "$lib"
+                input=$scratch/process action=rexprocessvalidate LC_ALL=C awk -f "$lib"
                 exit_code=$(jsonfield "$scratch/process" last_exit.exit_code true)
                 case $exit_code in ''|null) exit_code=;; *[!0-9-]*) fatal 'invalid exit code';; esac
                 if [ -n "$exit_code" ]; then
@@ -355,8 +395,9 @@ rex|hc)
                     else state=exited; fi
                     break
                 fi
-                [ "$(date +%s)" -lt "$deadline" ] || break
+                [ "$remaining" -gt 0 ] || break
                 sleep 1
+                remaining=$((remaining-1))
             done
         fi
         printf '{"id":%s,"state":%s' "$(quote "$id")" "$(quote "$state")"

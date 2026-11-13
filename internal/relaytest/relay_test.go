@@ -14,6 +14,7 @@ import (
 )
 
 type fixture struct {
+	Text      bool
 	Name      string
 	Args      []string
 	Sheet     string
@@ -242,6 +243,11 @@ func cases() []fixture {
 	for i, p := range []string{`[]`, `{"block_id":3}`, `{"block_ids":[1]}`} {
 		all = append(all, fixture{Name: fmt.Sprintf("rex invalid launch shape/%d", i), Args: []string{"rex", "start", "--harness", "claude", "--model", "opus", "--brief", "{brief}"}, Env: map[string]string{"REX_SESSION": "s"}, RexLaunch: p})
 	}
+	all = append(all,
+		fixture{Name: "unicode/sheet whitespace", Sheet: "\u00a0r,\u2003s:\u00a0claude:opus\u202f@high\u3000", Args: []string{"models", "--json"}},
+		fixture{Name: "unicode/escaped model", Missing: true, Config: "model = 'é'", Env: map[string]string{"CODEX_MODELS": `{"models":[{"slug":"first"},{"slug":"\u00e9"}]}`}, Args: []string{"setup", "--dry-run", "--json"}},
+		fixture{Name: "unicode/surrogate model", Missing: true, Env: map[string]string{"CODEX_MODELS": `{"models":[{"slug":"model-\ud83d\ude80"}]}`}, Args: []string{"setup", "--dry-run", "--json"}})
+	all = append(all, fixture{Name: "text/models", Text: true, Sheet: "r: claude:opus @high\nsession hook: off", Args: []string{"models"}}, fixture{Name: "text/setup", Text: true, Missing: true, Config: `model = "c"`, Args: []string{"setup", "--yes"}}, fixture{Name: "text/doctor", Text: true, Sheet: "r: auto", Env: map[string]string{"CODEX_THREAD_ID": "thread"}, Args: []string{"doctor"}}, fixture{Name: "text/version", Text: true, Args: []string{"version"}})
 	return all
 }
 
@@ -320,7 +326,7 @@ func execute(t *testing.T, c fixture, exe, shell string) expected {
 	write(t, filepath.Join(dir, ".codex/config.toml"), c.Config)
 	log := filepath.Join(dir, "calls.jsonl")
 	write(t, log, "")
-	env := map[string]string{"HOME": dir, "PATH": filepath.Join(dir, "bin") + ":/usr/bin:/bin", "TMPDIR": dir, "PSTACK_RELAY_SHEET": sheet, "PSTACK_REX_SHEET": sheet, "PSTACK_RELAY_STATE": filepath.Join(dir, "state"), "PSTACK_REX_STATE": filepath.Join(dir, "state/rex"), "RELAY_FAKE": "1", "CALL_LOG": log, "FAKE_MODE": c.Fake, "REX_LAUNCH": `{"block_id":"block-1"}`, "REX_PROCESS": c.Process, "WAIT_DIR": filepath.Join(dir, "state/rex/fixture")}
+	env := map[string]string{"HOME": dir, "PATH": filepath.Join(dir, "bin") + ":/usr/bin:/bin", "TMPDIR": dir, "PSTACK_RELAY_SHEET": sheet, "PSTACK_REX_SHEET": sheet, "PSTACK_RELAY_STATE": filepath.Join(dir, "state"), "PSTACK_REX_STATE": filepath.Join(dir, "state/rex"), "RELAY_FAKE": "1", "GORACE": "atexit_sleep_ms=0", "CALL_LOG": log, "FAKE_MODE": c.Fake, "REX_LAUNCH": `{"block_id":"block-1"}`, "REX_PROCESS": c.Process, "WAIT_DIR": filepath.Join(dir, "state/rex/fixture")}
 	for k, v := range c.Env {
 		env[k] = v
 	}
@@ -360,7 +366,9 @@ func execute(t *testing.T, c fixture, exe, shell string) expected {
 		return got
 	} // Error spelling is deliberately not an API contract.
 	var output any
-	if e := json.Unmarshal(out.Bytes(), &output); e != nil {
+	if c.Text {
+		output = out.String()
+	} else if e := json.Unmarshal(out.Bytes(), &output); e != nil {
 		t.Fatalf("%s: invalid JSON %q stderr=%s", c.Name, out.String(), errout.String())
 	}
 	id := ""
@@ -417,7 +425,7 @@ func TestRuntime(t *testing.T) {
 		if e = json.Unmarshal(data, &golden); e != nil {
 			t.Fatal(e)
 		}
-	} else if os.Getenv("RELAY_ORACLE") == "" {
+	} else {
 		t.Fatal(e)
 	}
 	if golden == nil {
@@ -431,11 +439,6 @@ func TestRuntime(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.Name, func(t *testing.T) {
 			want, ok := golden[c.Name]
-			if oracle := os.Getenv("RELAY_ORACLE"); oracle != "" {
-				want = execute(t, c, oracle, "")
-				golden[c.Name] = want
-				ok = true
-			}
 			if !ok {
 				t.Fatal("missing captured Go expectation")
 			}
@@ -451,19 +454,7 @@ func TestRuntime(t *testing.T) {
 			}
 		})
 	}
-	if os.Getenv("RELAY_CAPTURE") == "1" {
-		b, e := json.MarshalIndent(golden, "", "  ")
-		if e != nil {
-			t.Fatal(e)
-		}
-		if e = os.MkdirAll("testdata", 0755); e != nil {
-			t.Fatal(e)
-		}
-		if e = os.WriteFile("testdata/go-expectations.json", append(b, '\n'), 0644); e != nil {
-			t.Fatal(e)
-		}
-	}
 	if !t.Failed() {
-		t.Logf("%d cases passed across %d shell(s)", len(cases), len(shells))
+		t.Logf("%d captured Go cases passed across %d shell(s)", len(cases), len(shells))
 	}
 }

@@ -18,7 +18,7 @@ if [[ "$before" == "$revision" ]]; then
   exit 0
 fi
 validation=passed
-if go run ./cmd/pstack-rex plugin build > "$work/plugin.log" 2>&1; then
+if go run ./cmd/build-plugin > "$work/plugin.log" 2>&1; then
   cat "$work/plugin.log"
 else
   cat "$work/plugin.log"

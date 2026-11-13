@@ -25,7 +25,7 @@ func isolated(t *testing.T) (string, []string) {
 			t.Fatal(e)
 		}
 	}
-	env := []string{"HOME=" + dir, "XDG_CONFIG_HOME=" + filepath.Join(dir, "config"), "TMPDIR=" + dir, "PATH=" + filepath.Join(dir, "bin") + ":/usr/bin:/bin", "RELAY_FAKE=1", "CALL_LOG=" + filepath.Join(dir, "calls"), "REX_LAUNCH=" + `{"block_id":"block-1"}`}
+	env := []string{"HOME=" + dir, "XDG_CONFIG_HOME=" + filepath.Join(dir, "config"), "TMPDIR=" + dir, "PATH=" + filepath.Join(dir, "bin") + ":/usr/bin:/bin", "RELAY_FAKE=1", "GORACE=atexit_sleep_ms=0", "CALL_LOG=" + filepath.Join(dir, "calls"), "REX_LAUNCH=" + `{"block_id":"block-1"}`}
 	return dir, env
 }
 func invoke(t *testing.T, dir string, env []string, stdin string, args ...string) ([]byte, error) {

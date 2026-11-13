@@ -16,7 +16,7 @@ func fixture(t *testing.T) string {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for name, data := range map[string]string{"internal/plugin/adaptations.json": "[]", "upstream/skills/example/SKILL.md": "---\nname: example\n---\nbody\n", "upstream/skills/example/references/ref.md": "unchanged\n", "upstream/agents/example.md": "agent\n", "upstream/LICENSE": "MIT\n", "upstream/README.md": "README\n", "overlay/delegation.md": "delegation\n", "overlay/hooks/session-start.sh": string(hook)} {
+	for name, data := range map[string]string{"overlay/bin/pstack-relay": "#!/bin/sh\necho relay\n", "overlay/lib/relay.awk": "# awk support\n", "upstream/REVISION": "0000000000000000000000000000000000000000\n", "internal/plugin/adaptations.json": "[]", "upstream/skills/example/SKILL.md": "---\nname: example\n---\nbody\n", "upstream/skills/example/references/ref.md": "unchanged\n", "upstream/agents/example.md": "agent\n", "upstream/LICENSE": "MIT\n", "upstream/README.md": "README\n", "overlay/delegation.md": "delegation\n", "overlay/hooks/session-start.sh": string(hook)} {
 		p := filepath.Join(root, filepath.FromSlash(name))
 		if err := os.MkdirAll(filepath.Dir(p), 0755); err != nil {
 			t.Fatal(err)
@@ -41,6 +41,9 @@ func TestBuild(t *testing.T) {
 		{"reference unchanged", "plugins/pstack-rex/skills/example/references/ref.md", "unchanged\n"},
 		{"verbatim delegation", "plugins/pstack-rex/delegation.md", "delegation\n"},
 		{"license", "plugins/pstack-rex/LICENSE", "MIT\n"},
+		{"runtime", "plugins/pstack-rex/bin/pstack-relay", "#!/bin/sh"},
+		{"awk support", "plugins/pstack-rex/lib/relay.awk", "# awk support"},
+		{"upstream revision", "plugins/pstack-rex/UPSTREAM-REVISION", "0000000000000000000000000000000000000000"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			b, err := os.ReadFile(filepath.Join(root, tt.path))
@@ -71,6 +74,9 @@ func TestBuild(t *testing.T) {
 		{"missing file", func(root string) error { return os.Remove(filepath.Join(root, "plugins/pstack-rex/LICENSE")) }},
 		{"extra file", func(root string) error {
 			return os.WriteFile(filepath.Join(root, "plugins/pstack-rex/extra"), nil, 0644)
+		}},
+		{"non-executable runtime", func(root string) error {
+			return os.Chmod(filepath.Join(root, "plugins/pstack-rex/bin/pstack-relay"), 0644)
 		}},
 		{"non-executable hook", func(root string) error {
 			return os.Chmod(filepath.Join(root, "plugins/pstack-rex/claude-hooks/session-start.sh"), 0644)

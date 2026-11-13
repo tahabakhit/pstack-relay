@@ -1,5 +1,5 @@
 # POSIX awk support for the relay's data boundaries. No shell commands run here.
-function trim(s) { sub(/^[[:space:]]+/, "", s); sub(/[[:space:]]+$/, "", s); return s }
+function trim(s) { sub("^(" white ")+", "", s); sub("(" white ")+$", "", s); return s }
 function fail(s) { print "pstack-relay: " s > "/dev/stderr"; failed=1; exit 1 }
 function quote(s,    i,c,r,n) {
  r="\""
@@ -24,7 +24,7 @@ function parse(line,ln,    p,k,v,a,b,n,j,c,h,m,e,nf,parts) {
  k=keynorm(k); if(!(k in counts)) order[++roles]=k
  n=split(v,parts,","); counts[k]=n
  for(j=1;j<=n;j++) {
-  nf=split(trim(parts[j]),b,/[[:space:]]+/)
+  nf=split(trim(parts[j]),b,"(" white ")+")
   if(trim(parts[j])=="" || nf>2) fail("line " ln ": expected [harness:]model [@effort]")
   h=""; m=b[1]; e=""; p=index(m,":")
   if(p) { h=substr(m,1,p-1); m=substr(m,p+1); if(!harness(h)) fail("line " ln ": unknown harness " h); if(m=="" || index(m,":")) fail("line " ln ": invalid model " m) }
@@ -134,7 +134,7 @@ function loadcatalogs(    root,i,j,h,id,ar,model,first,seen,a,n,f,line) {
    for(j=1;j<=size[ar];j++) { model=child[child[ar,j],"slug"]; if(model && typ[model]!="string" && typ[model]!="null") fail("slug must be a string"); if(val[model]!="") models[h,++nm[h]]=val[model] }
   } else {
    n=split(readall(root "/" h ".models"),a,"\n")
-   for(j=1;j<=n;j++) { line=trim(a[j]); f=split(line,seen,/[[:space:]]+/); if(line=="" || seen[1]~/^Warning:/ || tolower(seen[1])=="provider") continue
+   for(j=1;j<=n;j++) { line=trim(a[j]); f=split(line,seen,"(" white ")+"); if(line=="" || seen[1]~/^Warning:/ || tolower(seen[1])=="provider") continue
     model=""; if(index(seen[1],"/")) model=seen[1]; else if(f>=2 && substr(seen[1],1,1)!="-") model=seen[1] "/" seen[2]
     if(model!="" && !((h SUBSEP model) in unique)) { unique[h,model]=1; models[h,++nm[h]]=model }
    }
@@ -171,8 +171,16 @@ function starter(    template,a,n,i,on,found,k,j,parts,np,family,e,h,m,b) {
  defaultEffort="session"
 }
 BEGIN {
+ white="[[:space:]]|" utf8(133) "|" utf8(160) "|" utf8(5760) "|" utf8(8232) "|" utf8(8233) "|" utf8(8239) "|" utf8(8287) "|" utf8(12288)
+ for(ci=8192;ci<=8202;ci++) white=white "|" utf8(ci)
  for(ci=1;ci<32;ci++) controls=controls sprintf("%c",ci)
  hook=1; horder[1]="codex"; horder[2]="claude"; horder[3]="pi"; action=ENVIRON["action"]
+ if(action=="trimfile") { printf "%s",trim(readall(ENVIRON["input"])); exit }
+ if(action=="word") {
+  t=ENVIRON["text"]; unsafe=" \t\n\047\"$`\\;&|<>()*?![]{}"; needs=(t=="")
+  for(i=1;i<=length(t);i++) if(index(unsafe,substr(t,i,1))) needs=1
+  if(needs) { gsub(/\047/, "\047\"\047\"\047",t); t="\047" t "\047" }; printf "%s",t; exit
+ }
  if(action=="quote") { printf "%s",quote(ENVIRON["text"]); exit }
  if(action=="json") { id=json(readall(ENVIRON["input"])); n=split(ENVIRON["field"],a,"."); for(i=1;i<=n;i++) id=child[id,a[i]]; if(ENVIRON["raw"]=="true") print raw[id]; else if(typ[id]=="string" || typ[id]=="number") printf "%s", val[id]; else if(typ[id]!="" && typ[id]!="null") fail("unexpected JSON field type"); exit }
  if(action=="rexlaunchvalidate" || action=="rexprocessvalidate") {
@@ -194,7 +202,7 @@ BEGIN {
  if(action=="validate") { json(readall(ENVIRON["input"])); exit }
  if(action=="catalogs" || action=="starter" || action=="setup" || action=="doctor") loadcatalogs()
  if(action=="doctor") { for(i=1;i<=3;i++) { h=horder[i]; print "{\"name\":" quote(h) ",\"ok\":" ((!installed[h] || nm[h]>0)?"true":"false") ",\"detail\":" quote("installed=" (installed[h]?"true":"false") " models=" (nm[h]+0) " " notes[h]) "}" }; exit }
- if(action=="setup") { for(i=1;i<=3;i++) { h=horder[i]; t=""; for(j=1;j<=nm[h];j++) t=t (j>1?", ":"") models[h,j]; print h ": installed=" (installed[h]?"true":"false") " models=" t " " notes[h] }; exit }
+ if(action=="setup") { prefer(); for(i=1;i<=3;i++) { h=horder[i]; t=""; for(j=1;j<=nm[h];j++) t=t (j>1?", ":"") models[h,j]; print h ": installed=" (installed[h]?"true":"false") " models=" t " " notes[h] }; exit }
  if(action=="catalogs") { prefer(); print catalogs(); exit }
  if(action=="starter") { prefer(); starter(); printf "%s",format(); exit }
  if(action=="models" || action=="resolve") {

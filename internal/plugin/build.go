@@ -42,7 +42,7 @@ func Build(root string, check bool) error {
 				return err
 			}
 			if !bytes.Equal(got, want.data) || info.Mode().Perm()&0111 != want.mode&0111 {
-				return fmt.Errorf("generated file differs: %s; run pstack-rex plugin build", name)
+				return fmt.Errorf("generated file differs: %s; run go run ./cmd/build-plugin", name)
 			}
 			seen[name] = true
 		}
@@ -129,13 +129,13 @@ func generate(root string) (map[string]generatedFile, error) {
 			return nil, err
 		}
 	}
-	for _, pair := range [][2]string{{"upstream/LICENSE", "LICENSE"}, {"upstream/README.md", "UPSTREAM-README.md"}, {"overlay/delegation.md", "delegation.md"}, {"overlay/hooks/session-start.sh", "claude-hooks/session-start.sh"}} {
+	for _, pair := range [][2]string{{"overlay/bin/pstack-relay", "bin/pstack-relay"}, {"overlay/lib/relay.awk", "lib/relay.awk"}, {"upstream/REVISION", "UPSTREAM-REVISION"}, {"upstream/LICENSE", "LICENSE"}, {"upstream/README.md", "UPSTREAM-README.md"}, {"overlay/delegation.md", "delegation.md"}, {"overlay/hooks/session-start.sh", "claude-hooks/session-start.sh"}} {
 		b, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(pair[0])))
 		if err != nil {
 			return nil, err
 		}
 		mode := fs.FileMode(0644)
-		if pair[1] == "claude-hooks/session-start.sh" {
+		if pair[1] == "claude-hooks/session-start.sh" || pair[1] == "bin/pstack-relay" {
 			mode = 0755
 		}
 		files[prefix+pair[1]] = generatedFile{b, mode}

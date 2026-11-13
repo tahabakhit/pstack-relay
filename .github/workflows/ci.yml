@@ -24,8 +24,11 @@ jobs:
       - run: go test -race ./...
       - run: go vet ./...
       - run: go run ./cmd/upstream sync --check
-      - run: go run ./cmd/pstack-rex plugin build --check
-      - run: go build -trimpath -o bin/pstack-rex ./cmd/pstack-rex
+      - run: go run ./cmd/build-plugin --check
+      - run: sh -n overlay/bin/pstack-relay
+      - name: Check POSIX shell runtime
+        if: runner.os == 'Linux'
+        run: shellcheck -s sh overlay/bin/pstack-relay
       - run: bash scripts/package.sh
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
