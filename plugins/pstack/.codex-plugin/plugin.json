@@ -7,6 +7,5 @@
   "license": "MIT",
   "name": "pstack",
   "repository": "https://github.com/tahabakhit/pstack-relay",
-  "skills": "./skills/",
-  "version": "2.0.0"
+  "skills": "./skills/"
 }

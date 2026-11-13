@@ -23,5 +23,5 @@ test ! -e "$stage/plugins/pstack/hooks"
 cmp upstream/skills/setup-pstack/SKILL.md "$stage/plugins/pstack/lib/setup-pstack.md"
 expected_revision=$(cat upstream/REVISION)
 actual=$(cd "$stage" && sh "$stage/plugins/pstack/bin/pstack-relay" version)
-[[ "$actual" == "pstack-relay 2.0.0"$'\n'"upstream $expected_revision" ]]
+[[ "$actual" == "pstack-relay"$'\n'"upstream $expected_revision" ]]
 printf '%s\n' "$actual"

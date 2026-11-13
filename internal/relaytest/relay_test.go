@@ -272,7 +272,6 @@ func normalized(v any, dir, script, id string) any {
 	switch x := v.(type) {
 	case string:
 		x = strings.ReplaceAll(x, script, "{script}")
-		x = strings.ReplaceAll(x, "pstack-relay 1.0.0", "pstack-relay 2.0.0")
 		x = strings.ReplaceAll(x, "then run: pstack-relay rex", "then run: {script} rex")
 		if x == "pstack-relay" {
 			x = "{script}"

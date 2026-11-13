@@ -98,8 +98,8 @@ version)
     case ${1:-} in --json|--json=true) asjson=true; shift;; --json=false) shift;; --help|-h) usage;; esac
     [ "$#" = 0 ] || fatal "unexpected arguments: $*"
     rev=$(revision)
-    if [ "$asjson" = true ]; then printf '{"version":"2.0.0","upstream":%s}\n' "$(quote "$rev")"
-    else printf 'pstack-relay 2.0.0\nupstream %s\n' "$rev"; fi
+    if [ "$asjson" = true ]; then printf '{"upstream":%s}\n' "$(quote "$rev")"
+    else printf 'pstack-relay\nupstream %s\n' "$rev"; fi
     ;;
 models|resolve)
     role='' own=false edit='' asjson=false
@@ -176,7 +176,7 @@ setup|doctor)
                 printf '%s %s: %s\n' "$status" "$1" "$3"
             fi
         }
-        addcheck binary true "pstack-relay 2.0.0; upstream $(revision)"
+        addcheck binary true "pstack-relay; upstream $(revision)"
         if sheetfile=$sheet action=models LC_ALL=C awk -f "$lib" > /dev/null 2> "$scratch/sheet-error"; then addcheck sheet true "$sheet"
         else addcheck sheet false "$(cat "$scratch/sheet-error")"; fi
         ok=false; [ -z "$parent" ] || ok=true

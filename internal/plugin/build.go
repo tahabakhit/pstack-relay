@@ -10,7 +10,6 @@ import (
 	"sort"
 )
 
-const Version = "2.0.0"
 const repository = "https://github.com/tahabakhit/pstack-relay"
 const description = "Cursor pstack workflows with native, Orca, Rex, and hc delegation for Claude Code and Codex."
 
@@ -149,8 +148,8 @@ func generate(root string) (map[string]generatedFile, error) {
 		return nil
 	}
 	manifests := map[string]any{
-		prefix + ".claude-plugin/plugin.json": map[string]any{"name": "pstack", "version": Version, "description": description, "license": "MIT", "repository": repository, "author": map[string]string{"name": "Taha Bakhit"}, "hooks": "./claude-hooks/hooks.json"},
-		prefix + ".codex-plugin/plugin.json":  map[string]any{"name": "pstack", "version": Version, "description": description, "license": "MIT", "repository": repository, "skills": "./skills/", "interface": map[string]string{"displayName": "pstack", "shortDescription": "pstack workflows across Claude Code and Codex"}},
+		prefix + ".claude-plugin/plugin.json": map[string]any{"name": "pstack", "description": description, "license": "MIT", "repository": repository, "author": map[string]string{"name": "Taha Bakhit"}, "hooks": "./claude-hooks/hooks.json"},
+		prefix + ".codex-plugin/plugin.json":  map[string]any{"name": "pstack", "description": description, "license": "MIT", "repository": repository, "skills": "./skills/", "interface": map[string]string{"displayName": "pstack", "shortDescription": "pstack workflows across Claude Code and Codex"}},
 		".claude-plugin/marketplace.json":     map[string]any{"name": "pstack-relay", "owner": map[string]string{"name": "Taha Bakhit"}, "plugins": []any{map[string]any{"name": "pstack", "source": "./plugins/pstack", "description": description}}},
 		".agents/plugins/marketplace.json":    map[string]any{"name": "pstack-relay", "interface": map[string]string{"displayName": "pstack-relay"}, "plugins": []any{map[string]any{"name": "pstack", "source": map[string]string{"source": "local", "path": "./plugins/pstack"}, "policy": map[string]any{"installation": "AVAILABLE", "authentication": "ON_INSTALL", "products": []string{"CODEX"}}}}},
 	}

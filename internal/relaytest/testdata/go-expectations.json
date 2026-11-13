@@ -321,7 +321,7 @@
       ],
       "checks": [
         {
-          "detail": "pstack-relay 2.0.0; upstream ec569379616a4826b98f0f0a205dd3411b573611",
+          "detail": "pstack-relay; upstream ec569379616a4826b98f0f0a205dd3411b573611",
           "name": "binary",
           "ok": true
         },
@@ -7175,7 +7175,7 @@
   },
   "text/doctor": {
     "error": false,
-    "output": "ok binary: pstack-relay 2.0.0; upstream ec569379616a4826b98f0f0a205dd3411b573611\nok sheet: {tmp}/sheet.md\nok environment: parent=codex backend=none\nok codex: installed=true models=3 \nok claude: installed=true models=4 aliases; Claude has no model list command\nok pi: installed=true models=1 \nok harnesses: 3 installed\nok orca: version\nok rex: version\n",
+    "output": "ok binary: pstack-relay; upstream ec569379616a4826b98f0f0a205dd3411b573611\nok sheet: {tmp}/sheet.md\nok environment: parent=codex backend=none\nok codex: installed=true models=3 \nok claude: installed=true models=4 aliases; Claude has no model list command\nok pi: installed=true models=1 \nok harnesses: 3 installed\nok orca: version\nok rex: version\n",
     "calls": [
       [
         "codex",
@@ -7279,7 +7279,7 @@
   },
   "text/version": {
     "error": false,
-    "output": "pstack-relay 2.0.0\nupstream ec569379616a4826b98f0f0a205dd3411b573611\n"
+    "output": "pstack-relay\nupstream ec569379616a4826b98f0f0a205dd3411b573611\n"
   },
   "topLevelModel/0": {
     "error": false,
