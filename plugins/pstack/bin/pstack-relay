@@ -233,7 +233,7 @@ setup|doctor)
     if [ "$migrated" = true ]; then addnote "Migrated model sheet from $legacy"; fi
     for h in pi codex claude; do
         [ "$(cat "$scratch/$h.installed")" = yes ] || continue
-        if [ "$h" = pi ]; then addnote 'Pi is discovered for the sheet; Pi plugin installation is deferred until after 1.0.'; continue; fi
+        if [ "$h" = pi ]; then addnote 'Pi is discovered for the sheet; Pi plugin installation is not supported yet.'; continue; fi
         if [ "$h" = codex ]; then
             # shellcheck disable=SC2016
             if run codex features list && awk '$1=="multi_agent" && $NF=="true" {found=1} END {exit !found}' "$scratch/output"; then :
