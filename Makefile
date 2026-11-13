@@ -9,7 +9,7 @@ test:
 
 check: test
 	go vet ./...
-	go run ./cmd/upstream check
+	go run ./cmd/upstream sync --check
 
 package:
 	bash scripts/package.sh
