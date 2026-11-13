@@ -1,5 +1,5 @@
 #!/bin/sh
-# Marketplace runtime: POSIX sh, POSIX awk and standard Unix tools only.
+# Marketplace runtime: POSIX sh, awk and standard Unix tools only.
 set -eu
 self_dir=$(CDPATH='' cd -P -- "$(dirname -- "$0")" && pwd)
 self=$self_dir/$(basename -- "$0")

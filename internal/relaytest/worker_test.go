@@ -88,7 +88,10 @@ func TestLargeWorkerReports(t *testing.T) {
 				dir, env := isolated(t)
 				d := filepath.Join(dir, "state", backend, "fixture")
 				write(t, filepath.Join(d, "launch.json"), `{"name":"worker","session":"s","block":"b"}`)
-				report := strings.Repeat("Markdown `code` $(command) \\\"\t\r\n", 5000) + "last line" + suffix
+				report := "Unicode é🚀\n" + strings.Repeat("Markdown `code` $(command) \\\"\t\r\n", 5000) + "last line" + suffix
+				for c := byte(1); c < 32; c++ {
+					report = string(c) + report
+				}
 				write(t, filepath.Join(d, "result.md"), report)
 				if len(report) <= 128*1024 {
 					t.Fatal("fixture must exceed the environment argument limit")

@@ -11,7 +11,7 @@ The current candidate ships a versionless `pstack` plugin in the pstack-relay ma
 
 ### Local marketplace and repository checks
 
-Local checks on 13 November 2026, with upstream revision `ec569379616a4826b98f0f0a205dd3411b573611`:
+Local checks on 13 November 2026, with upstream revision `6e359ce0aba9e927914d8a940510aa2ef66a8f23`:
 
 - `go test -race ./...` passed for all packages. `go vet ./...` exited zero with no diagnostics.
 - `go run ./cmd/build-plugin --check` printed `plugin tree is up to date`.

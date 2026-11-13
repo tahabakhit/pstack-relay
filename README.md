@@ -30,7 +30,7 @@ codex plugin add pstack@pstack-relay
 
 Then type `$setup-pstack` in Codex.
 
-The setup skill runs the installed plugin's `bin/pstack-relay setup`. Setup discovers harnesses and models, writes the shared sheet if absent, and installs the plugin into the other detected harness. Existing sheets are preserved. Pi models are discovered, but Pi plugin installation is deferred.
+The setup skill shows `bin/pstack-relay setup --dry-run`, asks you to confirm, then runs `setup --yes`. Setup discovers harnesses and models, writes the shared sheet if absent, and installs the plugin into the other detected harness. Existing sheets are preserved. Pi models are discovered, but Pi plugin installation is deferred.
 
 The plugin keeps upstream's name, `pstack`. The repository, marketplace, and runtime script are named `pstack-relay`. The script ships inside the plugin. No separate CLI installation or Go build is needed.
 
@@ -94,7 +94,7 @@ codex plugin remove pstack@pstack-claude
 
 Run only the removal commands for installed plugins. Remove any manually copied pstack skills from `~/.codex/skills` as well. Follow the marketplace installation steps above, then run the setup skill.
 
-Setup automatically copies assignments from `~/.config/pstack-rex/pstack-models.md` when the new sheet is absent. It keeps the old sheet. `PSTACK_RELAY_SHEET` now overrides the sheet path. Update any local configuration that used `PSTACK_REX_SHEET`.
+Setup automatically copies assignments from `${PSTACK_REX_SHEET:-${XDG_CONFIG_HOME:-$HOME/.config}/pstack-rex/pstack-models.md}` when the new sheet is absent. It keeps the old sheet. `PSTACK_RELAY_SHEET` now overrides the sheet path. Update any local configuration that used `PSTACK_REX_SHEET`.
 
 ## Update or uninstall
 

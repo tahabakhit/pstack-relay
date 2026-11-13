@@ -1,14 +1,21 @@
-# POSIX awk support for the relay's data boundaries. No shell commands run here.
+# awk support for the relay's data boundaries. No shell commands run here.
 function trim(s) { sub("^(" white ")+", "", s); sub("(" white ")+$", "", s); return s }
 function fail(s) { print "pstack-relay: " s > "/dev/stderr"; failed=1; exit 1 }
-function quote(s,    i,c,r,n) {
- r="\""
- for(i=1;i<=length(s);i++) { c=substr(s,i,1); n=index(controls,c)
-  if(c=="\"" || c=="\\") r=r "\\" c
-  else if(n) r=r sprintf("\\u%04x",n)
-  else r=r c
- }
+function escaped(c,    n) {
+ n=index(controls,c)
+ if(c=="\"" || c=="\\") return "\\" c
+ if(n) return sprintf("\\u%04x",n)
+ return c
+}
+function quote(s,    i,r,n,a) {
+ r="\""; n=split(s,a,"")
+ for(i=1;i<=n;i++) r=r escaped(a[i])
  return r "\""
+}
+function quotefile(path,bytes,    i,n,a) {
+ n=split(substr(readall(path),1,bytes),a,""); printf "\""
+ for(i=1;i<=n;i++) printf "%s",escaped(a[i])
+ printf "\""
 }
 function effort(e) { return e ~ /^(low|medium|high|xhigh|max|session)$/ }
 function harness(h) { return h ~ /^(claude|codex|pi)$/ }
@@ -82,20 +89,20 @@ function resolve(    role,k,i,j,a,n,m,h,e,mode,note,cmd,p,own,backend,branch,out
  print out "]"
 }
 # JSON recursive descent: values are indexed by node id, never evaluated as code.
-function ws() { while(substr(src,pos,1) ~ /[ \t\r\n]/ && pos<=length(src)) pos++ }
+function ws() { while(pos<=srclen && chars[pos] ~ /[ \t\r\n]/) pos++ }
 function utf8(n) {
  if(n<128) return sprintf("%c",n)
  if(n<2048) return sprintf("%c%c",192+int(n/64),128+n%64)
  if(n<65536) return sprintf("%c%c%c",224+int(n/4096),128+int(n/64)%64,128+n%64)
  return sprintf("%c%c%c%c",240+int(n/262144),128+int(n/4096)%64,128+int(n/64)%64,128+n%64)
 }
-function hex4(    i,c,n) { n=0; for(i=0;i<4;i++) { c=index("0123456789abcdef",tolower(substr(src,pos++,1)))-1; if(c<0) fail("invalid JSON unicode escape"); n=n*16+c }; return n }
+function hex4(    i,c,n) { n=0; for(i=0;i<4;i++) { c=index("0123456789abcdef",tolower(chars[pos++]))-1; if(c<0) fail("invalid JSON unicode escape"); n=n*16+c }; return n }
 function stringval(    r,c,n,lo) {
- if(substr(src,pos++,1)!="\"") fail("expected JSON string")
- while(pos<=length(src)) {
-  c=substr(src,pos++,1); if(c=="\"") return r
-  if(c=="\\") { c=substr(src,pos++,1)
-   if(c=="u") { n=hex4(); if(n>=55296 && n<=56319) { if(substr(src,pos,2)!="\\u") fail("invalid JSON surrogate"); pos+=2; lo=hex4(); if(lo<56320 || lo>57343) fail("invalid JSON surrogate"); n=65536+(n-55296)*1024+lo-56320 }; if(n==0) fail("NUL is not supported in command arguments"); r=r utf8(n) }
+ if(chars[pos++]!="\"") fail("expected JSON string")
+ while(pos<=srclen) {
+  c=chars[pos++]; if(c=="\"") return r
+  if(c=="\\") { c=chars[pos++]
+   if(c=="u") { n=hex4(); if(n>=55296 && n<=56319) { if(chars[pos]!="\\" || chars[pos+1]!="u") fail("invalid JSON surrogate"); pos+=2; lo=hex4(); if(lo<56320 || lo>57343) fail("invalid JSON surrogate"); n=65536+(n-55296)*1024+lo-56320 }; if(n==0) fail("NUL is not supported in command arguments"); r=r utf8(n) }
    else if(c=="n") r=r "\n"; else if(c=="r") r=r "\r"; else if(c=="t") r=r "\t"; else if(c=="b") r=r sprintf("%c",8); else if(c=="f") r=r sprintf("%c",12)
    else if(c=="\\" || c=="/" || c=="\"") r=r c; else fail("invalid JSON escape")
   } else { if(index(controls,c)) fail("invalid JSON control character"); r=r c }
@@ -103,20 +110,21 @@ function stringval(    r,c,n,lo) {
  fail("unterminated JSON string")
 }
 function value(    id,c,k,v,n,start) {
- ws(); id=++nodes; c=substr(src,pos,1); start=pos
- if(c=="{") { typ[id]="object"; pos++; ws(); if(substr(src,pos,1)=="}") pos++
-  else while(1) { ws(); k=stringval(); ws(); if(substr(src,pos++,1)!=":") fail("invalid JSON object"); v=value(); child[id,k]=v; ws(); c=substr(src,pos++,1); if(c=="}") break; if(c!=",") fail("invalid JSON object") }
- } else if(c=="[") { typ[id]="array"; pos++; ws(); if(substr(src,pos,1)=="]") pos++
-  else while(1) { child[id,++n]=value(); ws(); c=substr(src,pos++,1); if(c=="]") break; if(c!=",") fail("invalid JSON array") }; size[id]=n
+ ws(); id=++nodes; c=chars[pos]; start=pos
+ if(c=="{") { typ[id]="object"; pos++; ws(); if(chars[pos]=="}") pos++
+  else while(1) { ws(); k=stringval(); ws(); if(chars[pos++]!=":") fail("invalid JSON object"); v=value(); child[id,k]=v; ws(); c=chars[pos++]; if(c=="}") break; if(c!=",") fail("invalid JSON object") }
+ } else if(c=="[") { typ[id]="array"; pos++; ws(); if(chars[pos]=="]") pos++
+  else while(1) { child[id,++n]=value(); ws(); c=chars[pos++]; if(c=="]") break; if(c!=",") fail("invalid JSON array") }; size[id]=n
  } else if(c=="\"") { typ[id]="string"; val[id]=stringval() }
- else { while(pos<=length(src) && substr(src,pos,1)!~/[ \t\r\n,}\]]/) pos++; v=substr(src,start,pos-start)
+ else { while(pos<=srclen && chars[pos]!~/[ \t\r\n,}\]]/) v=v chars[pos++]
   if(v=="true" || v=="false" || v=="null") typ[id]=v
   else if(v ~ /^-?(0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]+)?$/) { typ[id]="number"; val[id]=v }
   else fail("invalid JSON value")
  }
- raw[id]=substr(src,start,pos-start); return id
+ starts[id]=start; ends[id]=pos; return id
 }
-function json(s,    id) { src=s; pos=1; id=value(); ws(); if(pos<=length(src)) fail("invalid JSON trailing data"); return id }
+function json(s,    id) { src=s; srclen=split(s,chars,""); pos=1; id=value(); ws(); if(pos<=srclen) fail("invalid JSON trailing data"); return id }
+function rawvalue(id) { return (id in starts)?substr(src,starts[id],ends[id]-starts[id]):"" }
 function chomp(s) { sub(/\n$/, "", s); return s }
 function readall(path,    r,s,rc) { while((rc=(getline s < path))>0) r=r s "\n"; close(path); if(rc<0) fail("cannot read " path); return r }
 function arrmodels(h,    r,i) { r="["; for(i=1;i<=nm[h];i++) r=r (i>1?",":"") quote(models[h,i]); return r "]" }
@@ -182,8 +190,8 @@ BEGIN {
   if(needs) { gsub(/\047/, "\047\"\047\"\047",t); t="\047" t "\047" }; printf "%s",t; exit
  }
  if(action=="quote") { printf "%s",quote(ENVIRON["text"]); exit }
- if(action=="quotefile") { printf "%s",quote(substr(readall(ENVIRON["input"]),1,ENVIRON["bytes"]+0)); exit }
- if(action=="json") { id=json(readall(ENVIRON["input"])); n=split(ENVIRON["field"],a,"."); for(i=1;i<=n;i++) id=child[id,a[i]]; if(ENVIRON["raw"]=="true") print raw[id]; else if(typ[id]=="string" || typ[id]=="number") printf "%s", val[id]; else if(typ[id]!="" && typ[id]!="null") fail("unexpected JSON field type"); exit }
+ if(action=="quotefile") { quotefile(ENVIRON["input"],ENVIRON["bytes"]+0); exit }
+ if(action=="json") { id=json(readall(ENVIRON["input"])); n=split(ENVIRON["field"],a,"."); for(i=1;i<=n;i++) id=child[id,a[i]]; if(ENVIRON["raw"]=="true") print rawvalue(id); else if(typ[id]=="string" || typ[id]=="number") printf "%s", val[id]; else if(typ[id]!="" && typ[id]!="null") fail("unexpected JSON field type"); exit }
  if(action=="rexlaunchvalidate" || action=="rexprocessvalidate") {
   id=json(readall(ENVIRON["input"])); if(typ[id]!="object" && typ[id]!="null") fail("expected Rex object")
   if(action=="rexlaunchvalidate") {
