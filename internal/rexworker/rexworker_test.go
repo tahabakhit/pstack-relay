@@ -243,22 +243,23 @@ func TestFailures(t *testing.T) {
 }
 
 func TestStateRoot(t *testing.T) {
-	for _, xdg := range []string{"", "/tmp/state"} {
+	uid := fmt.Sprintf("pstack-rex-%d", os.Getuid())
+	for _, tt := range []struct{ tmp, override, want string }{
+		{"", "", filepath.Join("/tmp", uid, "rex")},
+		{"/var/tmp/x", "", filepath.Join("/var/tmp/x", uid, "rex")},
+		{"/var/tmp/x", "/state", "/state"},
+	} {
 		got := StateRoot(func(key string) string {
-			if key == "XDG_STATE_HOME" {
-				return xdg
-			}
-			if key == "HOME" {
-				return "/home/example"
+			switch key {
+			case "TMPDIR":
+				return tt.tmp
+			case "PSTACK_REX_STATE":
+				return tt.override
 			}
 			return ""
 		})
-		want := "/home/example/.local/state/pstack-rex/rex"
-		if xdg != "" {
-			want = "/tmp/state/pstack-rex/rex"
-		}
-		if got != want {
-			t.Fatalf("StateRoot = %q, want %q", got, want)
+		if got != tt.want {
+			t.Fatalf("StateRoot = %q, want %q", got, tt.want)
 		}
 	}
 }

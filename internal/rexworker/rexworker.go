@@ -35,12 +35,18 @@ type Status struct {
 
 type Runner func(name string, args ...string) ([]byte, error)
 
+// StateRoot lives under the temporary directory because Codex's sandbox lets
+// a worker write there without an approval prompt, and a worker's brief and
+// report only need to outlive the worker, not a reboot.
 func StateRoot(getenv func(string) string) string {
-	root := getenv("XDG_STATE_HOME")
-	if root == "" {
-		root = filepath.Join(getenv("HOME"), ".local", "state")
+	if root := getenv("PSTACK_REX_STATE"); root != "" {
+		return root
 	}
-	return filepath.Join(root, "pstack-rex", "rex")
+	tmp := getenv("TMPDIR")
+	if tmp == "" {
+		tmp = "/tmp"
+	}
+	return filepath.Join(tmp, fmt.Sprintf("pstack-rex-%d", os.Getuid()), "rex")
 }
 
 func Start(r Runner, stateRoot string, getenv func(string) string, s Spec) (Launch, error) {
