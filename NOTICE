@@ -2,10 +2,10 @@ pstack-rex is distributed under the MIT license in LICENSE.
 
 This distribution embeds pstack from https://github.com/cursor/plugins,
 originally Copyright (c) 2026 Lauren Tan, under the MIT license.
-The pristine upstream license is internal/bundle/_upstream/LICENSE in source,
+The pristine upstream license is upstream/LICENSE in source,
 LICENSE.upstream in binary archives, and LICENSE in the installed bundle.
-The pinned source revision and per-file inventory are in upstream.lock.json.
-Generated skill and agent entrypoints add a runtime-contract pointer.
+The source revision is in upstream/REVISION.
+Generated skill and agent entrypoints add a delegation reference pointer.
 Two source-hash-checked adaptations replace Cursor model setup and fallback
 bootstrap paths. The pristine source remains unchanged.
 

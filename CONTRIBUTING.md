@@ -21,9 +21,9 @@ The ordinary Go tests use controlled fixtures and fake processes. They do not re
 
 ## Change workflows and adapters
 
-Read [the architecture](docs/architecture.md) and [runtime contracts](docs/contracts.md) before changing dispatch or lifecycle handling. Keep the shared CLI and MCP behavior consistent. Cover observable failure behavior when changing parsing, cancellation, idempotency, or writable ownership.
+Read the architecture and runtime contracts before changing dispatch or lifecycle handling. Keep the shared CLI and MCP behavior consistent. Cover observable failure behavior when changing parsing, cancellation, idempotency, or writable ownership.
 
-Keep `internal/bundle/_upstream/` pristine. Change runtime adaptation in this project's implementation. Follow [upstream review](docs/upstream.md) for source imports and record the source revision and compatibility decision.
+Keep `upstream/` pristine. Change runtime adaptation in this project's implementation. Follow [upstream review](docs/upstream.md) for source imports and record the source revision and compatibility decision.
 
 The imported workflows include helper scripts with their own Bun, Node, Python, or other dependencies. `go test ./...` does not run those upstream suites. When changing helper behavior or accepting a relevant source update, read the helper's package metadata and run its declared checks separately. Do not add those dependencies to the Go runtime merely because the source bundle contains them.
 

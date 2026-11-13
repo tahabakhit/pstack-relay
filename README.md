@@ -6,9 +6,9 @@ This is an initial usable integration, version 0.1.0. Cursor owns the engineerin
 
 See [current status and continuation](docs/status.md) for the completed milestone, artifact retention and next bounded work.
 
-The next scoped release is [1.0.0](docs/release-1.0.md), with Codex as the main chat and Claude Code and Pi as coding workers through Rex. That target requires runnable verification and isolated implementation from both worker harnesses. The current integration does not yet meet those requirements.
+The next scoped release is 1.0.0, with Codex as the main chat and Claude Code and Pi as coding workers through Rex. That target requires runnable verification and isolated implementation from both worker harnesses. The current integration does not yet meet those requirements.
 
-A real Codex parent has used the installed pstack `how` workflow to dispatch a Claude worker through MCP and Rex, receive its result, and answer from it. An installed `interrogate` workflow has also completed with two explicitly requested Codex models, runnable reviewer probes and a parent rerun. All three worker harnesses have separately completed live Rex smoke tasks. See [validation and limits](docs/validation.md). Full workflow parity, native subagents and live steering are not claimed.
+A real Codex parent has used the installed pstack `how` workflow to dispatch a Claude worker through MCP and Rex, receive its result, and answer from it. An installed `interrogate` workflow has also completed with two explicitly requested Codex models, runnable reviewer probes and a parent rerun. All three worker harnesses have separately completed live Rex smoke tasks. See validation and limits. Full workflow parity, native subagents and live steering are not claimed.
 
 ## Build
 
@@ -88,7 +88,7 @@ go run ./examples/codex-parent \
   --parent-model gpt-6.1-sol
 ```
 
-The configured `how explainer` must use Claude or Pi. The example verifies an actual MCP dispatch/wait pair and the durable worker result. Success produces `evidence.json` and the parent explanation. A failed approval or missing worker result exits nonzero. [Validation](docs/validation.md) describes the observed run and what it proves.
+The configured `how explainer` must use Claude or Pi. The example verifies an actual MCP dispatch/wait pair and the durable worker result. Success produces `evidence.json` and the parent explanation. A failed approval or missing worker result exits nonzero. Validation describes the observed run and what it proves.
 
 For a controlled multi-model review, configure `interrogate reviewers` with at least two distinct explicit Codex models, concrete efforts and `rex` backends. Every configured seat participates. The example requires Python 3 and an absent output directory outside the source repository.
 
@@ -136,7 +136,7 @@ A worker's Rex session and block IDs are in its launch receipt. Attach any compa
 
 Claude and Pi tool restrictions are not a filesystem or confidentiality sandbox. A worktree separates writes, not credentials or network access. No workflow gains a missing independent reviewer because a launch failed. MCP-dependent `why` and `reflect` roles are rejected before launch. Other specialist requirements must pass the shared capability check.
 
-Read [architecture](docs/architecture.md), [research](docs/research.md), [upstream updates](docs/upstream.md), [troubleshooting](docs/troubleshooting.md), and [contributing](CONTRIBUTING.md).
+Read architecture, [research](docs/research.md), [upstream updates](docs/upstream.md), [troubleshooting](docs/troubleshooting.md), and [contributing](CONTRIBUTING.md).
 
 ## Upgrade and uninstall
 
@@ -146,4 +146,4 @@ Remove the MCP entry with `codex mcp remove pstack-rex`. Remove only the skill l
 
 ## Attribution
 
-Original pstack is by Lauren Tan, MIT licensed. The pristine source and its license are under `internal/bundle/_upstream`. Integration code is MIT licensed. [NOTICE](NOTICE) preserves upstream attribution. [Research](docs/research.md) identifies the examined ports. The project is independent of Cursor, Superlogical and the coding-harness vendors.
+Original pstack is by Lauren Tan, MIT licensed. The pristine source and its license are under `upstream`. Integration code is MIT licensed. [NOTICE](NOTICE) preserves upstream attribution. [Research](docs/research.md) identifies the examined ports. The project is independent of Cursor, Superlogical and the coding-harness vendors.

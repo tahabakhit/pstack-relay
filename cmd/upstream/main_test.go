@@ -2,119 +2,126 @@ package main
 
 import (
 	"bytes"
-	"encoding/json"
 	"os"
-	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
-func TestUpdateRequiresCompatibilityAcceptance(t *testing.T) {
-	root := t.TempDir()
-	external := t.TempDir()
-	cwd, err := os.Getwd()
+func fixtureGit(t *testing.T, dir string, args ...string) string {
+	t.Helper()
+	result, err := git(dir, args...)
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.Chdir(cwd)
-	if err := os.MkdirAll(filepath.Join(root, bundleDir), 0755); err != nil {
+	return result
+}
+
+func write(t *testing.T, path, text string, mode os.FileMode) {
+	t.Helper()
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.Mkdir(filepath.Join(external, "pstack"), 0755); err != nil {
+	if err := os.WriteFile(path, []byte(text), mode); err != nil {
 		t.Fatal(err)
-	}
-	put := func(p, s string) {
-		t.Helper()
-		if err := os.WriteFile(p, []byte(s), 0644); err != nil {
-			t.Fatal(err)
-		}
-	}
-	put(filepath.Join(root, bundleDir, "adaptations.json"), `[]`)
-	put(filepath.Join(external, "pstack/plugin.json"), `{"version":"test"}`)
-	put(filepath.Join(external, "pstack/SKILL.md"), "# Test\nSpawn the model reviewer.\n")
-	command := func(args ...string) {
-		t.Helper()
-		c := exec.Command("git", append([]string{"-c", "core.hooksPath=/dev/null", "-c", "commit.gpgsign=false", "-C", external}, args...)...)
-		if out, err := c.CombinedOutput(); err != nil {
-			t.Fatalf("git: %v %s", err, out)
-		}
-	}
-	command("init", "-q")
-	command("add", ".")
-	command("-c", "user.name=Test", "-c", "user.email=test@example.invalid", "commit", "-qm", "initial")
-	if err := os.Chdir(root); err != nil {
-		t.Fatal(err)
-	}
-	if err := run([]string{"update", "--source", external}); err != nil {
-		t.Fatal(err)
-	}
-	if err := run([]string{"check"}); err == nil {
-		t.Fatal("accepted unreviewed source")
-	}
-	if err := run([]string{"accept", "--source", external}); err != nil {
-		t.Fatal(err)
-	}
-	if err := run([]string{"check", "--source", external}); err != nil {
-		t.Fatal(err)
-	}
-	baseline, err := os.ReadFile(filepath.Join(bundleDir, "compatibility.json"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	put(filepath.Join(external, "pstack/new-unknown.md"), "# Never-before-seen delegation expression\n")
-	command("add", ".")
-	command("-c", "user.name=Test", "-c", "user.email=test@example.invalid", "commit", "-qm", "change")
-	if err := run([]string{"update", "--source", external}); err != nil {
-		t.Fatal(err)
-	}
-	current, err := os.ReadFile(filepath.Join(bundleDir, "compatibility.json"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !bytes.Equal(baseline, current) {
-		t.Fatal("update silently accepted baseline")
-	}
-	if err := run([]string{"check"}); err == nil {
-		t.Fatal("accepted new source without compatibility review")
-	}
-	var r Report
-	b, err := os.ReadFile(filepath.Join(bundleDir, "review-report.json"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := json.Unmarshal(b, &r); err != nil {
-		t.Fatal(err)
-	}
-	if len(r.Changed) != 1 || r.Changed[0] != "new-unknown.md" {
-		t.Fatalf("changed report: %#v", r.Changed)
-	}
-	if err := run([]string{"accept"}); err != nil {
-		t.Fatal(err)
-	}
-	if err := run([]string{"check"}); err != nil {
-		t.Fatal(err)
-	}
-	if err := run([]string{"check", "--revision", "wrong"}); err == nil {
-		t.Fatal("ignored revision")
-	}
-	put(filepath.Join(external, "pstack/SKILL.md"), "dirty")
-	if err := run([]string{"update", "--source", external}); err == nil {
-		t.Fatal("accepted dirty source")
 	}
 }
-func TestInventoryMatchesAndHasHonestScope(t *testing.T) {
-	if !terms.MatchString("Task Agent spawn_agent steer resume model cloud_base_branch MCP") {
-		t.Fatal("matcher is broken")
-	}
+
+func TestSyncLocalRepository(t *testing.T) {
 	root := t.TempDir()
-	if err := os.MkdirAll(filepath.Join(root, "skills/setup-pstack"), 0755); err != nil {
+	repo := filepath.Join(root, "source repo")
+	if err := os.Mkdir(repo, 0755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(root, "skills/setup-pstack/SKILL.md"), []byte("```\nnew role: gpt-test\n```\n"), 0644); err != nil {
+	fixtureGit(t, repo, "init", "--initial-branch=main")
+	fixtureGit(t, repo, "config", "user.name", "Fixture")
+	fixtureGit(t, repo, "config", "user.email", "fixture@example.invalid")
+	fixtureGit(t, repo, "config", "core.filemode", "true")
+	write(t, filepath.Join(repo, "pstack/keep.md"), "original\n", 0644)
+	write(t, filepath.Join(repo, "pstack/removed.md"), "remove me\n", 0644)
+	write(t, filepath.Join(repo, "pstack/run.sh"), "#!/bin/sh\nexit 0\n", 0755)
+	write(t, filepath.Join(repo, "outside.md"), "exclude me\n", 0644)
+	if err := os.Symlink("keep.md", filepath.Join(repo, "pstack/link")); err != nil {
 		t.Fatal(err)
 	}
-	roles := roleCandidates(root)
-	if len(roles) != 1 || roles[0] != "new role" {
-		t.Fatalf("roles %#v", roles)
+	fixtureGit(t, repo, "add", ".")
+	fixtureGit(t, repo, "commit", "-m", "initial")
+	first := fixtureGit(t, repo, "rev-parse", "HEAD")
+	dest := filepath.Join(root, "upstream")
+	var output bytes.Buffer
+	args := []string{"sync", "--repo", "file://" + filepath.ToSlash(repo)}
+	if err := run(args, dest, &output); err != nil {
+		t.Fatal(err)
+	}
+	revision, err := readRevision(dest)
+	if err != nil || revision != first {
+		t.Fatalf("revision=%s err=%v", revision, err)
+	}
+	info, err := os.Stat(filepath.Join(dest, "run.sh"))
+	if err != nil || info.Mode().Perm() != 0755 {
+		t.Fatalf("executable mode: %v %v", info, err)
+	}
+	link, err := os.Readlink(filepath.Join(dest, "link"))
+	if err != nil || link != "keep.md" {
+		t.Fatalf("symlink: %s %v", link, err)
+	}
+	if _, err := os.Stat(filepath.Join(dest, "outside.md")); !os.IsNotExist(err) {
+		t.Fatal("copied outside pstack")
+	}
+	output.Reset()
+	if err := run(args, dest, &output); err != nil || !strings.HasPrefix(output.String(), "unchanged ") {
+		t.Fatalf("repeat: %s %v", &output, err)
+	}
+	fixtureGit(t, repo, "rm", "pstack/removed.md")
+	write(t, filepath.Join(repo, "pstack/keep.md"), "updated\n", 0644)
+	write(t, filepath.Join(repo, "pstack/new.md"), "new\n", 0644)
+	fixtureGit(t, repo, "add", ".")
+	fixtureGit(t, repo, "commit", "-m", "replace")
+	second := fixtureGit(t, repo, "rev-parse", "HEAD")
+	if err := run(args, dest, &output); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := os.Stat(filepath.Join(dest, "removed.md")); !os.IsNotExist(err) {
+		t.Fatal("stale file survived")
+	}
+	if data, err := os.ReadFile(filepath.Join(dest, "keep.md")); err != nil || string(data) != "updated\n" {
+		t.Fatalf("updated content: %q %v", data, err)
+	}
+	if revision, err := readRevision(dest); err != nil || revision != second {
+		t.Fatalf("second revision: %s %v", revision, err)
+	}
+	if err := run(append(args, "--ref", "missing-branch"), dest, &output); err == nil {
+		t.Fatal("missing ref succeeded")
+	}
+	if revision, err := readRevision(dest); err != nil || revision != second {
+		t.Fatal("failed clone changed previous snapshot")
+	}
+	fixtureGit(t, repo, "rm", "-r", "pstack")
+	fixtureGit(t, repo, "commit", "-m", "no pstack")
+	if err := run(args, dest, &output); err == nil {
+		t.Fatal("missing pstack succeeded")
+	}
+	if revision, err := readRevision(dest); err != nil || revision != second {
+		t.Fatal("failed copy changed previous snapshot")
+	}
+}
+
+func TestCheckRevision(t *testing.T) {
+	for _, value := range []string{"", "bad", strings.Repeat("a", 39), strings.Repeat("g", 40), strings.Repeat("a", 40) + "\nextra"} {
+		t.Run(value, func(t *testing.T) {
+			dest := t.TempDir()
+			write(t, filepath.Join(dest, "REVISION"), value, 0644)
+			if err := run([]string{"sync", "--check"}, dest, &bytes.Buffer{}); err == nil {
+				t.Fatal("invalid revision accepted")
+			}
+		})
+	}
+	dest := t.TempDir()
+	if err := run([]string{"sync", "--check"}, dest, &bytes.Buffer{}); err == nil {
+		t.Fatal("missing revision accepted")
+	}
+	write(t, filepath.Join(dest, "REVISION"), strings.Repeat("a", 40)+"\n", 0644)
+	if err := run([]string{"sync", "--check", "--repo", "does-not-exist"}, dest, &bytes.Buffer{}); err != nil {
+		t.Fatal(err)
 	}
 }

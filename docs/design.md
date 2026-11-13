@@ -1,6 +1,6 @@
 # Delegation design for pstack on Orca and Rex
 
-Status is proposed, 13 November 2026. This document replaces [architecture](architecture.md) and the [1.0 release contract](release-1.0.md). The code still follows those documents until the plan below lands.
+Status is proposed, 13 November 2026. This document replaces architecture and the 1.0 release contract. The code still follows those documents until the plan below lands.
 
 ## Goal
 
