@@ -93,17 +93,7 @@ func ParsePi(output string) []string {
 // setting to the front of the Codex catalog, so setup starts from the model
 // the user already runs instead of the catalog's first and costliest entry.
 func PreferConfigured(catalogs []Catalog, codexConfig string) {
-	var want string
-	for _, line := range strings.Split(codexConfig, "\n") {
-		line = strings.TrimSpace(line)
-		if strings.HasPrefix(line, "[") {
-			break
-		}
-		key, value, ok := strings.Cut(line, "=")
-		if ok && strings.TrimSpace(key) == "model" {
-			want = strings.Trim(strings.TrimSpace(value), `"'`)
-		}
-	}
+	want := topLevelModel(codexConfig)
 	for i := range catalogs {
 		if catalogs[i].Harness != sheet.Codex {
 			continue
@@ -115,4 +105,84 @@ func PreferConfigured(catalogs []Catalog, codexConfig string) {
 			}
 		}
 	}
+}
+
+// topLevelModel reads the top-level TOML key `model` without a TOML library.
+// It tracks multi-line arrays and strings so that a `[` inside a value is not
+// taken for a table header.
+func topLevelModel(config string) string {
+	depth, triple := 0, ""
+	for _, raw := range strings.Split(config, "\n") {
+		line := strings.TrimSpace(raw)
+		if triple != "" {
+			if strings.Contains(line, triple) {
+				triple = ""
+			}
+			continue
+		}
+		if depth > 0 {
+			depth += bracketDelta(line)
+			continue
+		}
+		if strings.HasPrefix(line, "[") {
+			return ""
+		}
+		key, value, ok := strings.Cut(line, "=")
+		if !ok {
+			continue
+		}
+		key = strings.Trim(strings.TrimSpace(key), `"'`)
+		value = strings.TrimSpace(value)
+		for _, q := range []string{`"""`, "'''"} {
+			if strings.HasPrefix(value, q) && !strings.Contains(value[3:], q) {
+				triple = q
+			}
+		}
+		if triple != "" {
+			continue
+		}
+		if strings.HasPrefix(value, "[") {
+			depth = bracketDelta(value)
+			continue
+		}
+		if key == "model" {
+			return tomlString(value)
+		}
+	}
+	return ""
+}
+
+func bracketDelta(s string) int {
+	d, quote := 0, rune(0)
+	for _, r := range s {
+		switch {
+		case quote != 0:
+			if r == quote {
+				quote = 0
+			}
+		case r == '"' || r == '\'':
+			quote = r
+		case r == '#':
+			return d
+		case r == '[':
+			d++
+		case r == ']':
+			d--
+		}
+	}
+	return d
+}
+
+func tomlString(value string) string {
+	if value == "" {
+		return ""
+	}
+	q := value[0]
+	if q != '"' && q != '\'' {
+		return ""
+	}
+	if end := strings.IndexByte(value[1:], q); end >= 0 {
+		return value[1 : end+1]
+	}
+	return ""
 }

@@ -82,3 +82,20 @@ func TestPreferConfigured(t *testing.T) {
 		t.Fatalf("unknown model reordered catalog: %v", catalogs[0].Models)
 	}
 }
+
+func TestTopLevelModel(t *testing.T) {
+	for _, tt := range []struct{ name, config, want string }{
+		{"plain", `model = "c"`, "c"},
+		{"trailing comment", `model = "c" # pinned`, "c"},
+		{"quoted key", `"model" = "c"`, "c"},
+		{"single quotes", `model = 'c'`, "c"},
+		{"multi-line array first", "x = [\n 1,\n [2]\n]\nmodel = \"c\"", "c"},
+		{"multi-line string first", "notes = \"\"\"\n[hi]\n\"\"\"\nmodel = \"c\"", "c"},
+		{"table only", "[profiles.x]\nmodel = \"b\"", ""},
+		{"after table", "a = 1\n[t]\nmodel = \"b\"", ""},
+	} {
+		if got := topLevelModel(tt.config); got != tt.want {
+			t.Errorf("%s: got %q want %q", tt.name, got, tt.want)
+		}
+	}
+}
