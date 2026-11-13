@@ -212,7 +212,8 @@ setup|doctor)
     fi
     config=${CODEX_HOME:-$HOME/.codex}/config.toml
     [ -f "$config" ] || config=
-    template=$plugin_root/skills/setup-pstack/SKILL.md
+    template=$plugin_root/lib/setup-pstack.md
+    [ -f "$template" ] || template=$plugin_root/skills/setup-pstack/SKILL.md
     [ -f "$template" ] || template=$self_dir/../../upstream/skills/setup-pstack/SKILL.md
     export template config
     create=false migrated=false

@@ -129,7 +129,7 @@ func generate(root string) (map[string]generatedFile, error) {
 			return nil, err
 		}
 	}
-	for _, pair := range [][2]string{{"overlay/bin/pstack-relay", "bin/pstack-relay"}, {"overlay/lib/relay.awk", "lib/relay.awk"}, {"upstream/REVISION", "UPSTREAM-REVISION"}, {"upstream/LICENSE", "LICENSE"}, {"upstream/README.md", "UPSTREAM-README.md"}, {"overlay/delegation.md", "delegation.md"}, {"overlay/hooks/session-start.sh", "claude-hooks/session-start.sh"}} {
+	for _, pair := range [][2]string{{"overlay/bin/pstack-relay", "bin/pstack-relay"}, {"overlay/lib/relay.awk", "lib/relay.awk"}, {"upstream/skills/setup-pstack/SKILL.md", "lib/setup-pstack.md"}, {"upstream/REVISION", "UPSTREAM-REVISION"}, {"upstream/LICENSE", "LICENSE"}, {"upstream/README.md", "UPSTREAM-README.md"}, {"overlay/delegation.md", "delegation.md"}, {"overlay/hooks/session-start.sh", "claude-hooks/session-start.sh"}} {
 		b, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(pair[0])))
 		if err != nil {
 			return nil, err

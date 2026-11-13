@@ -359,3 +359,24 @@ func TestNoReplaceRace(t *testing.T) {
 		t.Fatal(left)
 	}
 }
+
+func TestInstalledSetup(t *testing.T) {
+	dir, env := isolated(t)
+	cmd := exec.Command("sh", filepath.Join(rootpath(t), "plugins/pstack/bin/pstack-relay"), "setup", "--yes", "--json", "--source", rootpath(t))
+	cmd.Dir = dir
+	cmd.Env = env
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
+	b, err := cmd.Output()
+	if err != nil {
+		t.Fatalf("installed setup: %v: %s", err, stderr.String())
+	}
+	result := object(t, b)
+	sheet, err := os.ReadFile(filepath.Join(dir, "config/pstack-relay/pstack-models.md"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(sheet) != result["sheet"] || !strings.Contains(string(sheet), "interrogate reviewers:") {
+		t.Fatalf("installed setup did not create the role sheet: %s", b)
+	}
+}

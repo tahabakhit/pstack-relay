@@ -16,7 +16,7 @@ func fixture(t *testing.T) string {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for name, data := range map[string]string{"overlay/bin/pstack-relay": "#!/bin/sh\necho relay\n", "overlay/lib/relay.awk": "# awk support\n", "upstream/REVISION": "0000000000000000000000000000000000000000\n", "internal/plugin/adaptations.json": "[]", "upstream/skills/example/SKILL.md": "---\nname: example\n---\nbody\n", "upstream/skills/example/references/ref.md": "unchanged\n", "upstream/agents/example.md": "agent\n", "upstream/LICENSE": "MIT\n", "upstream/README.md": "README\n", "overlay/delegation.md": "delegation\n", "overlay/hooks/session-start.sh": string(hook)} {
+	for name, data := range map[string]string{"overlay/bin/pstack-relay": "#!/bin/sh\necho relay\n", "overlay/lib/relay.awk": "# awk support\n", "upstream/REVISION": "0000000000000000000000000000000000000000\n", "internal/plugin/adaptations.json": "[]", "upstream/skills/setup-pstack/SKILL.md": "setup template\n", "upstream/skills/example/SKILL.md": "---\nname: example\n---\nbody\n", "upstream/skills/example/references/ref.md": "unchanged\n", "upstream/agents/example.md": "agent\n", "upstream/LICENSE": "MIT\n", "upstream/README.md": "README\n", "overlay/delegation.md": "delegation\n", "overlay/hooks/session-start.sh": string(hook)} {
 		p := filepath.Join(root, filepath.FromSlash(name))
 		if err := os.MkdirAll(filepath.Dir(p), 0755); err != nil {
 			t.Fatal(err)
