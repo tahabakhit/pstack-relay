@@ -52,7 +52,7 @@ func TestBuild(t *testing.T) {
 			}
 		})
 	}
-	for _, name := range []string{".agents/plugins/marketplace.json", ".claude-plugin/marketplace.json", "plugins/pstack-rex/.codex-plugin/plugin.json", "plugins/pstack-rex/.claude-plugin/plugin.json", "plugins/pstack-rex/hooks/hooks.json"} {
+	for _, name := range []string{".agents/plugins/marketplace.json", ".claude-plugin/marketplace.json", "plugins/pstack-rex/.codex-plugin/plugin.json", "plugins/pstack-rex/.claude-plugin/plugin.json", "plugins/pstack-rex/claude-hooks/hooks.json"} {
 		b, err := os.ReadFile(filepath.Join(root, name))
 		if err != nil {
 			t.Fatal(err)
@@ -73,7 +73,7 @@ func TestBuild(t *testing.T) {
 			return os.WriteFile(filepath.Join(root, "plugins/pstack-rex/extra"), nil, 0644)
 		}},
 		{"non-executable hook", func(root string) error {
-			return os.Chmod(filepath.Join(root, "plugins/pstack-rex/hooks/session-start.sh"), 0644)
+			return os.Chmod(filepath.Join(root, "plugins/pstack-rex/claude-hooks/session-start.sh"), 0644)
 		}},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
@@ -115,7 +115,7 @@ func TestSessionHook(t *testing.T) {
 					t.Fatal(err)
 				}
 			}
-			cmd := exec.Command("sh", filepath.Join(pluginPath, "hooks/session-start.sh"), "codex")
+			cmd := exec.Command("sh", filepath.Join(pluginPath, "claude-hooks/session-start.sh"), "codex")
 			cmd.Env = append(os.Environ(), "PSTACK_REX_SHEET="+sheetPath)
 			b, err := cmd.Output()
 			if err != nil {
