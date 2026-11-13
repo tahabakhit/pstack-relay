@@ -1,8 +1,10 @@
 # Configuration reference
 
+The runtime script ships in the installed plugin. In examples below, replace `<plugin root>` with the absolute directory that holds `delegation.md`. Run the script by path, without adding it to `PATH`.
+
 ## Shared sheet
 
-The default path is `${XDG_CONFIG_HOME:-$HOME/.config}/pstack-rex/pstack-models.md`. `PSTACK_REX_SHEET` overrides it. The `setup`, `models`, `resolve`, and `doctor` commands also accept `--sheet <path>`.
+The default path is `${XDG_CONFIG_HOME:-$HOME/.config}/pstack-relay/pstack-models.md`. `PSTACK_RELAY_SHEET` overrides it. The `setup`, `models`, `resolve`, and `doctor` commands also accept `--sheet <path>`.
 
 Each role line has this grammar:
 
@@ -31,43 +33,49 @@ A comma-separated value supplies seats. The calling skill decides how to use the
 | `session hook: on` | Enables the Claude session reminder. This is the default. |
 | `session hook: off` | Disables the Claude session reminder. Codex ships no hook. |
 
-`pstack-rex models` prints the sheet. `pstack-rex models --json` includes its path, parsed roles, and formatted text. `models --set` replaces a literal line, or creates it if absent:
+`<plugin root>/bin/pstack-relay models` prints the sheet. `<plugin root>/bin/pstack-relay models --json` includes its path, parsed roles, and formatted text. `models --set` replaces a literal line, or creates it if absent:
 
 ```zsh
-pstack-rex models --set 'interrogate reviewers=claude:opus @xhigh, codex:gpt-6.1-sol @high'
-pstack-rex models --set 'default effort=session'
-pstack-rex models --set 'session hook=off'
+"<plugin root>/bin/pstack-relay" models --set 'interrogate reviewers=claude:opus @xhigh, codex:gpt-6.1-sol @high'
+"<plugin root>/bin/pstack-relay" models --set 'default effort=session'
+"<plugin root>/bin/pstack-relay" models --set 'session hook=off'
 ```
 
-Use the full literal name with `--set` to replace a grouped role line. Component lookup applies to resolution, not updates. Setup preserves an existing sheet unless `--force` is given.
+Use the full literal name with `--set` to replace a grouped role line. Component lookup applies to resolution, not updates. Setup preserves an existing sheet unless `--force` is given. Changes through `models --set` do not reinstall plugins.
 
 ## Environment variables
 
 | Variable | Meaning |
 | --- | --- |
-| `PSTACK_REX_SHEET` | Overrides the shared sheet path for the CLI and Claude hook. |
+| `PSTACK_RELAY_SHEET` | Overrides the shared sheet path for the CLI and Claude hook. |
 | `XDG_CONFIG_HOME` | Supplies the default configuration directory, otherwise `$HOME/.config`. |
-| `PSTACK_REX_STATE` | Overrides the Rex worker state root. Parent and worker must use the same root. |
-| `TMPDIR` | Supplies the default Rex state base, otherwise `/tmp`. The root is `<base>/pstack-rex-<uid>/rex`. State need not survive a reboot. |
-| `ORCA_TERMINAL_HANDLE` | Detects Orca when nonempty, ahead of Rex. |
+| `PSTACK_RELAY_STATE` | Overrides the worker state base. Rex and hc use separate subdirectories. Parent and worker must use the same root. |
+| `TMPDIR` | Supplies the default state base, otherwise `/tmp`. Workers use `<base>/pstack-relay-<uid>/rex` or `<base>/pstack-relay-<uid>/hc`. State need not survive a reboot. |
+| `ORCA_TERMINAL_HANDLE` | Detects Orca when nonempty, ahead of Rex and hc. |
 | `REX_SESSION`, `REX_BLOCK` | Detect Rex when both are nonempty and Orca is not detected. |
+| `HC_TERMINAL_ID` | Detects hc when nonempty and neither Orca nor Rex was detected. |
 | `CLAUDECODE` | Detects a Claude parent when equal to `1`. |
 | `CODEX_THREAD_ID` | Detects a Codex parent when nonempty and Claude was not detected. |
-| `PI_CODING_AGENT`, `PI_SESSION` | Detect a Pi parent after Claude and Codex, when the first equals `1` or the second is nonempty. Pi parent support is after 1.0. |
+| `PI_CODING_AGENT`, `PI_SESSION` | Detect a Pi parent after Claude and Codex, when the first equals `1` or the second is nonempty. Pi parent acceptance remains pending. |
 
 ## Resolver modes
 
-`pstack-rex resolve --role '<role>'` prints a JSON array of seats. It does not start workers. `--parent claude|codex|pi` and `--backend orca|rex|none` override detection for inspection.
+`<plugin root>/bin/pstack-relay resolve --role '<role>'` prints a JSON array of seats. It does not start workers. `--parent claude|codex|pi` and `--backend orca|rex|hc|none` override detection for inspection.
 
 | Mode | Condition | Action |
 | --- | --- | --- |
 | `native` | Bare model, parent's harness, or parent-model alias | Use the parent's native subagent tool. |
 | `orca` | Another harness, Orca detected, and target is not Pi | Start the returned Orca command with the brief file. |
-| `rex` | Another harness and Rex detected | Start the returned `pstack-rex rex start` command with the brief file. |
+| `rex` | Another harness and Rex detected | Start the returned `<plugin root>/bin/pstack-relay rex start` command with the brief file. |
+| `hc` | Another harness and hc detected | Run the returned script command with the brief file. |
 | `fallback` | Another harness without a backend, or Pi on Orca | Run native on the parent's model and report the substitution. |
 
 An undetected parent also produces `native`, with a diagnostic note. Resolve the missing parent before treating that placement as a cross-harness decision.
 
 `--own-worktree` requests isolation when the upstream skill requires it. `--worktree-own` is an alias. Orca commands then include `--worktree new-child --base-branch <current-branch>`. A detached checkout cannot supply that branch. Native worktrees are created by the parent as described in [the delegation contract](../overlay/delegation.md).
 
-Rex commands accept `pstack-rex rex start --harness <harness> --model <model> --effort <effort> --brief <file>`, with optional `--own-worktree`. The worker returns text with `pstack-rex rex report --id <id> --file <file>`, or reads stdin when `--file -`. `pstack-rex rex wait --id <id> --seconds <n>` returns its state. Its default wait is 540 seconds, after which an unreported active worker remains `running`.
+Rex commands accept `<plugin root>/bin/pstack-relay rex start --harness <harness> --model <model> --effort <effort> --brief <file>`, with optional `--own-worktree`. The worker returns text with `<plugin root>/bin/pstack-relay rex report --id <id> --file <file>`, or reads stdin when `--file -`. `<plugin root>/bin/pstack-relay rex wait --id <id> --seconds <n>` returns its state. Its default wait is 540 seconds, after which an unreported active worker remains `running`.
+
+hc commands accept `"<plugin root>/bin/pstack-relay" hc start --harness <harness> --model <model> --brief <file>`, with optional `--effort` and `--own-worktree`. The worker receives instructions to report with `hc send` into the parent's terminal. Long reports can be written to the returned `state_dir`'s `result.md` and sent by absolute path.
+
+Wait with `"<plugin root>/bin/pstack-relay" hc wait --id <id> --seconds <n>`, or let hc notes wake the parent. The script reports hc states and returns a saved result file or recent terminal output. A terminal becoming idle or exiting does not establish successful work. Verify the worker's report. Use `hc keys <name> ...` only to answer the worker's startup trust dialog. See [herdr-core commands](https://github.com/herdrdev/herdr-core/blob/master/docs/commands.md).

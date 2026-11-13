@@ -1,14 +1,15 @@
-pstack-rex is distributed under the MIT license in LICENSE.
+pstack-relay is distributed under the MIT license in LICENSE.
 
 This distribution embeds pstack from https://github.com/cursor/plugins,
 originally Copyright (c) 2026 Lauren Tan, under the MIT license.
 The pristine upstream license is upstream/LICENSE in source,
-LICENSE.upstream in binary archives, and LICENSE in the installed bundle.
+LICENSE in the installed plugin and in the plugin archive.
 The source revision is in upstream/REVISION.
 Generated skill and agent entrypoints add a delegation reference pointer.
 Two source-hash-checked adaptations replace Cursor model setup and fallback
 bootstrap paths. The pristine source remains unchanged.
 
 Vendored pstack helper scripts are preserved source material. Some require Bun,
-Node.js or other upstream tools. Go CI checks the source inventory, runtime
-adapter and installer. It does not run the upstream helper-script test suites.
+Node.js or other upstream tools. Go CI checks the source inventory, generated
+plugin, and runtime fixtures. It does not run the upstream helper-script test
+suites.
