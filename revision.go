@@ -6,3 +6,8 @@ import _ "embed"
 //
 //go:embed upstream/REVISION
 var UpstreamRevision string
+
+// SetupTemplate is upstream's role vocabulary, embedded for installed binaries.
+//
+//go:embed upstream/skills/setup-pstack/SKILL.md
+var SetupTemplate string
