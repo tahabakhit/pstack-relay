@@ -1,50 +1,31 @@
-# Review a Cursor pstack update
+# Upstream maintenance
 
-Keep third-party checkouts outside this repository. Use a clean Cursor plugins checkout at an exact commit. The examples use `/tmp/cursor` and a shell variable containing the full SHA.
+## Source and generated files
 
-```zsh
-gh repo clone cursor/plugins /tmp/cursor
-revision=$(git -C /tmp/cursor rev-parse HEAD)
-go run ./cmd/upstream check
-go run ./cmd/upstream update --source /tmp/cursor --revision "$revision"
-```
+`upstream/` contains Cursor's pristine pstack source. `upstream/REVISION` records the imported commit. `pstack-rex version` prints the plugin version and that revision.
 
-`update` imports tracked `pstack/` files, records hashes and executable modes, and writes the candidate manifest and review report. It leaves compatibility approval unchanged. A changed manifest makes `check` fail until explicit acceptance.
+The plugin generator combines upstream skills and agents with `overlay/delegation.md`, the Claude session hook, and harness manifests. Generated entrypoints add a delegation reference pointer. Source-hash-checked adaptations in [`internal/plugin/adaptations.json`](../internal/plugin/adaptations.json) replace Cursor model setup and the agent's fallback bootstrap path. The original files in `upstream/` remain unchanged.
 
-1. Review the complete source diff, including additions, deletions, scripts, nested references, and role changes.
-2. Read `internal/bundle/review-report.json`. Review changed delegation candidates and the adapter's treatment of their semantics.
-3. Resolve unsupported capabilities and conflicting instructions in the runtime adaptation. Keep the source import pristine.
-	Review `internal/bundle/adaptations.json`. Its exact source hashes and anchors must still match. An upstream change to either adapted file requires explicit patch review even after inventory acceptance.
-4. Run relevant upstream helper tests with their declared dependencies when those helpers change.
-5. Accept only the reviewed candidate, then run the local checks.
+## Sync locally
+
+From the repository root, run:
 
 ```zsh
-go run ./cmd/upstream accept --source /tmp/cursor --revision "$revision"
-go run ./cmd/upstream check --source /tmp/cursor --revision "$revision"
-go test -race ./...
+go run ./cmd/upstream sync
+go run ./cmd/pstack-rex plugin build
+go test ./...
 go vet ./...
-bash scripts/package.sh /tmp/pstack-rex-packages
+go run ./cmd/pstack-rex plugin build --check
 ```
 
-Commit the imported source, both manifests, review report, compatibility baseline, and any adapter changes together. `accept` records an explicit inventory baseline. It does not perform semantic review for you.
+`sync` clones `cursor/plugins` into a temporary directory outside the checkout and replaces the upstream snapshot when its revision changes. It defaults to the `main` branch. `--repo <URL>` and `--ref <branch-or-tag>` select another source. `sync --check` validates the recorded revision format without network access. It does not compare the snapshot to remote bytes.
 
-## Files to inspect
+Review the upstream and generated diffs before committing. If a source-hash check fails, review the changed source and update the relevant adaptation deliberately. Read changed helpers' dependency metadata and run their declared checks when applicable. Go tests do not prove every upstream workflow's semantics.
 
-| Path | Purpose |
-| --- | --- |
-| `upstream.lock.json` | Source repository, exact commit, version, file hashes, and modes |
-| `internal/bundle/manifest.json` | Embedded copy of the lock |
-| `internal/bundle/_upstream/` | Pristine source data, excluded from Go package discovery |
-| `internal/bundle/review-report.json` | Changed files, lexical delegation candidates, and role candidates |
-| `internal/bundle/compatibility.json` | Explicitly accepted manifest hash |
-| `internal/bundle/adaptations.json` | Source-hash-checked model-setup and bootstrap patches |
+Keep third-party checkouts outside this repository. Preserve the upstream license and attribution in [NOTICE](../NOTICE).
 
-The inventory covers imported files and scans UTF-8 text for known terms. It includes false positives and can miss unfamiliar wording. File integrity, lexical classification, and semantic workflow compatibility are different checks. Review unsupported requirements and new delegation forms even when the report has no new terms.
+## Scheduled sync
 
-## Automated proposals
+[The workflow](../.github/workflows/upstream.yml) runs daily at 07:23 UTC or by manual dispatch on the default branch. [Its script](../scripts/check-upstream-update.sh) syncs upstream, builds the plugin, runs Go tests and vet, scans staged changes, and opens a pull request for a changed revision.
 
-[The updater workflow](../.github/workflows/upstream.yml) runs weekly or by manual dispatch on the default branch. It clones into the runner's temporary directory, validates the trusted baseline, imports candidate source as data, and proposes a draft PR when the file inventory changes. It never accepts compatibility or merges a proposal.
-
-The updater checks candidate build and vet after import. Candidate runtime tests and installer acceptance still require review. PRs created with `GITHUB_TOKEN` do not automatically trigger ordinary push or pull-request workflows. Dispatch CI on the candidate branch, or push the reviewed acceptance commit with maintainer credentials, then require passing candidate checks before merging.
-
-Package creation produces local archives and checksums. It does not publish a release, upload assets, or change a package registry. See [contribution checks](../CONTRIBUTING.md).
+When those local validation steps pass, the script requests squash auto-merge. When validation fails, it labels the pull request `upstream-sync-failed`. GitHub settings and required checks govern whether auto-merge completes. The first hosted auto-merge run remains unverified. See [status](status.md).
