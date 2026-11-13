@@ -6,7 +6,28 @@ self=$self_dir/$(basename -- "$0")
 plugin_root=$(dirname -- "$self_dir")
 lib=$plugin_root/lib/relay.awk
 export self
-usage() { printf 'Usage: pstack-relay %s\n' "$command" >&2; exit 0; }
+usage() {
+    cat <<'EOF'
+Usage: pstack-relay <command> [flags]
+  models [--sheet PATH] [--set ROLE=VALUE] [--json]
+  resolve --role ROLE [--sheet PATH] [--parent claude|codex|pi]
+          [--backend orca|rex|hc|none] [--own-worktree|--worktree-own] [--json]
+  setup [--sheet PATH] [--source REPO] [--dry-run] [--yes] [--force] [--json]
+  doctor [--sheet PATH] [--json]
+  rex start --harness claude|codex|pi --model MODEL --brief PATH
+            [--effort EFFORT] [--own-worktree]
+  rex report --id ID [--file PATH|-]
+  rex wait --id ID [--seconds N]
+  hc start --harness claude|codex|pi --model MODEL --brief PATH
+           [--effort EFFORT] [--own-worktree]
+  hc wait --id ID [--seconds N]
+  version [--json]
+  help
+All commands accept --help or -h. Wait defaults to 100 seconds.
+Boolean flags also accept =true or =false.
+EOF
+    exit 0
+}
 fatal() { printf 'pstack-relay: %s\n' "$*" >&2; exit 1; }
 # Pass values through the environment: awk -v interprets backslash escapes.
 quote() { text=$1 action=quote LC_ALL=C awk -f "$lib"; }
@@ -165,6 +186,9 @@ setup|doctor)
         esac
     done
     export sheet
+    if [ "$command" = setup ] && [ "$dry" = false ] && [ "$yes" = false ]; then
+        [ -t 0 ] || fatal 'setup requires terminal input; inspect setup --dry-run, then rerun with --yes'
+    fi
     scratchdir; discover
     if [ "$command" = doctor ]; then
         checks='' failed=false installed=0
@@ -219,7 +243,7 @@ setup|doctor)
     create=false migrated=false
     if [ "$force" = true ] || [ ! -e "$sheet" ]; then
         create=true
-        legacy=$HOME/.config/pstack-rex/pstack-models.md
+        legacy=${PSTACK_REX_SHEET:-${XDG_CONFIG_HOME:-$HOME/.config}/pstack-rex/pstack-models.md}
         if [ "$force" = false ] && [ -f "$legacy" ]; then
             sheetfile=$legacy asjson=false action=models LC_ALL=C awk -f "$lib" > "$scratch/sheet"
             migrated=true
@@ -294,7 +318,8 @@ rex|hc)
     backend=$command; export backend
     [ "$#" -gt 0 ] || fatal "$backend needs start, report or wait"
     operation=$1; shift
-    h='' m='' e='' own=false brief='' id='' file=- seconds=540
+    case $operation in --help|-h) usage;; esac
+    h='' m='' e='' own=false brief='' id='' file=- seconds=100
     while [ "$#" -gt 0 ]; do
         case $1 in
             --help|-h) usage;;
@@ -409,6 +434,6 @@ rex|hc)
     *) fatal "unknown $backend command $operation";;
     esac
     ;;
-help|--help|-h) printf 'Usage: pstack-relay <models|resolve|setup|doctor|rex|hc|version>\n';;
+help|--help|-h) usage;;
 *) fatal "unknown command $command";;
 esac

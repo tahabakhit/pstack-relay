@@ -12,7 +12,7 @@ Configure the shared pstack model sheet. The plugin root is the directory that h
 
 ## Steps
 
-1. Run `<plugin root>/bin/pstack-relay setup --dry-run` to inspect installed harnesses, model catalogs, the starter sheet, and installation commands. Run `<plugin root>/bin/pstack-relay setup` to create the sheet and install the plugin into detected harnesses. Existing sheets are preserved.
+1. Run `<plugin root>/bin/pstack-relay setup --dry-run` to inspect installed harnesses, model catalogs, the starter sheet, and installation commands. Show the dry-run output to the user and ask them to confirm the sheet and installation commands. After they confirm, run `<plugin root>/bin/pstack-relay setup --yes` to create the sheet and install the plugin into detected harnesses. Existing sheets are preserved.
 2. Run `<plugin root>/bin/pstack-relay models` and read `${PSTACK_RELAY_SHEET:-${XDG_CONFIG_HOME:-$HOME/.config}/pstack-relay/pstack-models.md}`. Ask which harness, model, and effort the user wants for each role. Preserve explicit preferences and panel order. A catalog lists models; it does not prove account access.
 3. Make changes with `<plugin root>/bin/pstack-relay models --set 'ROLE=HARNESS:MODEL @EFFORT'`. Use a comma-separated value for a panel. Each entry is one seat. Bare models run on the parent's harness. `inherit-parent` and `auto` use the parent's model. `default effort: session` omits an explicit effort. `session hook: off` disables the Claude session reminder.
 4. Run `<plugin root>/bin/pstack-relay models` to verify the saved choices. Report the sheet path and assignments. Before delegating, run `<plugin root>/bin/pstack-relay resolve --role 'ROLE'` and follow each placement.

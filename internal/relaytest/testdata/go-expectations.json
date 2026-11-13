@@ -6122,7 +6122,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -6235,7 +6235,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -6293,7 +6293,7 @@
         "pstack@pstack-relay"
       ]
     ],
-    "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
+    "sheet": "feature, refactoring: codex:gpt-first @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
   },
   "setup/force invalid": {
     "error": false,
@@ -6375,7 +6375,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -6433,7 +6433,7 @@
         "pstack@pstack-relay"
       ]
     ],
-    "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
+    "sheet": "feature, refactoring: codex:gpt-first @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
   },
   "setup/install-failure": {
     "error": true
@@ -6524,7 +6524,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -6582,7 +6582,7 @@
         "pstack@pstack-relay"
       ]
     ],
-    "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
+    "sheet": "feature, refactoring: codex:gpt-first @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
   },
   "setup/no-multi-agent": {
     "error": false,
@@ -6665,7 +6665,7 @@
         "Enable Codex native subagents with `codex features enable multi_agent` (or [features] multi_agent = true in ~/.codex/config.toml)."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -6723,7 +6723,7 @@
         "pstack@pstack-relay"
       ]
     ],
-    "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
+    "sheet": "feature, refactoring: codex:gpt-first @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
   },
   "setup/preserve": {
     "error": false,
@@ -6941,7 +6941,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -7028,7 +7028,7 @@
       ],
       "notes": [],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: claude:opus @xhigh\nbug-fix: claude:opus @xhigh\nperf-issue: claude:opus @xhigh\nhillclimb: claude:opus @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: claude:opus @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: claude:opus @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: claude:opus @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, claude:opus @xhigh\narena cross-judge pool: claude:opus @xhigh, claude:opus @xhigh\nswarm workers: claude:opus @xhigh\narchitect runners: claude:opus @xhigh, claude:opus @xhigh\ninterrogate reviewers: claude:opus @xhigh, claude:opus @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: claude:opus @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, claude:opus @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -7094,7 +7094,7 @@
       ],
       "notes": [],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: codex:gpt-first @xhigh\nhardest tasks: codex:gpt-first @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: codex:gpt-first @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: codex:gpt-first @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: codex:gpt-first @xhigh\narena runners: codex:gpt-first @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: codex:gpt-first @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: codex:gpt-first @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: codex:gpt-first @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nfixture reviewer: codex:gpt-first @xhigh\nfixture panel: codex:gpt-first @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -7151,7 +7151,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: pi:openai/gpt-a @xhigh\nbug-fix: pi:openai/gpt-a @xhigh\nperf-issue: pi:openai/gpt-a @xhigh\nhillclimb: pi:openai/gpt-a @xhigh\njudgment and prose: pi:openai/gpt-a @xhigh\nhardest tasks: pi:openai/gpt-a @xhigh\nhow explorer: pi:openai/gpt-a @xhigh\nhow explainer: pi:openai/gpt-a @xhigh\nwhy investigators: pi:openai/gpt-a @xhigh\nwhy synthesizer: pi:openai/gpt-a @xhigh\nreflect tooling: pi:openai/gpt-a @xhigh\nreflect judgment, divergent, synthesizer: pi:openai/gpt-a @xhigh\narena runners: pi:openai/gpt-a @xhigh, pi:openai/gpt-a @xhigh\narena cross-judge pool: pi:openai/gpt-a @xhigh, pi:openai/gpt-a @xhigh\nswarm workers: pi:openai/gpt-a @xhigh\narchitect runners: pi:openai/gpt-a @xhigh, pi:openai/gpt-a @xhigh\ninterrogate reviewers: pi:openai/gpt-a @xhigh, pi:openai/gpt-a @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: pi:openai/gpt-a @xhigh\nfixture reviewer: pi:openai/gpt-a @xhigh\nfixture panel: pi:openai/gpt-a @xhigh, pi:openai/gpt-a @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -7218,7 +7218,7 @@
   },
   "text/setup": {
     "error": false,
-    "output": "Shared sheet: {tmp}/sheet.md\nfeature, refactoring: codex:c @xhigh\nbug-fix: codex:c @xhigh\nperf-issue: codex:c @xhigh\nhillclimb: codex:c @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:c @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:c @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:c @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:c @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:c @xhigh\nswarm workers: codex:c @xhigh\narchitect runners: claude:opus @xhigh, codex:c @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\ncodex: installed=true models=c, gpt-first, gpt-next \nclaude: installed=true models=opus, sonnet, haiku, fable aliases; Claude has no model list command\npi: installed=true models=openai/gpt-a \n$ codex plugin marketplace add tahabakhit/pstack-relay\n  OK: installed\n$ codex plugin add pstack@pstack-relay\n  OK: installed\n$ claude plugin marketplace add tahabakhit/pstack-relay\n  OK: installed\n$ claude plugin install pstack@pstack-relay\n  OK: installed\nPi is discovered for the sheet; Pi plugin installation is not supported yet.\n",
+    "output": "Shared sheet: {tmp}/sheet.md\nfeature, refactoring: codex:c @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\ncodex: installed=true models=c, gpt-first, gpt-next \nclaude: installed=true models=opus, sonnet, haiku, fable aliases; Claude has no model list command\npi: installed=true models=openai/gpt-a \n$ codex plugin marketplace add tahabakhit/pstack-relay\n  OK: installed\n$ codex plugin add pstack@pstack-relay\n  OK: installed\n$ claude plugin marketplace add tahabakhit/pstack-relay\n  OK: installed\n$ claude plugin install pstack@pstack-relay\n  OK: installed\nPi is discovered for the sheet; Pi plugin installation is not supported yet.\n",
     "calls": [
       [
         "codex",
@@ -7275,7 +7275,7 @@
         "pstack@pstack-relay"
       ]
     ],
-    "sheet": "feature, refactoring: codex:c @xhigh\nbug-fix: codex:c @xhigh\nperf-issue: codex:c @xhigh\nhillclimb: codex:c @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:c @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:c @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:c @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:c @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:c @xhigh\nswarm workers: codex:c @xhigh\narchitect runners: claude:opus @xhigh, codex:c @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
+    "sheet": "feature, refactoring: codex:c @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
   },
   "text/version": {
     "error": false,
@@ -7357,7 +7357,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:c @xhigh\nbug-fix: codex:c @xhigh\nperf-issue: codex:c @xhigh\nhillclimb: codex:c @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:c @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:c @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:c @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:c @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:c @xhigh\nswarm workers: codex:c @xhigh\narchitect runners: claude:opus @xhigh, codex:c @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:c @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -7466,7 +7466,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:c @xhigh\nbug-fix: codex:c @xhigh\nperf-issue: codex:c @xhigh\nhillclimb: codex:c @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:c @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:c @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:c @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:c @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:c @xhigh\nswarm workers: codex:c @xhigh\narchitect runners: claude:opus @xhigh, codex:c @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:c @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -7575,7 +7575,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -7684,7 +7684,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:c @xhigh\nbug-fix: codex:c @xhigh\nperf-issue: codex:c @xhigh\nhillclimb: codex:c @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:c @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:c @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:c @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:c @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:c @xhigh\nswarm workers: codex:c @xhigh\narchitect runners: claude:opus @xhigh, codex:c @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:c @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -7793,7 +7793,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:c @xhigh\nbug-fix: codex:c @xhigh\nperf-issue: codex:c @xhigh\nhillclimb: codex:c @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:c @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:c @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:c @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:c @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:c @xhigh\nswarm workers: codex:c @xhigh\narchitect runners: claude:opus @xhigh, codex:c @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:c @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -7902,7 +7902,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -8011,7 +8011,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -8120,7 +8120,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:c @xhigh\nbug-fix: codex:c @xhigh\nperf-issue: codex:c @xhigh\nhillclimb: codex:c @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:c @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:c @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:c @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:c @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:c @xhigh\nswarm workers: codex:c @xhigh\narchitect runners: claude:opus @xhigh, codex:c @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:c @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -8229,7 +8229,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:c @xhigh\nbug-fix: codex:c @xhigh\nperf-issue: codex:c @xhigh\nhillclimb: codex:c @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:c @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:c @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:c @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:c @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:c @xhigh\nswarm workers: codex:c @xhigh\narchitect runners: claude:opus @xhigh, codex:c @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:c @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -8338,7 +8338,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -8447,7 +8447,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nbug-fix: codex:gpt-first @xhigh\nperf-issue: codex:gpt-first @xhigh\nhillclimb: codex:gpt-first @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:gpt-first @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:gpt-first @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:gpt-first @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:gpt-first @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:gpt-first @xhigh\nswarm workers: codex:gpt-first @xhigh\narchitect runners: claude:opus @xhigh, codex:gpt-first @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:gpt-first @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:gpt-first @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -8556,7 +8556,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:a\"b @xhigh\nbug-fix: codex:a\"b @xhigh\nperf-issue: codex:a\"b @xhigh\nhillclimb: codex:a\"b @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:a\"b @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:a\"b @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:a\"b @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:a\"b @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:a\"b @xhigh\nswarm workers: codex:a\"b @xhigh\narchitect runners: claude:opus @xhigh, codex:a\"b @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:a\"b @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:a\"b @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:a\"b @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -8665,7 +8665,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:c @xhigh\nbug-fix: codex:c @xhigh\nperf-issue: codex:c @xhigh\nhillclimb: codex:c @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:c @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:c @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:c @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:c @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:c @xhigh\nswarm workers: codex:c @xhigh\narchitect runners: claude:opus @xhigh, codex:c @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:c @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -8774,7 +8774,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:c @xhigh\nbug-fix: codex:c @xhigh\nperf-issue: codex:c @xhigh\nhillclimb: codex:c @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:c @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:c @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:c @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:c @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:c @xhigh\nswarm workers: codex:c @xhigh\narchitect runners: claude:opus @xhigh, codex:c @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:c @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:c @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -8882,7 +8882,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:é @xhigh\nbug-fix: codex:é @xhigh\nperf-issue: codex:é @xhigh\nhillclimb: codex:é @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:é @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:é @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:é @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:é @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:é @xhigh\nswarm workers: codex:é @xhigh\narchitect runners: claude:opus @xhigh, codex:é @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:é @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:é @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:é @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [
@@ -9013,7 +9013,7 @@
         "Pi is discovered for the sheet; Pi plugin installation is not supported yet."
       ],
       "path": "{tmp}/sheet.md",
-      "sheet": "feature, refactoring: codex:model-🚀 @xhigh\nbug-fix: codex:model-🚀 @xhigh\nperf-issue: codex:model-🚀 @xhigh\nhillclimb: codex:model-🚀 @xhigh\njudgment and prose: claude:opus @xhigh\nhardest tasks: claude:opus @xhigh\nhow explorer: codex:model-🚀 @xhigh\nhow explainer: claude:opus @xhigh\nwhy investigators: codex:model-🚀 @xhigh\nwhy synthesizer: claude:opus @xhigh\nreflect tooling: codex:model-🚀 @xhigh\nreflect judgment, divergent, synthesizer: claude:opus @xhigh\narena runners: claude:opus @xhigh, codex:model-🚀 @xhigh\narena cross-judge pool: claude:opus @xhigh, codex:model-🚀 @xhigh\nswarm workers: codex:model-🚀 @xhigh\narchitect runners: claude:opus @xhigh, codex:model-🚀 @xhigh\ninterrogate reviewers: claude:opus @xhigh, codex:model-🚀 @xhigh\ndefault effort: session\nsession hook: on\n"
+      "sheet": "feature, refactoring: codex:model-🚀 @xhigh\nfixture reviewer: claude:opus @xhigh\nfixture panel: claude:opus @xhigh, codex:model-🚀 @xhigh\ndefault effort: session\nsession hook: on\n"
     },
     "calls": [
       [

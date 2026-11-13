@@ -224,11 +224,11 @@ func TestHCResolver(t *testing.T) {
 	}
 }
 func TestPathsMigrationAndAtomicWrites(t *testing.T) {
-	for _, mode := range []string{"home", "xdg", "override", "migration", "force", "dry"} {
+	for _, mode := range []string{"home", "xdg", "override", "migration", "migration-home", "migration-override", "force", "dry"} {
 		t.Run(mode, func(t *testing.T) {
 			dir, env := isolated(t)
 			sheet := filepath.Join(dir, "config/pstack-relay/pstack-models.md")
-			if mode == "home" {
+			if mode == "home" || mode == "migration-home" {
 				env = append(env, "XDG_CONFIG_HOME=")
 				sheet = filepath.Join(dir, ".config/pstack-relay/pstack-models.md")
 			}
@@ -237,8 +237,17 @@ func TestPathsMigrationAndAtomicWrites(t *testing.T) {
 				env = append(env, "PSTACK_RELAY_SHEET="+sheet)
 			}
 			args := []string{"setup", "--yes", "--json"}
-			if mode == "migration" || mode == "force" || mode == "dry" {
-				write(t, filepath.Join(dir, ".config/pstack-rex/pstack-models.md"), "mine: codex:mine @low\nsession hook: off\n")
+			legacy := filepath.Join(dir, "config/pstack-rex/pstack-models.md")
+			if mode == "migration-home" {
+				legacy = filepath.Join(dir, ".config/pstack-rex/pstack-models.md")
+			}
+			if mode == "migration-override" {
+				write(t, legacy, "wrong: auto\n")
+				legacy = filepath.Join(dir, "legacy custom.md")
+				env = append(env, "PSTACK_REX_SHEET="+legacy)
+			}
+			if strings.HasPrefix(mode, "migration") || mode == "force" || mode == "dry" {
+				write(t, legacy, "mine: codex:mine @low\nsession hook: off\n")
 			}
 			if mode == "force" {
 				args = append(args, "--force")
@@ -259,15 +268,21 @@ func TestPathsMigrationAndAtomicWrites(t *testing.T) {
 				if !os.IsNotExist(e) {
 					t.Fatal("dry-run wrote sheet")
 				}
+				if !strings.Contains(v["sheet"].(string), "mine: codex:mine @low") {
+					t.Fatalf("dry-run did not preview migration: %s", b)
+				}
 				return
 			}
 			if e != nil {
 				t.Fatal(e)
 			}
-			if mode == "migration" {
+			if strings.HasPrefix(mode, "migration") {
 				if !strings.Contains(string(data), "mine: codex:mine @low") || !strings.Contains(string(b), "Migrated model sheet") {
 					t.Fatal(string(b))
 				}
+			}
+			if mode == "force" && strings.Contains(string(data), "mine:") {
+				t.Fatal("force used legacy sheet")
 			}
 			// Invalid edits must leave the existing file unchanged.
 			_, e = invoke(t, dir, env, "", "models", "--set", "r=bad:model")
@@ -376,7 +391,73 @@ func TestInstalledSetup(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if string(sheet) != result["sheet"] || !strings.Contains(string(sheet), "interrogate reviewers:") {
+	if string(sheet) != result["sheet"] || !strings.HasSuffix(string(sheet), "session hook: on\n") {
 		t.Fatalf("installed setup did not create the role sheet: %s", b)
+	}
+	b, err = invoke(t, dir, env, "", "models", "--json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	parsed := object(t, b)["sheet"].(map[string]any)
+	roles := parsed["roles"].(map[string]any)
+	if len(roles) == 0 || len(parsed["order"].([]any)) != len(roles) {
+		t.Fatalf("installed template has no roles: %s", b)
+	}
+	for role, seats := range roles {
+		if len(seats.([]any)) == 0 {
+			t.Fatalf("role %q has no seats", role)
+		}
+		for _, seat := range seats.([]any) {
+			v := seat.(map[string]any)
+			if v["model"] == "" || v["harness"] == "" || v["effort"] == "" {
+				t.Fatalf("incomplete seat for %q: %v", role, v)
+			}
+		}
+	}
+}
+
+func TestSetupNoninteractive(t *testing.T) {
+	dir, env := isolated(t)
+	_, err := invoke(t, dir, env, "y\n", "setup")
+	if err == nil || !strings.Contains(err.Error(), "rerun with --yes") {
+		t.Fatalf("nonterminal setup: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(dir, "calls")); !os.IsNotExist(err) {
+		t.Fatalf("setup ran discovery before rejecting nonterminal input: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(dir, "config/pstack-relay/pstack-models.md")); !os.IsNotExist(err) {
+		t.Fatal("nonterminal setup wrote a sheet")
+	}
+}
+
+func TestHelp(t *testing.T) {
+	for _, args := range [][]string{{"--help"}, {"models", "--help"}, {"resolve", "--help"}, {"setup", "--help"}, {"doctor", "--help"}, {"version", "--help"}, {"rex", "--help"}, {"hc", "--help"}, {"rex", "start", "--help"}, {"rex", "report", "--help"}, {"rex", "wait", "--help"}, {"hc", "start", "--help"}, {"hc", "wait", "--help"}} {
+		dir, env := isolated(t)
+		b, err := invoke(t, dir, env, "", args...)
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, flag := range []string{"--sheet", "--set", "--role", "--parent", "--backend", "--own-worktree", "--worktree-own", "--source", "--dry-run", "--yes", "--force", "--json", "--harness", "--model", "--brief", "--effort", "--id", "--file", "--seconds"} {
+			if !bytes.Contains(b, []byte(flag)) {
+				t.Fatalf("%q help missing %s: %s", args, flag, b)
+			}
+		}
+	}
+}
+
+func TestNormalizeSymlinkedTemp(t *testing.T) {
+	dir := t.TempDir()
+	physical := filepath.Join(dir, "physical")
+	if err := os.Mkdir(physical, 0700); err != nil {
+		t.Fatal(err)
+	}
+	alias := filepath.Join(dir, "alias")
+	if err := os.Symlink(physical, alias); err != nil {
+		t.Fatal(err)
+	}
+	for _, path := range []string{physical, alias} {
+		if got := normalized(path+"/worktree", alias, "script", ""); got != "{tmp}/worktree" {
+			t.Fatalf("normalization returned %q", got)
+		}
 	}
 }

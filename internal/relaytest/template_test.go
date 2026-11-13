@@ -22,17 +22,9 @@ func templateCases() []templateCase {
 func templateRun(t *testing.T, c templateCase) expected {
 	t.Helper()
 	dir, env := isolated(t)
-	root := rootpath(t)
-	for _, p := range []string{"bin/pstack-relay", "lib/relay.awk"} {
-		b, e := os.ReadFile(filepath.Join(root, "overlay", p))
-		if e != nil {
-			t.Fatal(e)
-		}
-		write(t, filepath.Join(dir, "plugin", p), string(b))
-	}
-	write(t, filepath.Join(dir, "plugin/skills/setup-pstack/SKILL.md"), c.Template)
+	script := fixturePlugin(t, dir, c.Template)
 	env = append(env, "FAKE_MODE="+c.Mode)
-	cmd := exec.Command("sh", filepath.Join(dir, "plugin/bin/pstack-relay"), "setup", "--dry-run", "--json")
+	cmd := exec.Command("sh", script, "setup", "--dry-run", "--json")
 	cmd.Env = env
 	cmd.Dir = dir
 	b, e := cmd.Output()
@@ -41,6 +33,19 @@ func templateRun(t *testing.T, c templateCase) expected {
 	}
 	v := object(t, b)
 	return expected{Output: v["sheet"]}
+}
+func fixturePlugin(t *testing.T, dir, template string) string {
+	t.Helper()
+	root := rootpath(t)
+	for _, p := range []string{"bin/pstack-relay", "lib/relay.awk"} {
+		b, e := os.ReadFile(filepath.Join(root, "overlay", p))
+		if e != nil {
+			t.Fatal(e)
+		}
+		write(t, filepath.Join(dir, "plugin", p), string(b))
+	}
+	write(t, filepath.Join(dir, "plugin/lib/setup-pstack.md"), template)
+	return filepath.Join(dir, "plugin/bin/pstack-relay")
 }
 func TestTemplatePort(t *testing.T) {
 	data, e := os.ReadFile("testdata/template-expectations.json")

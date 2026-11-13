@@ -21,7 +21,6 @@ type fixture struct {
 	Missing   bool
 	Env       map[string]string
 	Config    string
-	Template  string
 	Stdin     string
 	Result    string
 	Process   string
@@ -285,6 +284,9 @@ func normalized(v any, dir, script, id string) any {
 		if id != "" {
 			x = strings.ReplaceAll(x, id, "{id}")
 		}
+		if physical, err := filepath.EvalSymlinks(dir); err == nil {
+			x = strings.ReplaceAll(x, physical, "{tmp}")
+		}
 		x = strings.ReplaceAll(x, dir, "{tmp}")
 		// The new launcher quotes paths in its report instruction.
 		x = strings.ReplaceAll(x, "'{script}'", "{script}")
@@ -309,6 +311,14 @@ func execute(t *testing.T, c fixture, exe, shell string) expected {
 	t.Helper()
 	dir := t.TempDir()
 	script := filepath.Join(rootpath(t), "overlay/bin/pstack-relay")
+	if len(c.Args) > 0 && c.Args[0] == "setup" {
+		data, err := os.ReadFile("testdata/setup-pstack.md")
+		if err != nil {
+			t.Fatal(err)
+		}
+		script = fixturePlugin(t, dir, string(data))
+		exe = script
+	}
 	testbin, e := os.Executable()
 	if e != nil {
 		t.Fatal(e)
