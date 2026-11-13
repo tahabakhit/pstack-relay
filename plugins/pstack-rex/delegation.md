@@ -12,7 +12,7 @@ Read this file before you follow any pstack skill, playbook, or agent definition
 | `readonly: true` | Say in the brief that the subagent must not edit files | Same as Claude Code |
 | `run_in_background: true` | `run_in_background: true` | `spawn_agent` already runs in the background |
 | `AskQuestion` | `AskUserQuestion` | Ask in plain text |
-| The todo list tools | `TaskCreate` and `TaskUpdate`, or `TodoWrite` | `update_plan` |
+| The todo list tools | `TaskCreate` and `TaskUpdate`, or `TodoWrite` | `update_plan`. If the session has no `update_plan`, keep the list in a Markdown file outside the checkout |
 | `pstack-models.mdc` and the `/setup-pstack` rule | The shared model sheet. Run `pstack-rex models` to print it and `pstack-rex setup` to change it | Same as Claude Code |
 | A Cursor model slug such as `claude-opus-5-5-xhigh` | The role's line in the shared model sheet | Same as Claude Code |
 | A search under `~/.cursor/plugins/` for a skill | The skill in this plugin. Use the absolute path your parent gave you, or this plugin's `skills/` directory | Same as Claude Code |
@@ -42,7 +42,12 @@ A brief for an Orca or Rex worker is a complete prompt. Give it the upstream bri
 
 A subagent shares your checkout unless the calling skill gives it its own worktree. That is upstream's rule.
 
-When the skill gives an Orca worker its own worktree, add `--worktree-own` to the resolver call. The seat's `command` then creates a child worktree from your current branch. Before you start the worker, save your uncommitted changes with `git diff HEAD --binary > <file>`. Tell the worker to run `git apply --index <file>` first, so it starts from what you see. Untracked files need `git add -N` before the diff.
+When the skill gives a subagent its own worktree, add `--own-worktree` to the resolver call.
+
+1. Save your uncommitted changes with `git add -N .` and then `git diff HEAD --binary > <file>`.
+2. For an `orca` or `rex` seat, the seat's `command` creates the worktree from your current branch.
+3. For a `native` seat, create the worktree yourself with `git worktree add <path> HEAD` and give the subagent that path. In Claude Code you may use the `Agent` tool's `isolation: "worktree"` instead.
+4. If `<file>` is not empty, tell the subagent to run `git apply --index <file>` in its worktree first, so it starts from what you see.
 
 ## Upstream rules still apply
 

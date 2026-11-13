@@ -89,6 +89,8 @@ func TestTopLevelModel(t *testing.T) {
 		{"trailing comment", `model = "c" # pinned`, "c"},
 		{"quoted key", `"model" = "c"`, "c"},
 		{"single quotes", `model = 'c'`, "c"},
+		{"escaped quote", `model = "a\"b" # note`, `a"b`},
+		{"unterminated", `model = "c`, ""},
 		{"multi-line array first", "x = [\n 1,\n [2]\n]\nmodel = \"c\"", "c"},
 		{"multi-line string first", "notes = \"\"\"\n[hi]\n\"\"\"\nmodel = \"c\"", "c"},
 		{"table only", "[profiles.x]\nmodel = \"b\"", ""},

@@ -174,15 +174,22 @@ func bracketDelta(s string) int {
 }
 
 func tomlString(value string) string {
-	if value == "" {
+	if value == "" || (value[0] != '"' && value[0] != '\'') {
 		return ""
 	}
 	q := value[0]
-	if q != '"' && q != '\'' {
-		return ""
-	}
-	if end := strings.IndexByte(value[1:], q); end >= 0 {
-		return value[1 : end+1]
+	var b strings.Builder
+	for i := 1; i < len(value); i++ {
+		c := value[i]
+		switch {
+		case c == q:
+			return b.String()
+		case c == '\\' && q == '"' && i+1 < len(value):
+			i++
+			b.WriteByte(value[i])
+		default:
+			b.WriteByte(c)
+		}
 	}
 	return ""
 }
