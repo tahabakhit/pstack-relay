@@ -33,7 +33,7 @@ func TestStarter(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if s.DefaultEffort != "session" || len(s.Roles) != 3 || len(s.Roles["new role"]) != 2 {
+			if s.DefaultEffort != "session" || len(s.Roles) != 2 || len(s.Roles["new role"]) != 2 || len(s.Roles["feature, refactoring"]) != 1 {
 				t.Fatalf("lost upstream shape: %#v", s)
 			}
 			for i, seat := range s.Roles["new role"] {
@@ -49,8 +49,12 @@ func TestRealUpstreamTemplate(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(s.Roles["interrogate reviewers"]) != 2 || s.Roles["feature"][0].Effort != "xhigh" {
+	feature, ok := s.Lookup("feature")
+	if !ok || len(s.Roles["interrogate reviewers"]) != 2 || feature[0].Effort != "xhigh" {
 		t.Fatalf("unexpected upstream mapping: %#v", s)
+	}
+	if _, ok := s.Lookup("reflect judgment, divergent, synthesizer"); !ok {
+		t.Fatal("upstream reads this line by its full name")
 	}
 }
 func TestMissingTemplate(t *testing.T) {

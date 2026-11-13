@@ -173,7 +173,7 @@ func (c cli) models(args []string) error {
 	if *set != "" {
 		role, value, ok := strings.Cut(*set, "=")
 		role = strings.TrimSpace(role)
-		if !ok || role == "" || strings.ContainsAny(role, ",:\n\r") || strings.ContainsAny(value, "\n\r") {
+		if !ok || role == "" || strings.ContainsAny(role, ":\n\r") || strings.ContainsAny(value, "\n\r") {
 			return fmt.Errorf("--set requires one role=value[, value]")
 		}
 		edit, err := sheet.Parse(role + ": " + value)
@@ -186,10 +186,11 @@ func (c cli) models(args []string) error {
 		case "session hook":
 			s.SessionHook = edit.SessionHook
 		default:
-			if _, ok := s.Roles[role]; !ok {
-				s.Order = append(s.Order, role)
+			key := edit.Order[0]
+			if _, ok := s.Roles[key]; !ok {
+				s.Order = append(s.Order, key)
 			}
-			s.Roles[role] = edit.Roles[role]
+			s.Roles[key] = edit.Roles[key]
 		}
 		if err := writeSheet(*path, s); err != nil {
 			return err
@@ -276,6 +277,7 @@ func (c cli) setup(args []string) error {
 		return err
 	}
 	catalogs := discover.Discover(c.run)
+	discover.PreferConfigured(catalogs, c.codexConfig())
 	s, err := readSheet(*path)
 	create := *force || errors.Is(err, os.ErrNotExist)
 	if create {
@@ -480,4 +482,16 @@ func checkoutRoot() (string, error) {
 		}
 		dir = parent
 	}
+}
+
+func (c cli) codexConfig() string {
+	home := c.getenv("CODEX_HOME")
+	if home == "" {
+		home = filepath.Join(c.getenv("HOME"), ".codex")
+	}
+	data, err := os.ReadFile(filepath.Join(home, "config.toml"))
+	if err != nil {
+		return ""
+	}
+	return string(data)
 }

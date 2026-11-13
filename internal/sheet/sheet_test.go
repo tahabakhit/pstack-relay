@@ -45,12 +45,11 @@ func TestParse(t *testing.T) {
 				t.Fatalf("round trip changed sheet: %#v -> %#v", s, again)
 			}
 			if tt.name == "group and panel" {
-				if len(s.Roles["feature"]) != 2 || !reflect.DeepEqual(s.Roles["feature"], s.Roles["refactoring"]) || s.SessionHook || s.DefaultEffort != "session" {
+				feature, okF := s.Lookup("feature")
+				refactoring, okR := s.Lookup("refactoring")
+				whole, okW := s.Lookup("feature, refactoring")
+				if !okF || !okR || !okW || len(feature) != 2 || !reflect.DeepEqual(feature, refactoring) || !reflect.DeepEqual(feature, whole) || s.SessionHook || s.DefaultEffort != "session" {
 					t.Fatalf("unexpected sheet: %#v", s)
-				}
-				s.Roles["feature"][0].Model = "changed"
-				if s.Roles["refactoring"][0].Model != "opus" {
-					t.Fatal("group roles share mutable seats")
 				}
 			}
 		})

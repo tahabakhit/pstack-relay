@@ -88,3 +88,31 @@ func ParsePi(output string) []string {
 	}
 	return models
 }
+
+// PreferConfigured moves the model named by Codex's top-level `model = "..."`
+// setting to the front of the Codex catalog, so setup starts from the model
+// the user already runs instead of the catalog's first and costliest entry.
+func PreferConfigured(catalogs []Catalog, codexConfig string) {
+	var want string
+	for _, line := range strings.Split(codexConfig, "\n") {
+		line = strings.TrimSpace(line)
+		if strings.HasPrefix(line, "[") {
+			break
+		}
+		key, value, ok := strings.Cut(line, "=")
+		if ok && strings.TrimSpace(key) == "model" {
+			want = strings.Trim(strings.TrimSpace(value), `"'`)
+		}
+	}
+	for i := range catalogs {
+		if catalogs[i].Harness != sheet.Codex {
+			continue
+		}
+		models := catalogs[i].Models
+		for j, m := range models {
+			if m == want && j > 0 {
+				catalogs[i].Models = append([]string{m}, append(append([]string{}, models[:j]...), models[j+1:]...)...)
+			}
+		}
+	}
+}

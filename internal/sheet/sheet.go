@@ -95,15 +95,17 @@ func Parse(text string) (Sheet, error) {
 			seats = append(seats, seat)
 		}
 		for _, role := range strings.Split(key, ",") {
-			role = strings.TrimSpace(role)
-			if role == "" || role == "default effort" || role == "session hook" {
-				return fail("invalid role " + role)
+			if strings.TrimSpace(role) == "" {
+				return fail("invalid role " + key)
 			}
-			if _, exists := s.Roles[role]; !exists {
-				s.Order = append(s.Order, role)
-			}
-			s.Roles[role] = append([]Seat(nil), seats...)
 		}
+		// Upstream skills read a line by its full literal name, such as
+		// "reflect judgment, divergent, synthesizer", so the key stays whole.
+		role := strings.Join(splitTrim(key), ", ")
+		if _, exists := s.Roles[role]; !exists {
+			s.Order = append(s.Order, role)
+		}
+		s.Roles[role] = append([]Seat(nil), seats...)
 	}
 	if err := scanner.Err(); err != nil {
 		return Sheet{}, fmt.Errorf("line %d: %w", line+1, err)
@@ -152,6 +154,29 @@ func (s Sheet) Format() string {
 	fmt.Fprintf(&b, "session hook: %s\n", hook)
 	return b.String()
 }
+
+// Lookup finds a role by its full line name or by one name within a line.
+func (s Sheet) Lookup(role string) ([]Seat, bool) {
+	role = strings.Join(splitTrim(role), ", ")
+	if seats, ok := s.Roles[role]; ok {
+		return seats, true
+	}
+	for _, key := range s.Order {
+		if contains(splitTrim(key), role) {
+			return s.Roles[key], true
+		}
+	}
+	return nil, false
+}
+
+func splitTrim(key string) []string {
+	parts := strings.Split(key, ",")
+	for i := range parts {
+		parts[i] = strings.TrimSpace(parts[i])
+	}
+	return parts
+}
+
 func contains(values []string, value string) bool {
 	for _, v := range values {
 		if v == value {

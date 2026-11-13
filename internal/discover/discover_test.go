@@ -70,3 +70,15 @@ func TestParsePi(t *testing.T) {
 		t.Fatalf("captured Pi 1.5.2 sample: %#v", got)
 	}
 }
+
+func TestPreferConfigured(t *testing.T) {
+	catalogs := []Catalog{{Harness: sheet.Codex, Installed: true, Models: []string{"a", "b", "c"}}, {Harness: sheet.Claude, Models: []string{"opus"}}}
+	PreferConfigured(catalogs, "model = \"c\"\n[profiles.x]\nmodel = \"b\"\n")
+	if strings.Join(catalogs[0].Models, ",") != "c,a,b" || catalogs[1].Models[0] != "opus" {
+		t.Fatalf("got %v", catalogs)
+	}
+	PreferConfigured(catalogs, "model = \"missing\"")
+	if catalogs[0].Models[0] != "c" {
+		t.Fatalf("unknown model reordered catalog: %v", catalogs[0].Models)
+	}
+}

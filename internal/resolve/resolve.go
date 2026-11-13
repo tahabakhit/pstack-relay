@@ -68,7 +68,7 @@ func Resolve(s Sheet, role string, env Env, opts Options) ([]Placement, error) {
 	if env.Backend != Orca && env.Backend != Rex && env.Backend != None && env.Backend != "" {
 		return nil, fmt.Errorf("unknown backend %q", env.Backend)
 	}
-	seats, ok := s.Roles[role]
+	seats, ok := s.Lookup(role)
 	if !ok {
 		return []Placement{{Role: role, Mode: Native, Harness: env.Parent, Note: "role not in sheet; use the skill's default model"}}, nil
 	}

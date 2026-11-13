@@ -49,7 +49,7 @@ func TestModels(t *testing.T) {
 		{"interrogate reviewers=claude:opus @high, codex:gpt @xhigh", 2, false},
 		{"interrogate reviewers=auto", 1, false},
 		{"interrogate reviewers=other:model", 0, true},
-		{"a,b=auto", 0, true},
+
 		{"role=opus\nother: model", 0, true},
 	} {
 		t.Run(tt.value, func(t *testing.T) {
