@@ -28,4 +28,4 @@ Keep third-party checkouts outside this repository. Preserve the upstream licens
 
 [The workflow](../.github/workflows/upstream.yml) runs daily at 07:23 UTC or by manual dispatch on the default branch. [Its script](../scripts/check-upstream-update.sh) syncs upstream, builds the plugin, runs Go tests and vet, scans staged changes, and opens a pull request for a changed revision.
 
-When those local validation steps pass, the script requests squash auto-merge. When validation fails, it labels the pull request `upstream-sync-failed`. GitHub settings and required checks govern whether auto-merge completes. The first hosted auto-merge run remains unverified. See [status](status.md).
+When those validation steps pass, the script squash-merges the pull request and deletes its branch. It does not rely on repository auto-merge, which is off for this repository. When validation fails, it labels the pull request `upstream-sync-failed` and leaves it open. A local run with a stubbed `gh` reached the merge step. The first hosted run has not happened yet. See [status](status.md).

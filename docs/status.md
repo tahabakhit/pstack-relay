@@ -19,11 +19,11 @@ The record does not yet establish a complete setup acceptance run or a live no-b
 - Model discovery does not prove account access, provider-served model identity, or effective reasoning effort.
 - Worker reports require parent verification. A required independent review stays blocked when no reviewer can run.
 - Cursor cloud agents, automations, and project stores have no host equivalent here.
-- Hosted upstream auto-merge has not run yet. The workflow requests auto-merge after local validation, subject to GitHub repository settings and checks.
+- The hosted upstream sync has not run yet. A local run with a stubbed `gh` synced, validated, and reached the squash-merge step.
 
 ## After 1.0
 
 - Pi plugin installation and Pi parent acceptance. Setup currently discovers Pi models for the sheet.
 - Pi workers on Orca. Orca currently has no Pi agent, so those seats fall back to the parent's model.
 - A herdr backend.
-- The first hosted upstream sync and auto-merge run, with its actual outcome recorded.
+- The first hosted upstream sync run, with its actual outcome recorded.
