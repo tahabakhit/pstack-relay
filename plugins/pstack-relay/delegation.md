@@ -2,18 +2,20 @@
 
 Read this file before you follow any pstack skill, playbook, or agent definition in this plugin. The skills are Cursor's upstream pstack, unchanged. They name Cursor tools and Cursor model slugs. This file says what those names mean here and how to start each subagent. Everything else in the skills applies exactly as written.
 
+The script `bin/pstack-relay` sits next to this file. Run it by absolute path. In the commands below, replace `<plugin root>` with the directory that holds this file.
+
 ## Cursor names on this host
 
 | Upstream names | Claude Code | Codex |
 | --- | --- | --- |
 | The `Task` tool | The `Agent` tool | `spawn_agent`, then `wait_agent` for the result |
 | `subagent_type: generalPurpose` | `subagent_type: "general-purpose"` | A plain `spawn_agent` |
-| `subagent_type: "poteto-agent"` | `subagent_type: "pstack-rex:poteto-agent"` | A plain `spawn_agent` whose brief says to read the `poteto-mode` `SKILL.md` in full first |
+| `subagent_type: "poteto-agent"` | `subagent_type: "pstack-relay:poteto-agent"` | A plain `spawn_agent` whose brief says to read the `poteto-mode` `SKILL.md` in full first |
 | `readonly: true` | Say in the brief that the subagent must not edit files | Same as Claude Code |
 | `run_in_background: true` | `run_in_background: true` | `spawn_agent` already runs in the background |
 | `AskQuestion` | `AskUserQuestion` | Ask in plain text |
 | The todo list tools | `TaskCreate` and `TaskUpdate`, or `TodoWrite` | `update_plan`. If the session has no `update_plan`, keep the list in a Markdown file outside the checkout |
-| `pstack-models.mdc` and the `/setup-pstack` rule | The shared model sheet. Run `pstack-rex models` to print it and `pstack-rex setup` to change it | Same as Claude Code |
+| `pstack-models.mdc` and the `/setup-pstack` rule | The shared model sheet. Run `<plugin root>/bin/pstack-relay models` to print it and `<plugin root>/bin/pstack-relay models --set` to change it | Same as Claude Code |
 | A Cursor model slug such as `claude-opus-5-5-xhigh` | The role's line in the shared model sheet | Same as Claude Code |
 | A search under `~/.cursor/plugins/` for a skill | The skill in this plugin. Use the absolute path your parent gave you, or this plugin's `skills/` directory | Same as Claude Code |
 
@@ -26,17 +28,18 @@ Cursor cloud agents, Cursor automations, and Cursor project stores do not exist 
 Before each subagent or panel, run the resolver with the role name the skill uses:
 
 ```sh
-pstack-rex resolve --role "interrogate reviewers"
+"<plugin root>/bin/pstack-relay" resolve --role "interrogate reviewers"
 ```
 
 It prints one JSON object per seat. Each seat has a `mode` and the exact values to use. Follow the seat exactly. Do not pick a model, harness, or backend yourself.
 
 - `native` means use your own subagent tool from the table above, with the seat's `model` and `effort`.
 - `orca` means start an Orca worker. Write the full brief to a file, then run the seat's `command` with that file. End your turn after you start every worker. Orca wakes you when a worker sends `worker_done`. Read the result with `orca orchestration check`, and the transcript with `orca orchestration worker-read --dispatch <id>`. For stop, retry, and abandon, follow `orca skills get orchestration`.
-- `rex` means start a Rex worker with the seat's `command`. Wait for its report with `pstack-rex rex wait --id <id>`.
+- `rex` means start a Rex worker with the seat's `command`. Wait for its report with `<plugin root>/bin/pstack-relay rex wait --id <id>`.
+- `hc` means run the seat's command. The worker reports back with `hc send` into your terminal. Wait with `<plugin root>/bin/pstack-relay hc wait --id <id>`, or let hc's notes wake you. Answer a blocked worker with `hc keys <name> ...` only for its startup trust dialog.
 - `fallback` means the seat's harness cannot run here. Run it native with the seat's `model`, which follows upstream's fallback order, and tell the user which model ran instead of the configured one.
 
-A brief for an Orca or Rex worker is a complete prompt. Give it the upstream brief, the absolute path of this plugin's `skills/poteto-mode/SKILL.md` when the skill asks for `poteto-agent`, the absolute paths of the files involved, and the evidence the worker must return.
+A brief for an Orca, Rex, or hc worker is a complete prompt. Give it the upstream brief, the absolute path of this plugin's `skills/poteto-mode/SKILL.md` when the skill asks for `poteto-agent`, the absolute paths of the files involved, and the evidence the worker must return.
 
 ## Worktrees
 
@@ -45,7 +48,7 @@ A subagent shares your checkout unless the calling skill gives it its own worktr
 When the skill gives a subagent its own worktree, add `--own-worktree` to the resolver call.
 
 1. Save your uncommitted changes with `git add -N .` and then `git diff HEAD --binary > <file>`.
-2. For an `orca` or `rex` seat, the seat's `command` creates the worktree from your current branch.
+2. For an `orca`, `rex`, or `hc` seat, the seat's `command` creates the worktree from your current branch.
 3. For a `native` seat, create the worktree yourself with `git worktree add <path> HEAD` and give the subagent that path. In Claude Code you may use the `Agent` tool's `isolation: "worktree"` instead.
 4. If `<file>` is not empty, tell the subagent to run `git apply --index <file>` in its worktree first, so it starts from what you see.
 
