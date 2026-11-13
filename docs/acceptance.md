@@ -37,3 +37,8 @@ Clone with upstream/REVISION set back to a5539b1; `bash scripts/check-upstream-u
 
 ## Independent release review (Codex worker ctx_8adec9a411fe)
 Reviewed 5037111 against main: build, race tests, vet, plugin check, packages, flag names, isolated local-source setup for both harnesses. One blocker proven by a script that creates a sheet while setup waits at its prompt: setup replaced it without `--force`. Fixed by writing a new sheet with a hard link that refuses to replace an existing file; the same script then printed "sheet preserved: True". Default-source install (`tahabakhit/pstack-rex`) and `go install ...@latest` work only after this branch is on the default branch.
+
+## Remote install and hosted CI (PR #3)
+- `go install github.com/tahabakhit/pstack-rex/cmd/pstack-rex@tahabakhit/orca-alternative` printed `pstack-rex 1.0.0`.
+- With empty CODEX_HOME and CLAUDE_CONFIG_DIR: `codex plugin marketplace add tahabakhit/pstack-rex --ref tahabakhit/orca-alternative` and `codex plugin add pstack-rex@pstack-rex` installed 1.0.0; `claude plugin marketplace add 'tahabakhit/pstack-rex#tahabakhit/orca-alternative'` and `claude plugin install pstack-rex@pstack-rex` installed and enabled 1.0.0.
+- Hosted Go checks passed on ubuntu-latest and macos-latest for the PR.
